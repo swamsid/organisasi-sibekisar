@@ -152,33 +152,42 @@
                 <i class="icon-grid menu-icon"></i>
             </a>
         </li>
-          <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#link-indikator" aria-expanded="false" aria-controls="page-layouts">
-                  <span class="menu-title">Indikator</span>
-                  <i class="icon-folder menu-icon"></i>
-              </a>
-              <div class="collapse" id="link-indikator">
-                  <ul class="nav flex-column sub-menu">
-                      <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('module/master/indikator') ?>">Indikator PD</a></li>
-                      <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('module/master/indikator/kab') ?>">Indikator Kab/Kota</a></li>
 
-                  </ul>
-              </div>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#link-indikator" aria-expanded="false" aria-controls="page-layouts">
+                <span class="menu-title">Indikator</span>
+                <i class="icon-folder menu-icon"></i>
+            </a>
+            <div class="collapse" id="link-indikator">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('module/master/indikator') ?>">Indikator PD</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('module/master/indikator/kab') ?>">Indikator Kab/Kota</a></li>
 
-              <li class="nav-item">
-                  <a class="nav-link" data-toggle="collapse" href="#link-prof" aria-expanded="false" aria-controls="page-layouts">
-                      <span class="menu-title">Profil PD & Kab/Kota</span>
-                      <i class="icon-anchor menu-icon"></i>
-                  </a>
-                  <div class="collapse" id="link-prof">
-                      <ul class="nav flex-column sub-menu">
-                          <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('module/master/unit') ?>">Profil PD</a></li>
-                          <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('module/master/unit/kab') ?>">Profil Kab/Kota</a></li>
+                </ul>
+            </div>
 
-                      </ul>
-                  </div>
-              </li>
-<?php } ?>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#link-prof" aria-expanded="false" aria-controls="page-layouts">
+                    <span class="menu-title">Profil PD & Kab/Kota</span>
+                    <i class="icon-anchor menu-icon"></i>
+                </a>
+                <div class="collapse" id="link-prof">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('module/master/unit') ?>">Profil PD</a></li>
+                        <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('module/master/unit/kab') ?>">Profil Kab/Kota</a></li>
+
+                    </ul>
+                </div>
+            </li>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo base_url('module/master/periode') ?>">
+                <span class="menu-title">Periode Tahun</span>
+                <i class="icon-calendar menu-icon"></i>
+            </a>
+        </li>
+    <?php } ?>
         <li class="nav-item nav-category"><span class="nav-link">Help</span></li>
         <li class="nav-item">
             <a class="nav-link" href="#" target="_blank">

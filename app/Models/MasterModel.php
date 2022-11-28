@@ -247,4 +247,13 @@ class MasterModel extends Model
 
         return $this->db->query($sql)->getRow();
     }
+
+    /* m_periode */
+
+    function getPeriode(){
+        $builder = $this->db->table('m_periode');
+        $builder->select('m_periode.*');
+
+        return $builder->get()->getResult();
+    }
 }

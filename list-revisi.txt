@@ -1,0 +1,15 @@
+
+    - Halaman Periode
+        1. Menambahkan database periode
+        2. Menambahkan halaman untuk CRUD periode
+        
+    - Halaman Dashboard (done)
+        1.  Halaman dashboard ditambahkan dropdown pilihan tahun (periode) yang diambil dari data di tabel m_periode
+        2.  Tampilan data pada dashboard harus sesuai dengan tahun yang dipilih (di poin nomer 1)
+
+    - Halaman Indikator
+        1.  Data di tabel indikator harus berelasi dengan tabel periode, sehingga setiap periode dapat memiliki indikator yang  
+            berbeda-beda
+        2.  Halaman indikator ditambahkan dropdown pilihan tahun (periode) yang diambil dari data di tabel m_periode
+        3.  Tampilan datatabel harus sesuai dengan periode yang dipilih (di poin nomer 2)
+        4.  data indikator yang ditambahkan harus menjadi indikator milik periode yang dipilih (di poin nomer 2)

@@ -15,7 +15,7 @@
                                     <a href="<?php echo base_url('module/users')?>" type="button" class="btn px-0"> <i class="icon-user mr-2"></i> Tambah Users</a>
                                 </div>
                                 <div class="col-sm-6 col-md-3 p-3 text-center btn-wrapper">
-                                    <a href="<?php echo base_url('module/master/unit')?>" type="button" class="btn px-0"><i class="icon-docs mr-2"></i> Manajemen Perangkat Daerah</a>
+                                    <a href="<?php echo base_url('module/master/unit')?>" type="button" class="btn px-0"><i class="icon-docs mr-2"></i> Manajemen PD</a>
                                 </div>
                                 <?php endif ?>
                                <!-- <div class="col-sm-6 col-md-3 p-3 text-center btn-wrapper">
@@ -31,6 +31,32 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body" style="padding: 15px 27px;">
+                                <table style="width: 30%;">
+                                    <tbody>
+                                        <tr>
+                                            <td width="48%">
+                                                <span style="font-size: 10pt; font-weight: bold; color: var(--blue);">
+                                                    Periode Dashboard
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <select class="form-control" id="tahun" style="height: 35px; cursor: pointer;">
+
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="row">
                     <div class="col-md-12 grid-margin stretch-card div-reportpd" style="display:none">
                         <div class="card">
@@ -38,7 +64,7 @@
                                 <input type="hidden" id="tmp-pd" value="<?php echo $_SESSION['user']->id_unit?>">
                                 <input type="hidden" id="tmp-role" value="<?php echo $_SESSION['user']->id_role?>">
                                 <div class="d-sm-flex align-items-center mb-4">
-                                    <h4 class="card-title mb-sm-0">Report Penilaian Tahun <?php echo date("Y"); ?></h4>
+                                    <h4 class="card-title mb-sm-0">Report Penilaian Tahun <span class="tahun-show"></span></h4>
                                     <a href="#" class="text-dark ml-auto mb-3 mb-sm-0"> Jumlah PD yang sudah dinilai berdasar indikator</a>
                                 </div>
                                 <div class="table-responsive border rounded p-1">
@@ -100,7 +126,6 @@
                     <div class="col-md-8 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <input type="hidden" name="tahun" id="tahun" value="<?php echo date("Y") ?>">
                                 <div id="chart"></div>
                             </div>
                         </div>

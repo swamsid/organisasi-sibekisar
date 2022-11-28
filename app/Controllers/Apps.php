@@ -196,7 +196,7 @@ class Apps extends BaseController
         $rowspan = array_count_values(array_column($indikator, 'id_aspek'));
         foreach ($unit as $runit) {
             $html .= "<h2>Raport Budaya Kerja CETTAR <br>" . $runit['unit'] . " Tahun " . $tahun . "</h2>
-<table class='table' cellpadding='2' cellspacing='1' border='1'><thead>
+                        <table class='table' cellpadding='2' cellspacing='1' border='1'><thead>
                                     <tr>
                                         <th>Spirit Budaya Kerja</th>
                                         <th>Bobot</th>
@@ -243,10 +243,10 @@ class Apps extends BaseController
                 }
             }
             $html .= "</tbody><tfoot>
-<tr><th colspan='2'>Skor Total</th><th colspan='7'>" . $runit['skor_total'] . "</th> </tr>
-<tr><th colspan='2'>Nilai</th><th colspan='7'>" . $runit['nilai_huruf'] . "</th> </tr>
-<tr><th colspan='2'>Predikat</th><th colspan='7'>" . $runit['predikat'] . "</th> </tr>
-</tfoot></table>";
+                        <tr><th colspan='2'>Skor Total</th><th colspan='7'>" . $runit['skor_total'] . "</th> </tr>
+                        <tr><th colspan='2'>Nilai</th><th colspan='7'>" . $runit['nilai_huruf'] . "</th> </tr>
+                        <tr><th colspan='2'>Predikat</th><th colspan='7'>" . $runit['predikat'] . "</th> </tr>
+                        </tfoot></table>";
         }
 
         $mpdf = new Mpdf(['debug' => FALSE, 'mode' => 'utf-8', 'orientation' => 'P']);
@@ -492,6 +492,20 @@ class Apps extends BaseController
             }
         }
 
+    }
+
+    /* Tambahan setelah revisi */
+
+    function getPeriode(){
+        $params     = $_REQUEST;
+        $dataTable  = $this->mastermodel->getPeriode();
+
+        $data       = [
+            'data'      => $dataTable,
+            'selected'  => $dataTable[(count($dataTable) - 1)]->id_periode
+        ];
+
+        return json_encode($data);
     }
 
 }

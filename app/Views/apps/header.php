@@ -49,8 +49,36 @@
     <script>
         base_url = "<?php echo base_url(); ?>";
     </script>
+
+    <style>
+        #layout{
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999;
+            text-align: center;
+            padding-top: 50%;
+            display: none;
+        }
+
+        #layout .konten{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 99999;
+        }
+    </style>
 </head>
 <body>
+
+<div id="layout">
+    <div class="konten">
+        
+    </div>
+</div>
+
 <div class="container-scroller">
     <?php echo view('apps/navbar') ?>
     <!-- partial -->

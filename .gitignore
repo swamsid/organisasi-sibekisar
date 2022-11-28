@@ -133,7 +133,7 @@ nb-configuration.xml
 
 
 # CI Files #
-/app/Config/App.php
-/app/Config/Database.php
-/public/index.php
+# /app/Config/App.php
+# /app/Config/Database.php
+# /public/index.php
 

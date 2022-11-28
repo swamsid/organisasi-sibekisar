@@ -6,8 +6,7 @@ use App\Models\MasterModel;
 
 class Master extends BaseController
 {
-    public function __construct()
-    {
+    public function __construct(){
         $this->session = \Config\Services::session();
         if(!isset($_SESSION['user']) || empty($_SESSION['user'])) {
             header('Location: '.base_url('auth'));
@@ -20,8 +19,7 @@ class Master extends BaseController
         $this->failed = array('message' => 'Proses simpan gagal', 'type' => 'error', 'status' => false);
     }
 
-    public function unit($tag=null)
-    {
+    public function unit($tag=null){
         $data['user'] = $_SESSION['user'];
         $this->addScript("assets/js/apps/unit.js");
         $param['tag'] = (isset($tag) && $tag?$tag:'opd');
@@ -77,8 +75,7 @@ class Master extends BaseController
 
     /** indikator */
 
-    public function indikator($tag=null)
-    {
+    public function indikator($tag=null){
         $data['user'] = $_SESSION['user'];
         $this->addScript("assets/js/apps/indikator.js");
         $param['tag'] = (isset($tag) && $tag?$tag:'opd');
@@ -90,8 +87,7 @@ class Master extends BaseController
         $this->show('module/indikator/index', $data);
     }
 
-    public function gridindikator()
-    {
+    public function gridindikator(){
         $param = $_REQUEST;
         $data = $this->mastermodel->findMIndikator($param);
         $count = count($data);
@@ -128,5 +124,14 @@ class Master extends BaseController
 
         if ($result) echo json_encode($this->success);
         else echo json_encode($this->failed);
+    }
+
+    /** Periode */
+
+    public function periode(){
+        $data['user'] = $_SESSION['user'];
+        $this->addScript("assets/js/apps/periode.js");
+
+        $this->show('module/periode/index', $data);
     }
 }
