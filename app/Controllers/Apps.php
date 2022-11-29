@@ -502,10 +502,80 @@ class Apps extends BaseController
 
         $data       = [
             'data'      => $dataTable,
-            'selected'  => $dataTable[(count($dataTable) - 1)]->id_periode
+            'selected'  => $dataTable[(count($dataTable) - 1)]->tahun_periode
         ];
 
         return json_encode($data);
+    }
+
+    function savePeriode(){
+        $params         = $_REQUEST;
+        $dataPeriode    = [
+            'tahun_periode'     => $params['periode'],
+            'tanggal_dibuat'    => date('Y-m-d H:i:s'),
+        ];
+
+        $find   = $this->mastermodel->findPeriode([ 'tahun_periode' => $params['periode'] ]);    
+
+        if($find){
+            return json_encode([
+                'status'    => 'error',
+                'message'   => 'Data periode '.$params['periode'].' sudah ada'
+            ]);
+        }
+
+        $result         = $this->mastermodel->insertPeriode($dataPeriode);
+
+        if($result){
+            return json_encode([
+                'status'    => 'sukses'
+            ]);
+        }
+    }
+
+    function deletePeriode(){
+        $params         = $_REQUEST;
+        $dataPeriode    = [
+            'tahun_periode' => $params['periode'],
+        ];
+
+        $result         = $this->mastermodel->deletePeriode($dataPeriode);
+
+        if($result){
+            return json_encode([
+                'status'    => 'sukses'
+            ]);
+        }
+    }
+
+    function updatePeriode(){
+        $params         = $_REQUEST;
+
+
+        $dataPeriode    = [
+            'tahun_periode' => $params['periode'],
+        ];
+
+        $where    = [
+            'id_periode' => $params['id_periode'],
+        ];
+
+        $find   = $this->mastermodel->findPeriode($dataPeriode);    
+
+        if($find && $find->id_periode != $params['id_periode']){
+            return json_encode([
+                'status'    => 'error',
+                'message'   => 'Data periode '.$params['periode'].' sudah ada'
+            ]);
+        }
+
+        $result = $this->mastermodel->updatePeriode($dataPeriode, $where);
+
+        if($result){
+            return json_encode([
+                'status'    => 'sukses'
+            ]);
+        }
     }
 
 }

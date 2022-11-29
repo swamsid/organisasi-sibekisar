@@ -313,7 +313,7 @@ $(document).ready(function (){
             const data = JSON.parse(response) 
             
             data.data.forEach((z, index) => { 
-                htmlOption +=  `<option value="${z.id_periode}" ${ (z.id_periode == data.selected) ? 'selected' : '' }>${z.id_periode}</option>`
+                htmlOption +=  `<option value="${z.tahun_periode}" ${ (z.tahun_periode == data.selected) ? 'selected' : '' }>${z.id_periode}</option>`
             })
 
             $("#tahun").html(htmlOption);

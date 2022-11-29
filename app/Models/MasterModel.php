@@ -207,6 +207,7 @@ class MasterModel extends Model
         m_aspek.nilai_maks,m_aspek.icon, m_indikator.*, mid(md5(m_indikator.id_indikator),9,6) as id_indikator_hash');
         $builder->join('m_aspek', 'm_aspek.id_aspek = m_indikator.id_aspek');
         $builder->where('m_indikator.is_aktif <> 3');
+        $builder->where('periode = '.$data['periode']);
 
         if(isset($data['tag']) && !empty($data['tag'])) $builder->where('m_aspek.tag',$data['tag']);
         if(isset($data['id_unit']) && !empty($data['id_unit'])) $builder->where('m_indikator.id_opd',$data['id_unit']);
@@ -252,8 +253,43 @@ class MasterModel extends Model
 
     function getPeriode(){
         $builder = $this->db->table('m_periode');
-        $builder->select('m_periode.*');
+        $builder->select('m_periode.*, count(evaluasi.id_evaluasi) as evaluasi');
+        $builder->groupBy('id_periode');
+        $builder->orderBy('tahun_periode', 'asc');
+        $builder->join('evaluasi', 'evaluasi.periode = m_periode.tahun_periode', 'left');
 
         return $builder->get()->getResult();
+    }
+
+    function findPeriode($where){
+        $builder = $this->db->table('m_periode');
+        $builder->select('m_periode.*');
+        $builder->where($where);
+
+        return $builder->get()->getRow();
+    }
+
+    function insertPeriode($data = null){
+        $builder = $this->db->table('m_periode');
+        $builder->replace($data);
+        
+        return $builder;
+    }
+
+    function deletePeriode($data = null){
+        $builder = $this->db->table('m_periode');
+        $builder->delete($data);
+
+        $builder2 = $this->db->table('m_indikator');
+        $builder2->delete(['periode' => $data['tahun_periode']]);
+        
+        return $builder;
+    }
+
+    function updatePeriode($data = null, $where = null){
+        $builder = $this->db->table('m_periode');
+        $builder->update($data, $where);
+        
+        return $builder;
     }
 }

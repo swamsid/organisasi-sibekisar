@@ -12,7 +12,7 @@
         </button>
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-center">
-        <h5 class="mb-0 font-weight-medium d-none d-lg-flex">Selamat datang di dashboard SIBEKISAR</h5>
+        <h5 class="mb-0 font-weight-medium d-none d-lg-flex">Selamat datang di aplikasi SIBEKISAR</h5>
         <ul class="navbar-nav navbar-nav-right">
            <!--<form class="search-form d-none d-md-block" action="#">
                 <i class="icon-magnifier"></i>
