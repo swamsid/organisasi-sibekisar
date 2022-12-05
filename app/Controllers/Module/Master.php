@@ -111,14 +111,17 @@ class Master extends BaseController
 
         $data['is_aktif'] = (isset($_REQUEST['is_aktif'])?$_REQUEST['is_aktif']:0);
         $data['indikator'] = str_replace("'", "`",$data['indikator']);
-        $dataInsert = array('id_indikator'=>$data['id_indikator'],
-            'indikator'=>$data['indikator'],
-            'bobot'=>$data['bobot'],
-            'opd_pengampu'=>$data['opd_pengampu'],
-            'id_opd'=>$data['id_opd'],
-            'tag'=>$data['tag'],
-            'id_aspek'=>$data['id_aspek'],
-            'is_aktif'=>$data['is_aktif']);
+        $dataInsert = array(
+            'id_indikator'  =>$data['id_indikator'],
+            'indikator'     =>$data['indikator'],
+            'bobot'         =>$data['bobot'],
+            'opd_pengampu'  =>$data['opd_pengampu'],
+            'id_opd'        =>$data['id_opd'],
+            'tag'           =>$data['tag'],
+            'id_aspek'      =>$data['id_aspek'],
+            'is_aktif'      =>$data['is_aktif'],
+            'periode'       => $data['periode-indikator']
+        );
 
         $result = $this->mastermodel->insertMIndikator($dataInsert);
 
@@ -133,5 +136,18 @@ class Master extends BaseController
         $this->addScript("assets/js/apps/periode.js");
 
         $this->show('module/periode/index', $data);
+    }
+
+    /** Aspek */
+
+    public function getAspek(){
+        $params = $_REQUEST;
+        $data = $this->mastermodel->getAspek($params);
+
+        $response = [
+            'data'  => $data
+        ];
+
+        return json_encode($response);
     }
 }

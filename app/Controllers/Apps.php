@@ -322,6 +322,8 @@ class Apps extends BaseController
         return $this->response->setJSON(json_encode($data));
     }
 
+    /** Evaluasi */
+
     public function evaluasi($tag = null, $id_indikator = null)
     {
         if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
@@ -329,28 +331,9 @@ class Apps extends BaseController
             //return redirect()->to('auth');
             exit();
         }
-        $data['user'] = $_SESSION['user'];
-        $param['tag'] = (isset($tag) && $tag ? $tag : 'opd');
-        $param['kategori_unit'] = $param['tag'];
-        $data['unit'] = $this->mastermodel->findMUnit($param);
-        if ($_SESSION['user']->id_role == 1) $data['id_unit'] = '';
-        else {
-            $data['id_unit'] = $_SESSION['user']->id_unit;
-            $param['id_unit'] = $_SESSION['user']->id_unit;
-        }
 
         $this->addScript("assets/js/apps/evaluasi.js");
-        // $this->addScript("assets/vendors/datatables/dataTables.rowGroup.min.js");
-        $data['id_indikator'] = (isset($id_indikator) && $id_indikator ? $id_indikator : '');
-        /*if (!$indikator = cache('indikator')){
-           $indikator = $this->mastermodel->findMIndikator();
-           cache()->save('indikator', $indikator, 1000);
-       }
-       $data['indikator'] = $this->cache->get('indikator');*/
-        $data['indikator'] = $this->mastermodel->findMIndikator($param);
-        $data['label'] = ((isset($tag) && $tag == 'kab') ? 'Kabupaten/Kota' : 'Perangkat Daerah');
-        $data['tag'] = $param['tag'];
-        $this->show('apps/evaluasibyindikator', $data);
+        $this->show('apps/evaluasibyindikator');
     }
 
     public function rapor($tag = null, $id_indikator = null)
@@ -494,6 +477,30 @@ class Apps extends BaseController
 
     }
 
+    // tambahan 
+    function getPeriodeDanIndikator(){
+        $params = $_REQUEST;
+        $periode    = $this->mastermodel->getPeriode();
+
+        $dataIndikator = [
+            'tag'       => $params['tag'],
+            'periode'   => 1
+        ];
+
+        $indikator = $this->mastermodel->findMIndikator($dataIndikator);
+
+        $response   = [
+            'periode'       => $periode,
+            'selected'      => $periode[(count($periode) - 1)]->tahun_periode,
+            'id_selected'   => $periode[(count($periode) - 1)]->id_periode,
+            'indikator'     => $indikator
+        ];
+
+        return json_encode($response);
+    }
+
+    /** End Evaluasi */
+
     /* Tambahan setelah revisi */
 
     function getPeriode(){
@@ -510,10 +517,6 @@ class Apps extends BaseController
 
     function savePeriode(){
         $params         = $_REQUEST;
-        $dataPeriode    = [
-            'tahun_periode'     => $params['periode'],
-            'tanggal_dibuat'    => date('Y-m-d H:i:s'),
-        ];
 
         $find   = $this->mastermodel->findPeriode([ 'tahun_periode' => $params['periode'] ]);    
 
@@ -524,7 +527,33 @@ class Apps extends BaseController
             ]);
         }
 
-        $result         = $this->mastermodel->insertPeriode($dataPeriode);
+        $getId = $this->mastermodel->getIdPeriode();
+        $id    = ($getId && $getId->id_periode) ? ((int) $getId->id_periode + 1) : 1;
+
+        $dataPeriode    = [
+            'id_periode'        => $id,
+            'tahun_periode'     => $params['periode'],
+            'tanggal_dibuat'    => date('Y-m-d H:i:s'),
+        ];
+
+        $result2    = $this->mastermodel->insertPeriode($dataPeriode);
+        $dataAspek      = [];
+
+        foreach($params['aspek'] as $key => $aspek){
+            array_push($dataAspek, [
+                'id_aspek'      => ($params['tag'][$key] == 'opd') ? 'C0'.$params['periode'].''.str_pad(($key + 1), 2, '0', STR_PAD_LEFT) : 'K0'.$params['periode'].''.str_pad(($key + 1), 2, '0', STR_PAD_LEFT),
+                'periode'       => $id,
+                'aspek'         => $params['aspek'][$key],
+                'nilai_maks'    => $params['nilai_maks'][$key],
+                'keterangan'    => $params['keterangan'][$key],
+                'is_aktif'      => '1',
+                'tag'           => $params['tag'][$key],
+                'icon'          => $params['icon'][$key],
+            ]);
+
+        }
+        
+        $result     = $this->mastermodel->insertAspek($dataAspek);
 
         if($result){
             return json_encode([
@@ -576,6 +605,16 @@ class Apps extends BaseController
                 'status'    => 'sukses'
             ]);
         }
+    }
+
+    function bobotTerakhir(){
+        $dataTable  = $this->mastermodel->bobotTerakhir();
+
+        $data       = [
+            'data'      => $dataTable
+        ];
+
+        return json_encode($data);
     }
 
 }

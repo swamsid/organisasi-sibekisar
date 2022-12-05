@@ -117,7 +117,9 @@ $(document).ready(function (){
         }
 
         let url     = base_url + "/apps/savePeriode";
-        let params  = { periode: $('#input-periode').val() }
+        let params  = $('#form-tambah').serialize();
+
+        // console.log(params);
 
         $('#save').attr('disabled', 'true');
         $('#save').html('Menyimpan...');
@@ -202,17 +204,89 @@ $(document).ready(function (){
             $('#update').html('Simpan Perubahan');
         });
     })
-
-    $('#input-periode').keypress((evt) => {
-        if(isNaN(parseFloat(evt.key)))
-            return false;
-        
-        return true;
-    })
     
     $('#tambah-periode').click((evt) => {
         $('#input-periode').val('');
         $('#modal-tambah-periode').modal('show');
+
+        $('#save').attr('disabled', 'true');
+        $('#loading-indikator').fadeIn();
+
+        let url     = base_url + "/apps/bobotTerakhir";
+        let html    = ``;
+        
+        $.get(url).done(function (response) {
+            const data      = JSON.parse(response);
+            
+            const dataPD    = data.data.filter((z) => { return z.tag == 'opd' });
+            const dataKab   = data.data.filter((z) => { return z.tag == 'kab' });
+            
+            let html        = '';
+            
+            if(dataPD.length > 0){
+                dataPD.forEach((z, alpha) => {
+                    html += `
+                        <tr>
+                            <td width="65%">
+                                <i class="fa fa-arrow-right" style="font-size: 8pt;"></i> &nbsp;${z.aspek}
+                            </td>
+                            <td>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend" style="height: 30px;">
+                                        <span class="input-group-text" id="basic-addon1" style="font-size: 9pt;">Bobot</span>
+                                    </div>
+                                    
+                                    <input type="text" class="form-control only-number" style="font-size: 10pt; height: 30px; text-align: center;" placeholder="-" value="${z.nilai_maks}" name="nilai_maks[]">
+                                    
+                                    <input type="hidden" value="${z.aspek}" name="aspek[]" readonly>
+                                    <input type="hidden" value="${z.keterangan}" name="keterangan[]" readonly>
+                                    <input type="hidden" value="${z.icon}" name="icon[]" readonly>
+                                    <input type="hidden" value="${z.tag}" name="tag[]" readonly>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                $('#table-pd tbody').html(html);
+            }
+
+            if(dataKab.length > 0){
+                html = '';
+
+                dataKab.forEach((z, alpha) => {
+                    html += `
+                        <tr>
+                            <td width="65%">
+                                <i class="fa fa-caret-right" style="font-size: 8pt;"></i> &nbsp;${z.aspek}
+                            </td>
+                            <td>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend" style="height: 30px;">
+                                        <span class="input-group-text" id="basic-addon1" style="font-size: 9pt;">Bobot</span>
+                                    </div>
+                                    
+                                    <input type="text" class="form-control only-number" style="font-size: 10pt; height: 30px; text-align: center;" placeholder="-" value="${z.nilai_maks}" name="nilai_maks[]">
+
+                                    <input type="hidden" class="form-control only-number" style="font-size: 10pt; height: 30px; text-align: center;" placeholder="-" value="${z.nilai_maks}" name="nilai_maks[]">
+                                    
+                                    <input type="hidden" value="${z.aspek}" name="aspek[]" readonly>
+                                    <input type="hidden" value="${z.keterangan}" name="keterangan[]" readonly>
+                                    <input type="hidden" value="${z.icon}" name="icon[]" readonly>
+                                    <input type="hidden" value="${z.tag}" name="tag[]" readonly>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                $('#table-kab tbody').html(html);
+            }
+
+            $('#save').removeAttr('disabled');
+            $('#loading-indikator').fadeOut(300);
+            
+        });
     })
 
     $('#button-reload').click((evt) => {
@@ -222,6 +296,15 @@ $(document).ready(function (){
         $('#layout').show();
 
         getData();
+    })
+
+    $(document).on('keypress', '.only-number', (evt) => {
+        // console.log('trigered');
+
+        if(isNaN(parseFloat(evt.key)))
+            return false;
+        
+        return true;
     })
 
     getData();

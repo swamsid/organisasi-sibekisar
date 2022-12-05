@@ -12,7 +12,9 @@
         <div class="col-xl-12 div-frmindikator">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="mb-3 header-title">Form Indikator</h4>
+                    <div style="padding-left: 10px;">
+                        <h4 class="mb-3 header-title">Form Indikator Periode Tahun <span class="periode-show-text"></span></h4>
+                    </div>
                     <?php  echo view('module/indikator/frmindikator') ?>
                 </div> <!-- end card body-->
             </div> <!-- end card -->
@@ -32,7 +34,7 @@
                             <table style="width: 100%;">
                                 <tbody>
                                     <tr>
-                                        <td class="text-right" width="70%">
+                                        <td class="text-right" width="65%">
                                             <div class="input-group" style="margin-top: -5px;">
                                                 <div class="input-group-prepend" style="height: 20px; margin-top: -1px;">
                                                     <span class="input-group-text" id="basic-addon1" style="color: #888;">Periode Indikator</span>
@@ -43,9 +45,16 @@
                                             </div>
                                         </td>
                                         <td style="text-right">
-                                            <button class="btn btn-primary" id="tambah-data" style="padding: 10px 15px; font-size: 8pt; margin-top: -5px;">
-                                                Tambah Data
-                                            </button>
+                                            <div class="dropdown">
+                                                <button class="btn btn-primary dropdown-toggle" style="padding: 8px 15px; font-size: 8pt; margin-top: -5px;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Tambah Data
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <a class="dropdown-item" href="#" style="font-size: 9pt;" id="tambah-data">Tambah Data Indikator</a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#" style="font-size: 9pt;">Duplikat Indikator</a>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>

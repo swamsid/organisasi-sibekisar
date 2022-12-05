@@ -1,15 +1,6 @@
 $(document).ready(function (){
     $(".select2").select2();
 
-    $(".page-form").hide();
-    $(".page-content").show();
-    
-    $('#tambah-data').on('click', function(){
-        $(".page-form #formindikator")[0].reset();
-        $(".page-content").slideUp();
-        $(".page-form").fadeIn();
-    })
-
     let periode = null;
     var oTable = null;
 
@@ -103,7 +94,7 @@ $(document).ready(function (){
             const data = JSON.parse(response) 
             
             data.data.forEach((z, index) => { 
-                htmlOption +=  `<option value="${z.tahun_periode}" ${ (z.tahun_periode == data.selected) ? 'selected' : '' }>${z.tahun_periode}</option>`
+                htmlOption +=  `<option value="${z.id_periode}" ${ (z.tahun_periode == data.selected) ? 'selected' : '' }>${z.tahun_periode}</option>`
             })
 
             $("#periode-tahun-show").html(htmlOption);
@@ -117,8 +108,41 @@ $(document).ready(function (){
         });
     }
 
+    $('#tambah-data').on('click', function(){
+        let loadingKontent = `<span style="color: white;">Menyiapkan Formulir. Harap Tunggu...</span>`
+        
+        $('#layout .konten').html(loadingKontent);
+        $('#layout').show();
+
+        let url         = base_url + "/module/Master/getAspek";
+        let params      = { periode : $("#periode-tahun-show").val(), tag: $("#tag").val() }
+        let htmlOption  = "";
+
+        $.get(url, params).done(function (response) {
+            const data = JSON.parse(response);
+            
+            data.data.forEach((z, index) => {
+                htmlOption += `
+                    <option value="${z.id_aspek}" data-bobot="${z.nilai_maks}">${z.aspek}</option>
+                `
+
+                if(index == 0)
+                    $('#bobot-aspek').val(z.nilai_maks)
+            });
+
+            $('#id_aspek').html(htmlOption);
+            $('#layout').fadeOut(300);
+        });
+
+        $(".periode-show-text").text($("#periode-tahun-show option:selected").text());
+        $(".page-form #formindikator")[0].reset();
+        $(".page-content").slideUp();
+        $(".page-form").fadeIn();
+
+        $('.page-form #formindikator #periode-indikator-input').val($("#periode-tahun-show").val());
+    })
+
     $("#periode-tahun-show").on('change', function(){
-        oTable.clear();
         oTable.ajax.reload();
     });
 
@@ -127,18 +151,52 @@ $(document).ready(function (){
         var aData = oTable.row($(this).closest('tr')).data();
         if(!aData) var aData = oTable.row(this).data();
 
-        console.log(aData);
-        for (var key in aData) {
-            try {
-                if(key=='id_opd') $("#formindikator [name='id_opd']").val(aData[key]).trigger('change');
-                $('#formindikator [name=' + key + ']').val(aData[key]);
+        let loadingKontent = `<span style="color: white;">Menyiapkan Formulir. Harap Tunggu...</span>`
+        
+        $('#layout .konten').html(loadingKontent);
+        $('#layout').show();
 
-                if (aData['is_aktif'] == 0) $('#formindikator [name="is_aktif"]').prop('checked', false);
-                else $('#formindikator [name="is_aktif"]').prop('checked', true);
-            } catch (err) {}
-        }
-        $(".page-content").hide();
+        let url         = base_url + "/module/Master/getAspek";
+        let params      = { periode : $("#periode-tahun-show").val(), tag: $("#tag").val() }
+        let htmlOption  = "";
+
+        $.get(url, params).done(function (response) {
+            const data = JSON.parse(response);
+            
+            data.data.forEach((z, index) => {
+                htmlOption += `
+                    <option value="${z.id_aspek}" data-bobot="${z.nilai_maks}">${z.aspek}</option>
+                `
+
+                if(index == 0)
+                    $('#bobot-aspek').val(z.nilai_maks)
+            });
+
+            $('#id_aspek').html(htmlOption);
+            $('#layout').fadeOut(300);
+
+            setTimeout(() => {
+                for (var key in aData) {
+                    try {
+                        if(key=='id_opd') $("#formindikator [name='id_opd']").val(aData[key]).trigger('change');
+                        $('#formindikator [name=' + key + ']').val(aData[key]);
+        
+                        if (aData['is_aktif'] == 0) $('#formindikator [name="is_aktif"]').prop('checked', false);
+                        else $('#formindikator [name="is_aktif"]').prop('checked', true);
+                    } catch (err) {}
+                }
+            }, 0);
+        });
+
+        $(".periode-show-text").text($("#periode-tahun-show option:selected").text());
+        $(".page-form #formindikator")[0].reset();
+        $(".page-content").slideUp();
         $(".page-form").fadeIn();
+
+        $('.page-form #formindikator #periode-indikator-input').val($("#periode-tahun-show").val());
+
+        // $(".page-content").hide();
+        // $(".page-form").fadeIn();
 
     });
 
@@ -172,6 +230,9 @@ $(document).ready(function (){
         e.preventDefault();
 
         var formData = new FormData($("#formindikator")[0]);
+        
+        $('#btn-submit').text('menyimpan...');
+        $('#btn-submit').attr('disabled', 'true');
 
         $.ajax({
             url: base_url + "/module/master/simpan_indikator",
@@ -181,6 +242,8 @@ $(document).ready(function (){
             processData: false,
             success: function (response) {
                 var m = JSON.parse(response);
+                console.log(m);
+                
                 if (m.status === "ok") {
                     $.toast({
                         heading: 'Success',
@@ -189,7 +252,20 @@ $(document).ready(function (){
                         icon: 'success',
                         loaderBg: '#f96868',
                         position: 'top-right'
-                    })
+                    });
+
+                    $('#btn-submit').text('Simpan Indikator');
+                    $('#btn-submit').removeAttr('disabled');
+
+                    $(".page-form #formindikator")[0].reset();
+
+                    let selected = $('#id_aspek option').filter(':selected');
+                    $('#bobot-aspek').val(selected.data('bobot'));
+
+                    $(".page-form").hide();
+                    $(".page-content").show();
+
+                    oTable.ajax.reload();
                 } else {
                     $.toast({
                         heading: 'Danger',
@@ -198,14 +274,15 @@ $(document).ready(function (){
                         icon: 'error',
                         loaderBg: '#f2a654',
                         position: 'top-right'
-                    })
+                    });
                 }
-                $(".page-form #formindikator")[0].reset();
-                $(".page-form").hide();
-                $(".page-content").show();
-                oTable.ajax.reload();
             }
         });
+    });
+
+    $('#id_aspek').on('change', function(){
+        let selected = $('#id_aspek option').filter(':selected');
+        $('#bobot-aspek').val(selected.data('bobot'));
     });
 
     getPeriode();

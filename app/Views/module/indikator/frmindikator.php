@@ -14,73 +14,39 @@
                 <br>
             </div>
             <div class="col-md-12">
-                <div class="form-group">
+                <div class="form-group" style="margin-bottom: 50px;">
                     <label>Spirit</label>
                     <div class="controls">
                         <input type="hidden" name="tag" id="tag" value="<?php echo isset($tag)?$tag:'opd'; ?>">
+                        <input type="hidden" id="periode-indikator-input" name="periode-indikator" readonly>
+                        <input type="hidden" id="bobot-aspek" name="nilai_maks" readonly>
+
                         <select class="form-control" name="id_aspek" id="id_aspek">
-                            <?php
-                            if(isset($tag) && $tag=='kab') {
-                                $kategori = array(
-                                    'K01' => 'Cepat',
-                                    'K02' => 'Efektif & Efisien',
-                                    'K03' => 'Tanggap',
-                                    'K04' => 'Transparan',
-                                    'K05' => 'Akuntabel',
-                                    'K06' => 'Responsive'
-                                );
-                            }else{
-                                $kategori = array(
-                                    'C01' => 'Cepat',
-                                    'C02' => 'Efektif & Efisien',
-                                    'C03' => 'Tanggap',
-                                    'C04' => 'Transparan',
-                                    'C05' => 'Akuntabel',
-                                    'C06' => 'Responsive'
-                                );
-                            }
-                            foreach ($kategori as $key => $value){
-                                $selected = '';
-                                echo '<option value="'.$key.'" '. $selected.' >'. $value.'</option>';
-                            }
-                            ?>
+                            
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
+
+                <!-- <div class="form-group">
                     <label>Bobot Spirit<small><em>Note: Isikan bobot spirit</em></small></label>
                     <div class="controls">
                         <input type="number" class="form-control" id="nilai_maks" name="nilai_maks" required>
                     </div>
-                </div>
-                <div class="form-group" >
+                </div> -->
+
+                <div style="border-top: 1px solid #ddd;">&nbsp;</div>
+
+                <div class="form-group" style="margin-top: 15px;">
                     <label>PD Pengampu</label>
                     <div class="controls">
                         <input type="hidden" name="opd_pengampu" id="opd_pengampu">
-                        <select name="id_opd"  id="id_opd" class="form-control select2"  style="width:100%">
+                        <select name="id_opd" id="id_opd" class="form-control select2"  style="width:100%">
                             <option value="">- Pilih PD Pengampu -</option>
                             <?php
                             if(isset($unit)) {
                                 foreach ($unit as $key) {
                                     echo '<option value="' . $key->id_unit . '">' . $key->unit . '</option>';
                                 }
-                            }
-                            ?>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group hide" style="display:none">
-                    <label>Periode</label>
-                    <div class="controls">
-                        <select class="form-control" name="periode" id="periode">
-                            <?php
-                            $periode = array(
-                                'tahunan' => 'Tahunan',
-                                'triwulan' => 'Triwulan'
-                            );
-                            foreach ($periode as $key => $value){
-                                $selected = '';
-                                echo '<option value="'.$key.'" '. $selected.' >'. $value.'</option>';
                             }
                             ?>
                         </select>
@@ -114,8 +80,10 @@
                 </div>
 
                 <div class="pull-right">
-                    <a href="<?php echo base_url('module/master/indikator') ?>" class="btn btn-white btn-cons btn-cancel">Cancel</a>
-                    <button type="submit" class="btn btn-primary btn-cons btn-biodata">Simpan</button>
+                    <a href="#" class="btn btn-white btn-cons btn-cancel" style="padding: 8px 15px; font-size: 8pt;">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-cons btn-biodata" style="padding: 8px 15px; font-size: 8pt;" id="btn-submit">
+                        Simpan Indikator
+                    </button>
                 </div>
 
             </div>

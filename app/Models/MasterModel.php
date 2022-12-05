@@ -207,7 +207,7 @@ class MasterModel extends Model
         m_aspek.nilai_maks,m_aspek.icon, m_indikator.*, mid(md5(m_indikator.id_indikator),9,6) as id_indikator_hash');
         $builder->join('m_aspek', 'm_aspek.id_aspek = m_indikator.id_aspek');
         $builder->where('m_indikator.is_aktif <> 3');
-        $builder->where('periode = '.$data['periode']);
+        $builder->where('m_indikator.periode = '.$data['periode']);
 
         if(isset($data['tag']) && !empty($data['tag'])) $builder->where('m_aspek.tag',$data['tag']);
         if(isset($data['id_unit']) && !empty($data['id_unit'])) $builder->where('m_indikator.id_opd',$data['id_unit']);
@@ -261,6 +261,23 @@ class MasterModel extends Model
         return $builder->get()->getResult();
     }
 
+    function getIdPeriode(){
+        $query = '
+            select max(id_periode) as id_periode from m_periode
+        ';
+
+        return $this->db->query($query)->getRow();
+    }
+
+    public function bobotTerakhir(){
+        $query = "
+        SELECT * FROM m_aspek 
+        WHERE periode = (SELECT id_periode FROM m_periode WHERE tahun_periode = (SELECT MAX(tahun_periode) FROM m_periode))
+        ";
+        
+        return $this->db->query($query)->getResult();
+    }
+
     function findPeriode($where){
         $builder = $this->db->table('m_periode');
         $builder->select('m_periode.*');
@@ -276,12 +293,22 @@ class MasterModel extends Model
         return $builder;
     }
 
+    function insertAspek($data = null){
+        $builder = $this->db->table('m_aspek');
+        $builder->insertBatch($data);
+        
+        return $builder;
+    }
+
     function deletePeriode($data = null){
         $builder = $this->db->table('m_periode');
         $builder->delete($data);
 
         $builder2 = $this->db->table('m_indikator');
         $builder2->delete(['periode' => $data['tahun_periode']]);
+
+        $builder3 = $this->db->table('m_aspek');
+        $builder3->delete(['periode' => $data['tahun_periode']]);
         
         return $builder;
     }
@@ -291,5 +318,17 @@ class MasterModel extends Model
         $builder->update($data, $where);
         
         return $builder;
+    }
+
+    /** Aspek */
+    function getAspek($data){
+        $builder = $this->db->table('m_aspek');
+        $builder->where('tag', $data['tag']);
+        $builder->orderBy('id_aspek', 'asc');
+
+        if(isset($data['periode']))
+            $builder->where('periode', $data['periode']);
+
+        return $builder->get()->getResult();
     }
 }
