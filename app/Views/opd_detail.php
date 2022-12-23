@@ -19,74 +19,104 @@
     <script>
         base_url = "<?php echo base_url(); ?>";
     </script>
+    <style>
+        #layout{
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 999;
+            text-align: center;;
+            /* display: none; */
+            margin-top: -20vh;
+        }
+
+        #layout .konten{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            color: white;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+    </style>
 </head>
 
 <body>
+<div id="layout">
+    <div class="konten">
+        Menyiapkan Data, Harap Tunggu ...
+    </div>
+</div>
+
 <?php echo view('header') ?>
 <div class="left-image-decor"></div>
 <section class="section" style="margin-top:10%!important;">
     <div class="container">
         <div class="row">
             <div class="card col-md-12">
-                <div class="card-body" >
-                    <input type="hidden" id="tag" value="<?php echo (isset($tag)?$tag:'opd') ?>">
-                    <h4 class="card-title"><?php echo ($unit->nama_unit?ucwords(strtolower($unit->nama_unit)):$unit->unit) ?></h4>
+                <div class="card-body">
+                    <input type="hidden" id="tag" value="<?php echo (isset($tag) ? $tag : 'opd') ?>">
+                    <?php if ($unit->kategori_unit == 'opd') { ?>
+                        <img src="<?php base_url('uploads/logo_pd' . $unit->logo) ?>" class="img img-thumbnail">
+                    <?php } else { ?>
+                        <img src="<?php base_url('uploads/logo_kab' . $unit->logo) ?>" class="img img-thumblail">
+                    <?php } ?>
+                    <h4 class="card-title"><?php echo ($unit->nama_unit ? ucwords(strtolower($unit->nama_unit)) : $unit->unit) ?></h4>
 
                     <div class="row">
 
                         <div class="col-lg-12 col-md-12">
                             <hr>
-                           <!--<div align="center" class="text-center">
-                                <img src="<?php /*echo base_url($unit->foto_pejabat) ?>" class="img img-thumbnail img-rounded center" style="border-radius: 50%;" width="80px">
-                                <br><small>Kepala <?php echo $unit->unit ?></small><br>
-                                <b><?php echo $unit->pejabat */?></b>
-                            </div>
-                            <hr>-->
+                            <!--<div align="center" class="text-center">
+                            <img src="<?php /*echo base_url($unit->foto_pejabat) ?>" class="img img-thumbnail img-rounded center" style="border-radius: 50%;" width="80px">
+                            <br><small>Kepala <?php echo $unit->unit ?></small><br>
+                            <b><?php echo $unit->pejabat */ ?></b>
+                        </div>
+                        <hr>-->
                             <div class="row">
                                 <div class="col-lg-3 col-md-3">
-                                   <!-- <img src="<?php //echo base_url($unit->foto) ?>" class="img img-thumbnail">-->
-                                    <img src="<?php echo ($unit->foto_pejabat==1?base_url('assets/images/foto/'.$unit->id_unit.'.jpg'):file_url($unit->foto_pejabat)); ?>" class="img img-thumbnail center">
+                                    <!-- <img src="<?php //echo base_url($unit->foto) 
+                                                    ?>" class="img img-thumbnail">-->
+                                    <img src="<?php echo ($unit->foto_pejabat == 1 ? base_url('assets/images/foto/' . $unit->id_unit . '.jpg') : file_url($unit->foto_pejabat)); ?>" class="img img-thumbnail center">
                                     <br><small><?php
-                                        if($unit->kategori_unit=='kab') echo (substr($unit->unit,0,4)=='Kota'?'Walikota':'Bupati') .' '.(substr($unit->unit,0,4)=='Kota'?str_replace('Kota','',$unit->unit):str_replace('Kabupaten','',$unit->unit));
-                                        else echo $unit->nm_jabatan.' '.$unit->unit;
-                                        ?></small><br>
+                                                if ($unit->kategori_unit == 'kab') echo (substr($unit->unit, 0, 4) == 'Kota' ? 'Walikota' : 'Bupati') . ' ' . (substr($unit->unit, 0, 4) == 'Kota' ? str_replace('Kota', '', $unit->unit) : str_replace('Kabupaten', '', $unit->unit));
+                                                else echo $unit->nm_jabatan . ' ' . $unit->unit;
+                                                ?></small><br>
                                     <b><?php echo $unit->pejabat ?></b>
                                 </div>
                                 <div class="col-lg-9 col-md-9">
                                     <?php
-                                    if($unit->kategori_unit=='opd'){
+                                    if ($unit->kategori_unit == 'opd') {
                                     ?>
-                                    <b>Jumlah SDM</b> <?php echo ($unit->jumlah_sdm?$unit->jumlah_sdm:'-') ?>
-                                    <hr><b>Jumlah UPT/Cabang Dinas</b> <?php echo ($unit->jumlah_upt?$unit->jumlah_upt:'-') ?>
-                                    <hr><b>Nama & Jumlah Bidang/Bagian/Subbag/Subbid</b> <?php echo ($unit->jumlah_bidang?$unit->jumlah_bidang:'-') ?>
-                                    <hr><b>Jumlah Anggaran</b> <?php echo ($unit->jumlah_anggaran?$unit->jumlah_anggaran:'-') ?>
-                                    <hr>
+                                        <b>Jumlah SDM</b> <?php echo ($unit->jumlah_sdm ? $unit->jumlah_sdm : '-') ?>
+                                        <hr><b>Tugas</b> <?php echo ($unit->tugas ? $unit->tugas : '-') ?>
+                                        <?php $misi = str_replace([".", ";", '"'], "<li>", $unit->fungsi) ?>
+                                        <hr><b>Fungsi</b> <?php echo ($misi ? $misi : '-') ?>
+                                        <hr>
+                                    <?php } else { ?>
+                                        <b>Jumlah SDM</b> <?php echo ($unit->jumlah_sdm ? $unit->jumlah_sdm : '-') ?>
+                                        <hr><b>Visi</b> <?php echo ($unit->tugas ? $unit->tugas : '-') ?>
+                                        <?php $misi = str_replace([".", ";"], ".<li>", $unit->fungsi) ?>
+                                        <hr><b>Misi</b><br> <?php echo ($misi ? $misi : '-') ?>
+                                        <hr>
                                     <?php } ?>
                                     Alamat:<br>
                                     <i class="fa fa-map-marker"></i> <?php echo $unit->alamat ?><br>
                                     <i class="fa fa-link"></i> <b><a href="<?php echo $unit->website ?>" target="_blank"><?php echo $unit->website ?></a></b>
-                                    <i class="fa fa-envelope"></i> <b><?php echo str_replace('@','[at]',$unit->email) ?></b>
+                                    <i class="fa fa-envelope"></i> <b><?php echo str_replace('@', '[at]', $unit->email) ?></b>
                                     </br>Telp. <?php echo $unit->telp ?>, Fax. <?php echo $unit->fax ?>
                                     <?php
-                                    if($unit->kategori_unit=='opd') {
-                                        ?>
+                                    if ($unit->kategori_unit == 'opd') {
+                                    ?>
                                         <br>
-                                        <?php if ($unit->medsos_ig) { ?> <a
-                                                href="http://instagram.com/<?php echo str_replace('@', '', $unit->medsos_ig) ?>"
-                                                target="_blank"><i
-                                                    class="fa fa-instagram"></i> <?php echo $unit->medsos_ig ?>
-                                        </a>&nbsp;<?php } ?>
-                                        <?php if ($unit->medsos_fb) { ?><a
-                                            href="http://facebook.com/<?php echo str_replace('@', '', $unit->medsos_fb) ?>"
-                                            target="_blank"><i
-                                                    class="fa fa-facebook-square"></i> <?php echo $unit->medsos_fb ?>
+                                        <?php if ($unit->medsos_ig) { ?> <a href="http://instagram.com/<?php echo str_replace('@', '', $unit->medsos_ig) ?>" target="_blank"><i class="fa fa-instagram"></i> <?php echo $unit->medsos_ig ?>
                                             </a>&nbsp;<?php } ?>
-                                        <?php if ($unit->medsos_twitter) { ?><a
-                                            href="http://twitter.com/<?php echo str_replace('@', '', $unit->medsos_twitter) ?>"
-                                            target="_blank"><i
-                                                    class="fa fa-twitter-square"></i> <?php echo $unit->medsos_twitter ?>
-                                            </a><?php }
-                                    }?>
+                                            <?php if ($unit->medsos_fb) { ?><a href="http://facebook.com/<?php echo str_replace('@', '', $unit->medsos_fb) ?>" target="_blank"><i class="fa fa-facebook-square"></i> <?php echo $unit->medsos_fb ?>
+                                                </a>&nbsp;<?php } ?>
+                                                <?php if ($unit->medsos_twitter) { ?><a href="http://twitter.com/<?php echo str_replace('@', '', $unit->medsos_twitter) ?>" target="_blank"><i class="fa fa-twitter-square"></i> <?php echo $unit->medsos_twitter ?>
+                                                    </a><?php }
+                                                } ?>
 
                                 </div>
                             </div>
@@ -94,6 +124,7 @@
                     </div>
                 </div>
             </div>
+            
             <div class="card col-md-12" style="margin-top:20px">
                 <div class="card-body" >
                     <h4 class="card-title">Rapor CETTAR</h4>
@@ -108,12 +139,15 @@
                                                 <label>Tahun</label>
                                                 <select name="tahun" class="form-control" id="tahun">
                                                     <?php
-                                                    $year = date('Y');
-                                                    $min = $year - 10;
-                                                    $max = $year;
-                                                    for( $i=$max; $i>=$min; $i-- ){
-                                                        echo '<option value="'.$i.'">'.$i.'</option>';
-                                                    }
+                                                        foreach($dataPeriode as $key => $dPeriode){
+                                                            if(isset($_GET['t']))
+                                                                $selected = ($dPeriode->id_periode == $_GET['t']) ? 'selected' : '';
+                                                            else
+                                                                $selected = ($key == (count($dataPeriode) - 1)) ? 'selected' : '';
+
+
+                                                            echo '<option value="'.$dPeriode->id_periode.'" '.$selected.'>'.$dPeriode->tahun_periode.'</option>';
+                                                        }
                                                     ?>
                                                 </select>
                                             </div>
@@ -162,7 +196,7 @@
                 </div>
             </div>
 
-            <div class="card proj-progress-card col-md-12">
+            <div class="card proj-progress-card col-md-12" style="margin-top: 30px; padding: 20px;">
                 <div class="card-block">
                     <div class="row" id="progress-aspek"></div>
                 </div>

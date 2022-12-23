@@ -24,14 +24,51 @@
     <script>
         base_url = "<?php echo base_url(); ?>";
     </script>
+
+    <style>        
+        .select2-container .select2-selection--single {
+            height: 37px !important;
+            font-size: 12pt !important;
+            padding-top: 5px !important;
+            padding-left: 10px !important; 
+        }
+    </style>
+
+    <style>
+        #layout{
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 999;
+            text-align: center;;
+            /* display: none; */
+            margin-top: -20vh;
+        }
+
+        #layout .konten{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            color: white;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+    </style>
 </head>
 
 <body>
+<div id="layout">
+    <div class="konten">
+        Menyiapkan Data, Harap Tunggu ...
+    </div>
+</div>
+        
 <?php echo view('header') ?>
 <div class="left-image-decor"></div>
 <section class="section" style="margin-top:10%!important;">
         <div class="container">
-            <div class="row">
+            <div class="row" style="display: block;">
                 <div class="card" id="divDataRekap">
                     <div class="card-body" >
                         <h4 class="card-title">Rangking <?php echo $label ?></h4>
@@ -41,24 +78,24 @@
                                     <form id="frmsearch" class="forms-sample form-horizontal">
                                         <input type="hidden" id="tag" value="<?php echo (isset($tag)?$tag:'opd') ?>">
                                         <input type="hidden" id="lblunit" value="<?php echo $label ?>">
+
                                         <div class="form-group"><label>Filter pencarian</label>
                                             <div class="form-group row">
                                                 <div class="col-md-2">
                                                     <label>Tahun</label>
                                                     <select name="tahun" class="form-control" id="tahun">
-                                                        <?php
-                                                        $year = date('Y');
-                                                        $min = $year - 10;
-                                                        $max = $year;
-                                                        for( $i=$max; $i>=$min; $i-- ){
-                                                            echo '<option value="'.$i.'">'.$i.'</option>';
-                                                        }
+                                                        <?php 
+                                                            foreach($dataPeriode as $key => $dPeriode){
+                                                                $selected = ($dPeriode->id_periode == $periode) ? 'selected' : '';
+
+                                                                echo '<option value="'.$dPeriode->id_periode.'" '.$selected.'>'.$dPeriode->tahun_periode.'</option>';
+                                                            }
                                                         ?>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label><?php echo $label ?></label><br>
-                                                    <select name="id_unit" id="id_unit" class="form-control select2"  width="100%">
+                                                    <select name="id_unit" id="id_unit" class="form-control select2" width="100%">
                                                         <option value="">- Semua <?php echo $label ?> -</option>
                                                         <?php
                                                         if(isset($unit)) {
@@ -96,7 +133,7 @@
 
                                                         <select name="id_aspek" id="id_aspek" class="form-control" width="100%">
                                                             <?php
-                                                            echo '<option value="">- Semua Aspek -</option>';
+                                                            // echo '<option value="">- Semua Aspek -</option>';
                                                             if(isset($indikator)){
                                                                 $aspek=array();
                                                                 foreach ($indikator as $key):
@@ -117,17 +154,14 @@
                                                         </select>
                                                     </div>
                                                 </div>
-
-
-
                                             </div>
                                     </form>
                                 </blockquote>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="margin-top: 30px;">
                                 <div id="chart"></div>
 
-                                <div class="table-responsive" id="div-rekap">
+                                <!-- <div class="table-responsive" id="div-rekap">
                                     <table class="table table-hover table-striped display" id="tableRekap">
                                         <thead>
                                         <tr>
@@ -141,7 +175,7 @@
                                         <tbody>
                                         </tbody>
                                     </table>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

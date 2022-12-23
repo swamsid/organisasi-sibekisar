@@ -34,7 +34,14 @@
                                  <li><a href="<?php echo base_url('read/kab') ?>">Raport</a></li>
                              </ul>
                          </li>
-                        <li class="scroll-to-section"><a href="<?php echo base_url('auth') ?>" >Login</a></li>
+                         <li class="scroll-to-section" style="border-right: 2px solid #eee; padding-right: 20px;">
+                            <a href="<?php echo base_url('auth') ?>" >Login</a>
+                         </li>
+                         <li class="scroll-to-section">
+                            <a href="http://berakhlak.multi.web.id" target="_blank" style="color: var(--danger); font-weight: bold;">
+                                Berakhlak &nbsp;<i class="fa fa-caret-right"></i>
+                            </a>
+                        </li>
                     </ul>
                     <a class='menu-trigger'>
                         <span>Menu</span>

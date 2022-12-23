@@ -256,7 +256,7 @@ class MasterModel extends Model
         $builder->select('m_periode.*, count(evaluasi.id_evaluasi) as evaluasi');
         $builder->groupBy('id_periode');
         $builder->orderBy('tahun_periode', 'asc');
-        $builder->join('evaluasi', 'evaluasi.periode = m_periode.tahun_periode', 'left');
+        $builder->join('evaluasi', 'evaluasi.tahun = m_periode.tahun_periode', 'left');
 
         return $builder->get()->getResult();
     }

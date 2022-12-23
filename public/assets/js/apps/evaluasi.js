@@ -82,13 +82,84 @@ $(document).ready(function () {
     })
 
     $("#frmsearch [name='tahun']").change(function(){
-        alert('okee');
+        $('#tahun').val($("#frmsearch [name='tahun'] option:selected").text());
+        $('#periode').val($("#frmsearch [name='tahun']").val());
     });
 
     $("#frmsearch [name='id_indikator']").change(function(){
-        console.log($(this).val());
-        tabevaluasibyindikator();
+        $('#id_indikator').val($("#frmsearch [name='id_indikator']").val());
+        $('.btn-hide-first').fadeIn(300);
+
+        $('#nilai_maks').val($("#frmsearch [name='id_indikator'] option:selected").data('nmaks'));
+        $('#bobot').val($("#frmsearch [name='id_indikator'] option:selected").data('bobot'));
+        getDataByIndikator();
     });
+
+    $("#submit-form").click(function(){
+        let url     = base_url + "/apps/simpanevaluasi";
+        let params  = $('#formEvaluasi').serialize();
+
+        $.post(url, params).done(function (response) {
+            var rest = JSON.parse(response);
+            
+            if(rest.status == 'success'){
+                const data = rest.data;
+            }else{
+
+            }
+        })
+    });
+
+    function getDataByIndikator(){
+        let url     = base_url + "/apps/finddetailbyindikator";
+        let params  = {
+            tahun           : $("#frmsearch [name='tahun']").val(),
+            tag             : $('#tag').val(),
+            id_indikator    : $("#frmsearch [name='id_indikator']").val()
+        };
+
+        let id_indikator = $("#frmsearch [name='id_indikator']").val();
+
+        let loadingKontent = `<span style="color: white;">Harap Tunggu...</span>`
+        
+        $('#layout .konten').html(loadingKontent);
+        $('#layout').show();
+
+        $.get(url, params).done(function (response) {
+            var rest = JSON.parse(response);
+            
+            if(rest.status == 'success'){
+                const data = rest.data;
+
+                if (data) {
+                    let html = '';
+
+                    data.forEach((z, alpha) => {
+                        html += `
+                        <tr>
+                            <td>
+                                <input type="hidden" name="id_unit[]" value="${z.unit_id}" readonly>
+                                ${z.unit}
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" style="height: 30px; text-align: center;" placeholder="Input nilai" name="nilai_konversi[]" value="${(z.nilai_konversi) ? z.nilai_konversi : 0 }">
+                            </td>
+                        </tr>
+                        `;
+                    })
+
+                    $('#table-data tbody').html(html);
+                    setTimeout(() => {
+                        $('#layout').fadeOut(300);
+                    }, 0);
+
+                    // console.log($('#table-data tbody').html());
+                } else {
+                    $('#data-text-info').text('Tidak ditemukan data di indikator ini. coba muat ulang halaman')
+                }
+            }
+        });
+    }
 
     tabevaluasibyindikator = function(){
         $("#divFormEvaluasi").hide();
@@ -104,6 +175,7 @@ $(document).ready(function () {
         $('.nilai_maks').val(nilai_maks);
         $('.bobot').val(bobot);
         $('.nilai_konversi').val(0);
+
         if(id_indikator) {
             $("#divFormEvaluasi").show();
             $.ajax({
@@ -143,7 +215,7 @@ $(document).ready(function () {
     function initPage(){
 
         let url = base_url + "/apps/getPeriodeDanIndikator?tag="+$('#tag').val();
-        let htmlOption = ""; let htmlOption2 = "";
+        let htmlOption = ""; let htmlOption2 = "<option value='00000' selected disabled> -- Pilih indikator</option>";
 
         $.get(url).done(function (response) {
             const data = JSON.parse(response) 
@@ -152,9 +224,11 @@ $(document).ready(function () {
             });
 
             data.indikator.forEach((z, index) => { 
-                htmlOption2 +=  `<option value="${z.id_indikator}" ${ (index == 0) ? 'selected' : '' }>${z.indikator}</option>`
+                htmlOption2 +=  `<option value="${z.id_indikator}" data-nmaks="${z.nilai_maks}" data-bobot="${z.bobot}">${z.indikator}</option>`
             });
 
+            $("#tahun").val(data.selected)
+            $("#periode").val(data.periode[(data.periode.length - 1)].id_periode)
             $("#tahun-periode").html(htmlOption);
             $("#id_indikator_cmb").html(htmlOption2);
 

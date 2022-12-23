@@ -183,7 +183,6 @@ class EvaluasiModel extends Model
         return $builder->get()->getResult();
     }
 
-
     function findDataByIndikator($data = null)
     {
         $builder = $this->db->table('m_unit');
@@ -221,11 +220,37 @@ class EvaluasiModel extends Model
             $where = " (evaluasi.id_evaluasi='" . $data['id_evaluasi'] . "' OR mid(md5(evaluasi.id_evaluasi),9,6)='" . $data['id_evaluasi'] . "')";
             $builder->where($where);
         }
+
         $builder->orderBy('m_unit.kode_unit ASC');
-        // $sql = $builder->getCompiledSelect();
-        // echo $sql;exit;
 
         return $builder->get()->getResult();
+    }
+
+    function findPenilaian($data){
+        $builder = $this->db->table('m_unit');
+        $builder->join(
+            'evaluasi', 
+            'm_unit.id_unit = evaluasi.id_unit AND evaluasi.tahun = '.$data['tahun'].' AND evaluasi.id_indikator = "'.$data['id_indikator'].'"', 
+            'left'
+        );
+        
+        $builder->where('kategori_unit', $data['tag']);
+        $builder->select('m_unit.unit, ,m_unit.id_unit as unit_id, evaluasi.*', 'mid(md5(evaluasi.id_evaluasi),9,6) as id_evaluasi_hash');
+
+        return $builder->get()->getResult();
+    }
+
+    // Dirga
+
+    function findAspek($data = null)
+    {
+        $builder = $this->db->table('m_aspek');
+        $builder->select('m_aspek.*');
+        $builder->where($data);
+
+        $query = $builder->get()->getResult();
+        
+        return $query;
     }
 
     function findCettar($data = null)

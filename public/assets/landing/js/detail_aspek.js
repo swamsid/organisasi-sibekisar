@@ -7,12 +7,15 @@ $(document).ready(function () {
     $(".filter-aspek").show();
 
     $("#tahun").on('change',function(){
+        $('#layout').fadeIn(500);
         tabrekap();
     });
     $("#id_unit").on('change',function(){
+        $('#layout').fadeIn(500);
         tabrekap();
     });
     $("#id_aspek").on('change',function(){
+        $('#layout').fadeIn(500);
         tabrekap();
     });
 
@@ -28,10 +31,11 @@ $(document).ready(function () {
 
         var tahun=$("#tahun").val();
         var id_aspek=$("#id_aspek").val();
-        var req = $.post(url, param).done(function (data) {
 
-            if (data) grafikaspek(data, tahun,id_aspek);
+        var req = $.post(url, param).done(function (data) {
+            if (data) grafikaspek(data.eval, tahun, id_aspek);
             $('#div-rekap').html("");
+            $('#layout').fadeOut(500);
         }).always(function () {});
     }
 
@@ -39,259 +43,21 @@ $(document).ready(function () {
     tabrekap();
 
     grafikaspek = function(data,tahun,id_aspek){
-        var a=[], b=[], c=[], d=[], e=[], f=[];
-        var ma=[], mb=[], mc=[], md=[], me=[], mf=[];
-        var kategori = [],aspek=[];
-        var flags=[],flag=[],series=[],seriesa=[],seriesb=[], seriesc=[],seriesd=[],seriese=[],seriesf=[], jml=[],unit=[],kategoriunit=[];
 
-        for(var i = 0; i < data.length; i++){
-            if( aspek[data[i].aspek]) continue;
-            aspek[data[i].aspek] = true;
-            kategori.push(data[i]['aspek']);
-        }
+        let chartSeriesData=[];
+        let chartSeriesColor=[], chartUnit=[], flags=[];
 
-        for(var i = 0; i < data.length; i++){
-            if( flags[data[i].unit]) continue;
-            flags[data[i].unit] = true;
-            unit.push(data[i]['unit']);
-        }
+        data.sort(function(a, b){ return parseFloat(b.nilai_akhir) - parseFloat(a.nilai_akhir) }).forEach((z, alpha) => {
+            let l = '<a href="'+base_url +'/read/'+$("#tag").val()+'/'+z['id_unit_hash']+'?t='+$('#tahun').val()+'">'+z['unit'].toUpperCase()+'</a>';
+            let seriesColor = (alpha == 0) ? '#127a2c' : '#a9c7ff';
+            let series = [l, parseFloat(z['nilai_akhir'])];
+            chartSeriesData.push(series);
+            chartSeriesColor.push(seriesColor);
+            chartUnit.push(l);
+        })
 
-        for(var i = 0; i < kategori.length; i++) {
-            jml[i] = 0;
-            a[j] = 0, b[j] = 0, c[j] = 0, d[j] = 0, e[j] = 0;
-            for (var j = 0; j < unit.length; j++) {
-                kategoriunit[i] = unit[j];
-                if (flag[kategoriunit[i]]) continue;
-                flag[kategoriunit[i]] = true;
-
-                if (data) {
-                    $.each(data, function (key, value) {
-                        if (unit[j] == value['unit']) {
-                            if (value['id_aspek'] == 'C01' || value['id_aspek'] == 'K01'){
-                                a[j] = parseFloat(value['nilai_akhir']);
-                                ma.push({unit:value['unit'], 'nilai':a[j]});
-                            }
-                            if (value['id_aspek'] == 'C02' || value['id_aspek'] == 'K02') {
-                                b[j] = parseFloat(value['nilai_akhir']);
-                                mb.push({unit:value['unit'], 'nilai':b[j]});
-                            }
-                            if (value['id_aspek'] == 'C03' || value['id_aspek'] == 'K03') {
-                                c[j] = parseFloat(value['nilai_akhir']);
-                                mc.push({unit:value['unit'], 'nilai':c[j]});
-                            }
-                            if (value['id_aspek'] == 'C04' || value['id_aspek'] == 'K04') {
-                                d[j] = parseFloat(value['nilai_akhir']);
-                                md.push({unit:value['unit'], 'nilai':d[j]});
-                            }
-                            if (value['id_aspek'] == 'C05' || value['id_aspek'] == 'K05') {
-                                e[j] = parseFloat(value['nilai_akhir']);
-                                me.push({unit:value['unit'], 'nilai':e[j]});
-                            }
-                            if (value['id_aspek'] == 'C06' || value['id_aspek'] == 'K06') {
-                                f[j] = parseFloat(value['nilai_akhir']);
-                                mf.push({unit:value['unit'], 'nilai':f[j]});
-                            }
-                        }
-                    });
-                }
-            }
-            if (kategori[i] == 'Cepat' && (id_aspek=='C01' || id_aspek=='K01')){
-                var chartSeriesData=[];
-                var chartSeriesColor=[], chartUnit=[], flags=[];
-
-                ma.sort(function(a,b){ return b.nilai-a.nilai});
-                for (var x = 0; x < ma.length; x++) {
-                    //if(x < 56){
-                        if(x==0) color = '#127a2c';
-                        else color = '#a9c7ff';
-                        if (data) {
-                            y=0
-                            $.each(data, function (key, value) {
-                                if(kategori[i]==value['aspek'] && ma[x]['nilai'] == value['nilai_akhir'] && ma[x]['unit'] == value['unit']) {
-                                    y++;
-                                    //if(x==0) $(".lbl-tercepat").html(value['unit']);
-                                   var l = '<a href="'+base_url +'/read/'+$("#tag").val()+'/'+value['id_unit_hash']+'">'+value['unit'].toUpperCase()+'</a>';
-                                    var seriesColor = color;
-                                    var series = [l, parseFloat(value['nilai_akhir'])];
-                                    chartSeriesData.push(series);
-                                    chartSeriesColor.push(color);
-                                    chartUnit.push(l);
-                                }
-                            });
-                        }
-                    //}
-
-                }
-                var judul= $("#lblunit").val() + ' Tercepat dalam CETTAR Tahun '+ $("#tahun").val();
-                generatechart('chart',judul,chartSeriesData, chartSeriesColor, chartUnit);
-                /*series.push({
-                    name: kategori[i], data: ma
-                });*/
-
-            }
-            if (kategori[i] == 'Efektif & Efisien' && (id_aspek=='C02' || id_aspek=='K02')){
-                var chartSeriesData=[];
-                var chartSeriesColor=[], chartUnit=[];
-                mb.sort(function(a,b){ return b.nilai-a.nilai});
-                for (var x = 0; x < mb.length; x++) {
-                   // if(x < 56){
-                        if(x==0) color = '#127a2c';
-                        else color = '#a9c7ff';
-                        if (data) {
-                            y=0;
-                            $.each(data, function (key, value) {
-                                if(kategori[i]==value['aspek'] && mb[x]['nilai'] == value['nilai_akhir'] && mb[x]['unit'] == value['unit']) {
-                                    y++;
-                                    //if(x==0) $(".lbl-terefektif").html(value['unit']);
-                                   var l = '<a href="'+base_url +'/read/'+$("#tag").val()+'/'+value['id_unit_hash']+'">'+value['unit'].toUpperCase()+'</a>';
-                                    var seriesColor = color;
-                                    var series = [l, parseFloat(value['nilai_akhir'])];
-                                    chartSeriesData.push(series);
-                                    chartSeriesColor.push(color);
-                                    chartUnit.push(l);
-                                }
-                            });
-                       // }
-                    }
-
-                }
-                var judul= $("#lblunit").val() + ' Terefektif & Efisien dalam CETTAR Tahun '+ $("#tahun").val();
-                generatechart('chart',judul,chartSeriesData, chartSeriesColor, chartUnit);
-                /*series.push({
-                    name: kategori[i], data: mb
-                });*/
-            }
-            if (kategori[i] == 'Tanggap' && (id_aspek=='C03' || id_aspek=='K03')){
-                var chartSeriesData=[];
-                var chartSeriesColor=[], chartUnit=[];
-                mc.sort(function(a,b){ return b.nilai-a.nilai});
-                for (var x = 0; x < mc.length; x++) {
-                    //if(x < 56){
-                        if(x==0) color = '#127a2c';
-                        else color = '#a9c7ff';
-                        if (data) {
-                            y=0;
-                            $.each(data, function (key, value) {
-                                if(kategori[i]==value['aspek'] && mc[x]['nilai'] == value['nilai_akhir'] && mc[x]['unit'] == value['unit']) {
-                                    y++;
-                                    //if(x==0) $(".lbl-tertanggap").html(value['unit']);
-                                   var l = '<a href="'+base_url +'/read/'+$("#tag").val()+'/'+value['id_unit_hash']+'">'+value['unit'].toUpperCase()+'</a>';
-                                    var seriesColor = color;
-                                    var series = [l, parseFloat(value['nilai_akhir'])];
-                                    chartSeriesData.push(series);
-                                    chartSeriesColor.push(color);
-                                    chartUnit.push(l);
-                                }
-                            });
-                        //}
-                    }
-
-                }
-                var judul= $("#lblunit").val() + ' Tertanggap dalam CETTAR Tahun '+ $("#tahun").val();
-                generatechart('chart',judul,chartSeriesData, chartSeriesColor, chartUnit);
-
-                /* series.push({
-                     name: kategori[i], data: mc
-                 });*/
-            }
-            if (kategori[i] == 'Transparan' && (id_aspek=='C04' || id_aspek=='K04')){
-                var chartSeriesData=[];
-                var chartSeriesColor=[], chartUnit=[];
-                md.sort(function(a,b){ return b.nilai-a.nilai});
-                for (var x = 0; x < md.length; x++) {
-                   // if(x < 56){
-                        if(x==0) color = '#127a2c';
-                        else color = '#a9c7ff';
-                        if (data) {
-                            y=0;
-                            $.each(data, function (key, value) {
-                                if(kategori[i]==value['aspek'] && md[x]['nilai'] == value['nilai_akhir'] &&  md[x]['unit'] == value['unit']) {
-                                    y++;
-                                    //if(x==0) $(".lbl-tertransparan").html(value['unit']);
-                                   var l = '<a href="'+base_url +'/read/'+$("#tag").val()+'/'+value['id_unit_hash']+'">'+value['unit'].toUpperCase()+'</a>';
-                                    var seriesColor = color;
-                                    var series = [l, parseFloat(value['nilai_akhir'])];
-                                    chartSeriesData.push(series);
-                                    chartSeriesColor.push(color);
-                                    chartUnit.push(l);
-                                }
-                            });
-                        //}
-                    }
-
-                }
-                var judul= $("#lblunit").val() + ' Tertransparan dalam CETTAR Tahun '+ $("#tahun").val();
-                generatechart('chart',judul,chartSeriesData, chartSeriesColor, chartUnit);
-                /*series.push({
-                    name: kategori[i], data: md
-                });*/
-            }
-            if (kategori[i] == 'Akuntabel' && (id_aspek=='C05' || id_aspek=='K05')){
-                var chartSeriesData=[];
-                var chartSeriesColor=[];
-                var chartUnit=[];
-                me.sort(function(a,b){ return b.nilai-a.nilai});
-                for (var x = 0; x < me.length; x++) {
-                    if(x < 56){
-                        if(x==0) color = '#127a2c';
-                        else color = '#a9c7ff';
-                        if (data) {
-                            y=0;
-                            $.each(data, function (key, value) {
-                                if(kategori[i]==value['aspek'] && me[x]['nilai'] == value['nilai_akhir'] && me[x]['unit'] == value['unit']) {
-                                    y++;
-                                    //if(x==0) $(".lbl-terakuntabel").html(value['unit']);
-                                   var l = '<a href="'+base_url +'/read/'+$("#tag").val()+'/'+value['id_unit_hash']+'">'+value['unit'].toUpperCase()+'</a>';
-                                    var seriesColor = color;
-                                    var series = [l, parseFloat(value['nilai_akhir'])];
-                                    chartSeriesData.push(series);
-                                    chartSeriesColor.push(color);
-                                    chartUnit.push(l);
-                                }
-                            });
-                        }
-                    }
-
-                }
-                var judul= $("#lblunit").val() + ' Terakuntabel dalam CETTAR Tahun '+ $("#tahun").val();
-                generatechart('chart',judul,chartSeriesData, chartSeriesColor, chartUnit);
-                /*series.push({
-                    name: kategori[i], data: me
-                });*/
-            }
-            if (kategori[i] == 'Responsive' && (id_aspek=='C06' || id_aspek=='K06')){
-                var chartSeriesData=[];
-                var chartSeriesColor=[];
-                var chartUnit =[];
-                mf.sort(function(a,b){ return b.nilai-a.nilai});
-                for (var x = 0; x < mf.length; x++) {
-                    if(x < 56){
-                        if(x==0) color = '#127a2c';
-                        else color = '#a9c7ff';
-                        if (data) {
-                            y=0;
-                            $.each(data, function (key, value) {
-                                if(kategori[i]==value['aspek'] && mf[x]['nilai'] == value['nilai_akhir'] && mf[x]['unit'] == value['unit']) {
-                                    y++;
-                                    //if(x==0) $(".lbl-terresponsif").html(value['unit']);
-                                   var l = '<a href="'+base_url +'/read/'+$("#tag").val()+'/'+value['id_unit_hash']+'">'+value['unit'].toUpperCase()+'</a>';
-                                    var seriesColor = color;
-                                    var series = [l, parseFloat(value['nilai_akhir'])];
-                                    chartSeriesData.push(series);
-                                    chartSeriesColor.push(color);
-                                    chartUnit.push(l);
-                                }
-                            });
-                        }
-                    }
-
-                }
-                var judul= $("#lblunit").val() + ' Terresponsif dalam CETTAR Tahun '+ $("#tahun").val();
-                generatechart('chart',judul,chartSeriesData, chartSeriesColor, chartUnit);
-            }
-        }
-
-
+        let judul = $("#lblunit").val() + ' Terresponsif dalam CETTAR Tahun '+ $("#tahun").val();
+        generatechart('chart', judul, chartSeriesData, chartSeriesColor, chartUnit);
     }
 
     generatechart = function(chart, judul, chartSeriesData, chartSeriesColor, chartUnit){
@@ -415,6 +181,7 @@ $(document).ready(function () {
             }
         });
     }
+    
     grafikcettar = function(data,tahun,id_aspek){
         var a=[], b=[], c=[], d=[], e=[], f=[], g=[];
         var ma=[], mb=[], mc=[], md=[], me=[], mf=[], mg=[];

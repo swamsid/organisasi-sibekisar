@@ -1,7 +1,7 @@
 <div class="content-wrapper" style="margin-top: -20px;">
     <div class="page-header">
         <h3 class="page-title"> 
-            Form Penilaian <?php echo (isset($tag) ? 'Kabupaten/Kota' : 'Perangkat Daerah') ?>
+            Form Penilaian <?php echo $tag == 'opd' ? 'Perangkat Daerah' : 'Kabupaten/Kota' ?>
         </h3>
 
         <nav aria-label="breadcrumb">
@@ -17,7 +17,7 @@
     <div class="card" id="divDataEvaluasi">
         <div class="card-body" >            
             <input type="hidden" id="tmp-indikator" value="<?php echo (isset($id_indikator)?$id_indikator:'') ?>">
-            <input type="hidden" id="tag" value="<?php echo (isset($tag)?$tag:'opd') ?>">
+            <input type="hidden" id="tag" value="<?php echo ($tag) ? $tag : 'opd' ?>">
 
             <div class="row">
                 <div class="col-12">
@@ -55,63 +55,46 @@
                         </div>
                     </form>
 
-                    <div class="row" id="divFormEvaluasis" style="margin-top: 10px;">
-                        <div class="col-md-12 example-wrap">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
                             <blockquote class="blockquote blockquote-primary" style="border: 2px solid #ddd !important; border-radius: 10px;">
-                                <h4>Form Penilaian</h4>
-
                                 <form id="formEvaluasi" enctype="multipart/form-data" method="post" class="forms-sample form-horizontal">
-                                    <input type="hidden" name="id_indikator">
-                                    <input type="hidden" name="tahun" id="tahun">
+                                    <input type="hidden" name="id_indikator" id="id_indikator" readonly>
+                                    <input type="hidden" name="tahun" id="tahun" readonly>
+                                    <input type="hidden" name="periode" id="periode" readonly>
+                                    <input type="hidden" name="nilai_maks" id="nilai_maks" readonly>
+                                    <input type="hidden" name="bobot" id="bobot" readonly>
                                     <input type="hidden" name="id_role" id="id_role" value="<?php echo $_SESSION['user']->id_role ?>">
                                     <input type="hidden" name="id_opd" id="id_opd" value="<?php  echo $_SESSION['user']->id_unit ?>">
 
-                                    <div class="form-group row">
-                                        <div class="col" style="display: none">
-                                            <label>Bulan <small>*mulai</small></label>
-                                            <div class="col-md-12">
-                                                <select name="bulan_mulai" class="form-control select2" id="bulan_mulai">
-                                                    <?php
-                                                    $namaBulan = array("Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember");
+                                    <div class="form-group div-data" style="border-bottom: 2px solid #eee; padding-bottom: 20px;">
+                                        <table class="table table-hover table-striped" id="table-data" style="margin-bottom: 20px;">
+                                            <thead>
+                                                <tr>
+                                                    <th width="80%" style="font-weight: bold;">
+                                                        Nama 
+                                                        Perangkat Daerah
+                                                    </th>
+                                                    <th class="text-center" style="font-weight: bold;">
+                                                        Nilai Indikator
+                                                    </th>
+                                                </tr>
+                                            </thead>
 
-                                                    $noBulan = 1;
-                                                    for($index=0; $index<12; $index++){
-                                                        echo '<option value="'.$noBulan.'">'.$namaBulan[$index].'</option>';
-                                                        $noBulan++;
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col" style="display:none">
-                                            <label>Bulan <small>*selesai</small></label>
-                                            <div class="col-md-12">
-                                                <select name="bulan_selesai" class="form-control select2" id="bulan_selesai">
-                                                    <?php
-                                                    $namaBulan = array("Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember");
-
-                                                    $noBulan = 1;
-                                                    for($index=0; $index<12; $index++){
-                                                        echo '<option value="'.$noBulan.'">'.$namaBulan[$index].'</option>';
-                                                        $noBulan++;
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group div-data">
-                                        <table class="table table-hover table-responsive table-striped" width="100%">
-                                            
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="2" class="text-center" id="data-text-info">Pilih indikator menggunakan pilihan diatas</td>
+                                                </tr>
+                                            </tbody>
                                         </table>
                                     </div>
+
                                     <div class="form-group"><?php
                                         if ($_SESSION['user']->id_role==1 or ($_SESSION['user']->id_role==2 && !empty($_SESSION['user']->id_unit))){
-                                            echo '<button type="submit" class="btn btn-primary">Simpan</button>';
+                                            echo '<button type="button" id="submit-form" class="btn btn-primary btn-hide-first" style="display: none; padding: 10px 15px; font-size: 9pt">Simpan</button>';
                                         }
                                         ?>
-                                        <button type="button" class="btn btn-default btn-cancel">Cancel</button>
+                                        <button type="button" class="btn btn-default btn-cancel btn-hide-first" style="display: none; padding: 10px 15px; font-size: 9pt">Cancel</button>
                                     </div>
                                 </form>
                             </blockquote>

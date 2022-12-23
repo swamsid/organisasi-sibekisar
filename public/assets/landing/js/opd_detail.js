@@ -2,15 +2,18 @@ $(document).ready(function () {
     var aPos="";
     var aData="";
     $("#tahun").on('change',function(){
+        $('#layout').fadeIn(500);
         tabspirit();
         tabrekap();
     });
+
     tabspirit = function () {
         if ($.fn.DataTable.isDataTable("table.display")) $("table.display").DataTable().destroy();
         var url = base_url + "/apps/gridnilai";
         var param = {
-            tahun: $('#tahun').val(),
-            id_unit: $('#id_unit').val()
+            tahun   : $('#tahun').val(),
+            id_unit : $('#id_unit').val(),
+            tag     : $('#tag').val()
         };
 
         var tahun=$("#tahun").val();
@@ -67,8 +70,9 @@ $(document).ready(function () {
         if ($.fn.DataTable.isDataTable("table.rekap")) $("table.rekap").DataTable().destroy();
         var url = base_url + "/apps/gridrekapaspek";
         var param = {
-            tahun: $('#tahun').val(),
-            id_unit: $('#id_unit').val()
+            tahun   : $('#tahun').val(),
+            id_unit : $('#id_unit').val(),
+            tag     : $('#tag').val()
         };
 
         var tahun=$("#tahun").val();
@@ -79,7 +83,7 @@ $(document).ready(function () {
             var colors = ['progress-bar-danger','progress-bar-primary','progress-bar-success','progress-bar-warning','progress-bar-info','progress-bar-danger'];
         
             var n=0;
-            $.each(data, function (key, value) {
+            $.each(data.eval, function (key, value) {
 
                 var persen = parseFloat(value['total_nilai']/value['nilai_maks']) * 100;
                 var kurang = parseFloat(parseFloat(value['nilai_maks'])-parseFloat(value['total_nilai']));
@@ -155,10 +159,12 @@ $(document).ready(function () {
                 }
 
             }*/
-        })
-            .always(function () {
 
-            });
+            $('#layout').fadeOut(500);
+        })
+        .always(function () {
+
+        });
     }
 
     tabspirit();

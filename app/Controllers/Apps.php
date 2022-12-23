@@ -149,6 +149,7 @@ class Apps extends BaseController
     public function gridnilai()
     {
         $data = $_REQUEST;
+        // return json_encode($data);
         $eval = $this->evaluasimodel->findDetailNilai($data);
         $count = count($eval);
         return $this->response->setJSON($eval);
@@ -157,6 +158,7 @@ class Apps extends BaseController
     public function reportdinilai()
     {
         $data = $_REQUEST;
+
         $data['tahun'] = date("Y");
         $eval = $this->evaluasimodel->reportJumlahDinilai($data);
         /* $count = count($eval);
@@ -270,12 +272,10 @@ class Apps extends BaseController
     public function gridrekapcettar()
     {
         $data = $_REQUEST;
+        // return json_encode($data);
         $eval = $this->evaluasimodel->findCettar($data);
         $count = count($eval);
-        /*return $this->response->setJSON(json_encode(array(
-            "iTotalRecords" => $count,
-            "aaData" => $eval
-        )));*/
+
         return $this->response->setJSON($eval);
     }
 
@@ -299,9 +299,29 @@ class Apps extends BaseController
     public function gridrekapaspek()
     {
         $data = $_REQUEST;
+        // return json_encode($data);
         $eval = $this->evaluasimodel->findCettarAspek($data);
+        $aspek = $this->evaluasimodel->findAspek([ 'periode' => $data['tahun'], 'tag' => $data['tag']]);
+        $rekapAspek = [];
+
+        foreach($aspek as $key => $dataAspek){
+            $data1['limit'] = 1;
+            $data1['tahun']= $data['tahun'];
+            $data1['id_aspek'] = $dataAspek->id_aspek;
+            $data1['tag']= $data['tag'];
+
+            array_push($rekapAspek, $this->evaluasimodel->findCettarAspek($data1));
+        }
+
         $count = count($eval);
-        return $this->response->setJSON($eval);
+
+        return $this->response->setJSON(
+            [
+                'aspek'         => $aspek,
+                'eval'          => $eval,
+                'rekapAspek'    => $rekapAspek
+            ]
+        );
     }
 
     function getdetail()
@@ -317,9 +337,15 @@ class Apps extends BaseController
     }
 
     function finddetailbyindikator()
-    {
-        $data = $this->evaluasimodel->findDataByIndikator($_REQUEST);
-        return $this->response->setJSON(json_encode($data));
+    {        
+        $data = $this->evaluasimodel->findPenilaian($_REQUEST);
+
+        $response = [
+            'status'    => 'success',
+            'data'      => $data
+        ];
+
+        return json_encode($response);
     }
 
     /** Evaluasi */
@@ -332,8 +358,10 @@ class Apps extends BaseController
             exit();
         }
 
+        $data['tag'] = $tag;
+
         $this->addScript("assets/js/apps/evaluasi.js");
-        $this->show('apps/evaluasibyindikator');
+        $this->show('apps/evaluasibyindikator', $data);
     }
 
     public function rapor($tag = null, $id_indikator = null)
@@ -405,38 +433,52 @@ class Apps extends BaseController
     {
         if (empty($_POST)) echo json_encode($this->failed);
 
-        $mulai = sprintf("%02d", $_POST['bulan_mulai']);
+        // return json_encode($_POST); 
+
+        // $mulai = sprintf("%02d", $_POST['bulan_mulai']);
+        // $mulai = sprintf("%02d", date('d-m-Y'));
+
+        // return json_encode($mulai);
+
         if (!empty($_POST['id_indikator'])) {
             $i = 0;
-            foreach ($_POST['id_unit'] as $key) {
+            foreach ($_POST['id_unit'] as $index => $key) {
+                
                 $i++;
                 $id_indikator = $_POST['id_indikator'];
                 $id_unit = $key;
                 $fzeropadded = sprintf("%04d", $id_unit);
-                $id_evaluasi = $_POST['tahun'] . $mulai . $fzeropadded . '_' . $id_indikator;
-                if (empty($_POST['nilai_konversi' . $id_unit])) $_POST['nilai_konversi' . $id_unit] = 0;
-                $nilai_akhir = ($_POST['nilai_konversi' . $id_unit] * $_POST['bobot' . $id_unit]);
+                $id_evaluasi = $_POST['tahun'] . $fzeropadded . '_' . $id_indikator;
+
+                $nilai = ($_POST['nilai_konversi'][$index] == "") ? 0 : (float) $_POST['nilai_konversi'][$index];
+                $bobot = (float) ($_POST['bobot'] / 100);
+
+                $nilai_akhir = ($nilai * $bobot);
+                // return json_encode($nilai_akhir);
+
                 $dataKomponen = array(
-                    'id_indikator' => $id_indikator,
-                    'id_evaluasi' => $id_evaluasi,
-                    'nilai_awal' => $_POST['nilai_awal' . $id_unit],
-                    'nilai_konversi' => $_POST['nilai_konversi' . $id_unit],
-                    'nilai_akhir' => $nilai_akhir,
-                    'bobot' => $_POST['bobot' . $id_unit],
-                    'nilai_maks' => $_POST['nilai_maks' . $id_unit],
-                    'bulan_mulai' => $_POST['bulan_mulai'],
-                    'bulan_selesai' => $_POST['bulan_selesai'],
-                    'tahun' => $_POST['tahun'],
-                    'id_unit' => $key,
-                    'periode' => $_POST['periode' . $id_unit],
-                    'user_verifikasi' => $_POST['user_verifikasi' . $id_unit],
-                    'catatan_verifikasi' => $_POST['catatan_verifikasi' . $id_unit],
-                    'waktu_verifikasi' => $_POST['waktu_verifikasi' . $id_unit],
-                    'is_verify' => $_POST['is_verify' . $id_unit],
-                    //'catatan' => $_POST['catatan'.$id_indikator],
-                    'timestamp' => date("Y-m-d H:i:s"),
-                    'id_user' => $_SESSION['user']->id_user
+                    'id_indikator'      => $id_indikator,
+                    'id_evaluasi'       => $id_evaluasi,
+                    'nilai_awal'        => $nilai_akhir,
+                    'nilai_konversi'    => $nilai,
+                    'nilai_akhir'       => $nilai_akhir,
+                    'bobot'             => $bobot,
+                    'nilai_maks'        => $_POST['nilai_maks'],
+                    'bulan_mulai'       => '1',
+                    'bulan_selesai'     => '1',
+                    'tahun'             => $_POST['periode'],
+                    'id_unit'           => $key,
+                    'periode'           => $_POST['tahun'],
+                    'user_verifikasi'   => '0',
+                    'catatan_verifikasi' => '',
+                    'waktu_verifikasi'  => '',
+                    'is_verify'         => '0',
+                    'timestamp'         => date("Y-m-d H:i:s"),
+                    'id_user'           => $_SESSION['user']->id_user
                 );
+
+                // return json_encode($dataKomponen);
+
                 $result = $this->evaluasimodel->insertData($dataKomponen);
             }
             if ($result && $i == count($_POST['id_unit'], 1)) {

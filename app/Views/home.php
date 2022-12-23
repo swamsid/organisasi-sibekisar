@@ -21,9 +21,37 @@
     <script>
         base_url = "<?php echo base_url(); ?>";
     </script>
+
+    <style>
+        #layout{
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 999;
+            text-align: center;
+            padding-top: 50%;
+            /* display: none; */
+        }
+
+        #layout .konten{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            color: white;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+    </style>
 </head>
 
 <body>
+
+<div id="layout">
+    <div class="konten">
+        Menyiapkan Data, Harap Tunggu ...
+    </div>
+</div>
 
 <?php echo view('header') ?>
 <!-- ***** Welcome Area Start ***** -->
@@ -55,16 +83,33 @@
 <section class="section" id="promotion">
     <div class="container">
         <div class="center-heading">
-            <h2> Top 10 Perangkat Daerah <em>Tercettar</em></h2>
-           <!-- <p>SIBEKISAR berusaha untuk menilai budaya kerja perangkat daerah melalui aspek dari CETTAR, sehingga diperlukan pengukuran terhadap masing-masing aspek yang terdapat dalam CETTAR.</p>-->
+            <div class="row">
+                <div class="col-md-9">
+                    <h2> Top 10 Perangkat Daerah <em>Tercettar</em></h2>
+                </div>
+
+                <div class="col-md-3" style="padding-top: 8px;">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">Periode</span>
+                        </div>
+
+                        <select name="tahun" class="form-control" id="tahun">
+                            <?php
+                                foreach($dataPeriode as $key => $dPeriode){
+                                    $selected = ($key == (count($dataPeriode) - 1)) ? 'selected' : '';
+                                    echo '<option value="'.$dPeriode->id_periode.'" '.$selected.'>'.$dPeriode->tahun_periode.'</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row  mobile-bottom-fix-big"  data-scroll-reveal="enter left move 30px over 0.6s after 0.1s">
-            <div class="col-lg-12 col-md-12 col-sm-12"
-                 style="top:0px!important">
-                <input type="hidden" name="tahun" id="tahun" value="<?php echo (date("Y")-1) ?>">
 
-                    <div id="chart"></div>
-
+        <div class="row mobile-bottom-fix-big"  data-scroll-reveal="enter left move 30px over 0.6s after 0.1s" style="margin-top: 30px;">
+            <div class="col-lg-12 col-md-12 col-sm-12" style="top:0px!important">
+                <div id="chart"></div>
             </div>
             <div class="col-md-12">
                 <a href="<?php echo base_url("read/detail/spirit")?>" class="pull-right second-button btn-xs">
@@ -73,135 +118,45 @@
             </div>
         </div>
 
-           <div class="row mobile-bottom-fix" style="padding-top:20px!important">
+        <div class="row mobile-bottom-fix" style="padding-top:20px!important">
+            <?php 
+                $keys = 0;
+                foreach($aspek as $key => $dataView) { 
+            ?>
 
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.1s">
-                        <div class="features-item row">
-                            <div class="col-md-4">
-                                <div class="features-icon">
-                                    <img src="<?php echo base_url("assets/landing/images/fast-time1.png") ?>" alt="">
-                                        <div class="text">
-                                            <h4>ter <b>"CEPAT"</b></h4>
-                                            <h3><span class="text-danger text-bold lbl-tercepat"><?php echo strToUpper($cepat->unit) ?></span> </h3>
-                                        </div>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div id="chartTercepat"></div>
-                            </div>
-                            <div class="col-md-12">
-                                <a href="<?php echo base_url("read/detail/cepat")?>" class="pull-right second-button btn-xs">
-                                    Selengkapnya
-                                </a>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.1s">
+                    <div class="features-item row">
+                        <div class="col-md-4">
+                            <div class="features-icon">
+                                <img src="<?php echo base_url("assets/landing/images/fast-time1.png") ?>" alt="">
+                                    <div class="text">
+                                        <h4>ter <b><?= ucfirst($key) ?></b></h4>
+                                        <h3>
+                                            <span class="text-danger text-bold lbl-tercepat aspek-info" id="unit_aspek_<?= ($dataView) ? $dataView->id_aspek : '' ?>">
+                                                
+                                            </span>
+                                        </h3>
+                                    </div>
                             </div>
                         </div>
-
-
-                    </div>
-               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.1s" style="padding-top: 25px">
-                        <div class="features-item row">
-                            <div class="col-md-4">
-                                <div class="features-icon"><img src="<?php echo base_url("assets/landing/images/time-management1.png") ?>" alt="">
-                                    <div class="text">
-                                        <h4>ter <b>"EFEKTIF & EFISIEN"</b></h4>
-                                        <h3><span class="text-danger text-bold lbl-terefektif"><?php echo strToUpper($efektif->unit) ?></span></h3>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div id="chartTerefektif"></div>
-                            </div>
-                            <div class="col-md-12">
-                                <a href="<?php echo base_url("read/detail/efektif")?>" class="pull-right second-button btn-xs">
-                                    Selengkapnya
-                                </a>
-                            </div>
+                        <div class="col-md-8">
+                            <div id="chart-<?= $keys ?>"></div>
+                        </div>
+                        <div class="col-md-12">
+                            <form class="text-right" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>" style="margin-top: 50px;">
+                                <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
+                                <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
+                                <input type="hidden" name="ids" value="<?= ($dataView) ? $dataView->id_aspek : null ?>" readonly>
+                                <button type="submit" class="btn second-button btn-sm">
+                                    Selengkapnya &nbsp;
+                                    <i class="fa fa-arrow-right"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
-               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.1s" style="padding-top: 25px">
-                        <div class="features-item row">
-                            <div class="col-md-4">
-                                <div class="features-icon"><img src="<?php echo base_url("assets/landing/images/clock1.png") ?>" alt="">
-                                    <div class="text">
-                                        <h4>ter <b>"TANGGAP"</b></h4>
-                                        <h3><span class="text-danger text-bold lbl-tertanggap"><?php echo strToUpper($tanggap->unit) ?></span></h3>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div id="chartTertanggap"></div>
-                            </div>
-                            <div class="col-md-12">
-                                <a href="<?php echo base_url("read/detail/tanggap")?>" class="pull-right second-button btn-xs">
-                                    Selengkapnya
-                                </a>
-                            </div>
-                        </div>
-                   </div>
-                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.1s" style="padding-top: 25px">
-                       <div class="features-item row">
-                           <div class="col-md-4">
-                               <div class="features-icon">
-                                   <img src="<?php echo base_url("assets/landing/images/user1.png") ?>" alt="">
-                                    <div class="text">
-                                        <h4>ter <b>"TRANSPARAN"</b></h4>
-                                        <h3><span class="text-danger text-bold lbl-tertransparan"><?php echo strToUpper($transparan->unit) ?></span></h3>
-                                    </div>
-                               </div>
-                           </div>
-                           <div class="col-md-8">
-                               <div id="chartTertransparan"></div>
-                           </div>
-                           <div class="col-md-12">
-                               <a href="<?php echo base_url("read/detail/transparan")?>" class="pull-right second-button btn-xs">
-                                   Selengkapnya
-                               </a>
-                           </div>
-                       </div>
-                   </div>
-                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.1s" style="padding-top: 25px">
-                       <div class="features-item row">
-                           <div class="col-md-4">
-                               <div class="features-icon">
-                                   <img src="<?php echo base_url("assets/landing/images/accounting1.png") ?>" alt="">
-                                    <div class="text">
-                                        <h4>ter <b>"AKUNTABEL"</b></h4>
-                                        <h3><span class="text-danger text-bold lbl-terakuntabel"><?php echo strToUpper($akuntabel->unit) ?></span></h3>
-                                    </div>
-                               </div>
-                           </div>
-                           <div class="col-md-8">
-                               <div id="chartTerakuntabel"></div>
-                           </div>
-                           <div class="col-md-12">
-                               <a href="<?php echo base_url("read/detail/akuntabel")?>" class="pull-right second-button btn-xs">
-                                   Selengkapnya
-                               </a>
-                           </div>
-                       </div>
-                   </div>
-                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.1s" style="padding-top: 25px">
-                       <div class="features-item row">
-                           <div class="col-md-4">
-                               <div class="features-icon">
-                                   <img src="<?php echo base_url("assets/landing/images/rocket1.png") ?>" alt="">
-                                    <div class="text">
-                                        <h4>ter <b>"RESPONSIF"</b></h4>
-                                        <h3><span class="text-danger text-bold lbl-terresponsif"><?php echo strToUpper($responsif->unit) ?></span></h3>
-                                    </div>
-                               </div>
-                           </div>
-                           <div class="col-md-8">
-                               <div id="chartTerresponsif"></div>
-                           </div>
-                           <div class="col-md-12">
-                               <a href="<?php echo base_url("read/detail/responsif")?>" class="pull-right second-button btn-xs">
-                                   Selengkapnya
-                               </a>
-                           </div>
-                       </div>
-                    </div>
-            </div>
+                </div>
+            <?php $keys++; } ?>
+        </div>
 
     </div>
 </section>
