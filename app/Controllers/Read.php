@@ -67,9 +67,12 @@ class Read extends BaseController
         $data['label']=((isset($tag) && $tag=='kab')?'Kabupaten/Kota':'Perangkat Daerah');
         $data['tag'] = $param['tag'];
 
-        $data['idaspek'] = $_GET['ids'];
-        $data['periode'] = $_GET['p'];
+        if($params != 'spirit'){
+            $data['idaspek'] = $_GET['ids'];
+        }
+        
         $data['tahun']   = $_GET['t'];
+        $data['periode'] = $_GET['p'];
         $data['dataPeriode'] = $this->mastermodel->getPeriode();
 
         // return json_encode($data['dataPeriode']);

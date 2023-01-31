@@ -173,6 +173,9 @@ class Apps extends BaseController
     {
         $data['id_unit'] = $id;
         $data['tahun'] = $tahun;
+
+        $dataTahunTable = $this->mastermodel->findPeriode([ 'id_periode' => $tahun ]);
+
         $indikator = $this->evaluasimodel->findDetailNilai($data);
         $html = '';
         $aspek = array();
@@ -197,7 +200,7 @@ class Apps extends BaseController
 
         $rowspan = array_count_values(array_column($indikator, 'id_aspek'));
         foreach ($unit as $runit) {
-            $html .= "<h2>Raport Budaya Kerja CETTAR <br>" . $runit['unit'] . " Tahun " . $tahun . "</h2>
+            $html .= "<h2>Raport Budaya Kerja CETTAR <br>" . $runit['unit'] . " Tahun " . $dataTahunTable->tahun_periode . "</h2>
                         <table class='table' cellpadding='2' cellspacing='1' border='1'><thead>
                                     <tr>
                                         <th>Spirit Budaya Kerja</th>
@@ -366,20 +369,28 @@ class Apps extends BaseController
 
     public function rapor($tag = null, $id_indikator = null)
     {
+
+
         $data['user'] = $_SESSION['user'];
         $param['tag'] = (isset($tag) && $tag ? $tag : 'opd');
         $param['kategori_unit'] = $param['tag'];
+
         $data['unit'] = $this->mastermodel->findMUnit($param);
+
         if ($_SESSION['user']->id_role == 1) $data['id_unit'] = '';
         else $data['id_unit'] = $_SESSION['user']->id_unit;
 
         $this->addScript("assets/js/apps/rapor.js");
         $this->addScript("assets/vendors/datatables/rg/jquery.dataTables.min.js");
         $this->addScript("assets/vendors/datatables/rg/dataTables.rowsGroup.js");
-        $data['id_indikator'] = (isset($id_indikator) && $id_indikator ? $id_indikator : '');
-        $data['indikator'] = $this->mastermodel->findMIndikator($param);
-        $data['label'] = ((isset($tag) && $tag == 'kab') ? 'Kabupaten/Kota' : 'Perangkat Daerah');
-        $data['tag'] = $param['tag'];
+
+        // $data['id_indikator'] = (isset($id_indikator) && $id_indikator ? $id_indikator : '');
+        // $data['indikator'] = $this->mastermodel->findMIndikator($param);
+
+        $data['label']      = ((isset($tag) && $tag == 'kab') ? 'Kabupaten/Kota' : 'Perangkat Daerah');
+        $data['tag']        = $param['tag'];
+        $data['periode']    = $this->mastermodel->getPeriode();
+        
         $this->show('apps/rapor', $data);
     }
 
@@ -415,8 +426,12 @@ class Apps extends BaseController
             $indikator = $this->mastermodel->findMIndikator();
             cache()->save('indikator', $indikator, 1000);
         }*/
+
+        $data['periode'] = $this->mastermodel->getPeriode();
+
         $param['tag'] = (isset($tag) && $tag ? $tag : 'opd');
         $param['kategori_unit'] = $param['tag'];
+        $param['periode'] = (count($data['periode']) > 0) ? $data['periode'][count($data['periode']) - 1]->id_periode : 0;;
         // $data['indikator'] = $this->cache->get('indikator');
         $data['indikator'] = $this->mastermodel->findMIndikator($param);
         $data['unit'] = $this->mastermodel->findMUnit($param);
@@ -433,7 +448,9 @@ class Apps extends BaseController
     {
         if (empty($_POST)) echo json_encode($this->failed);
 
-        // return json_encode($_POST); 
+        // return json_encode($_POST);
+
+        // return json_encode([ 'status' => 'success' ]); 
 
         // $mulai = sprintf("%02d", $_POST['bulan_mulai']);
         // $mulai = sprintf("%02d", date('d-m-Y'));
@@ -450,7 +467,7 @@ class Apps extends BaseController
                 $fzeropadded = sprintf("%04d", $id_unit);
                 $id_evaluasi = $_POST['tahun'] . $fzeropadded . '_' . $id_indikator;
 
-                $nilai = ($_POST['nilai_konversi'][$index] == "") ? 0 : (float) $_POST['nilai_konversi'][$index];
+                $nilai = ($_POST['nilai_konversi'][$index] == "") ? 0 : (float) str_replace(',', '.', $_POST['nilai_konversi'][$index]);
                 $bobot = (float) ($_POST['bobot'] / 100);
 
                 $nilai_akhir = ($nilai * $bobot);
@@ -459,7 +476,7 @@ class Apps extends BaseController
                 $dataKomponen = array(
                     'id_indikator'      => $id_indikator,
                     'id_evaluasi'       => $id_evaluasi,
-                    'nilai_awal'        => $nilai_akhir,
+                    'nilai_awal'        => $_POST['nilai_awal'][$index],
                     'nilai_konversi'    => $nilai,
                     'nilai_akhir'       => $nilai_akhir,
                     'bobot'             => $bobot,
@@ -522,11 +539,13 @@ class Apps extends BaseController
     // tambahan 
     function getPeriodeDanIndikator(){
         $params = $_REQUEST;
+        $params['periode'] = 1;
         $periode    = $this->mastermodel->getPeriode();
 
         $dataIndikator = [
             'tag'       => $params['tag'],
-            'periode'   => 1
+            'periode'   => $periode[(count($periode) - 1)]->id_periode,
+            'id_unit'   => $_SESSION['user']->id_unit
         ];
 
         $indikator = $this->mastermodel->findMIndikator($dataIndikator);
@@ -535,6 +554,30 @@ class Apps extends BaseController
             'periode'       => $periode,
             'selected'      => $periode[(count($periode) - 1)]->tahun_periode,
             'id_selected'   => $periode[(count($periode) - 1)]->id_periode,
+            'indikator'     => $indikator
+        ];
+
+        return json_encode($response);
+    }
+
+    function getIndikatorByPeriode(){
+        $params = $_REQUEST;
+
+        $config = [
+            'id_unit'    => $_SESSION['user']->id_unit
+        ];
+
+        if(!empty($params['periode'])){
+            $config['periode'] = $params['periode'];
+        }
+
+        if(!empty($params['tag'])){
+            $config['tag'] = $params['tag'];
+        }
+
+        $indikator = $this->mastermodel->findMIndikator($config);
+
+        $response   = [
             'indikator'     => $indikator
         ];
 

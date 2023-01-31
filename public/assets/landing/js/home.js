@@ -111,6 +111,7 @@ $(document).ready(function () {
             },
             yAxis: {
                 min: 0,
+                max: 100,
                 title: {
                     text: '',
                     align: 'high'
@@ -287,6 +288,7 @@ $(document).ready(function () {
             },
             yAxis: {
                 min: 0,
+                max: 100,
                 title: {
                     text: '',
                     align: 'high'

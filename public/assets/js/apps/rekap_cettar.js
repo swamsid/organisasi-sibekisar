@@ -25,20 +25,34 @@ $(document).ready(function () {
             predikat: $('#predikat').val()
         };
 
-        var tahun=$("#tahun").val();
+        var tahun = $("#tahun option:selected").text();
         var predikat=$("#predikat").val();
         var req = $.post(url, param).done(function (data) {
 
             if (data) grafikcettarbar(data, tahun,predikat);
 
-            var t = '<table class="table display nowrap" id="tb-rekap-cetar" width="100%">' +
-                '<thead><tr><th>Periode</th><th>Unit</th><th>Nilai</th><th>Penilaian</th><th>Peringkat</th>';
-            t += '</tr></thead><tbody>';
+            var t = `<table class="table display nowrap" id="tb-rekap-cetar" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Periode</th>
+                                <th>Unit</th>
+                                <th>Nilai</th>
+                                <th>Penilaian</th>
+                                <th>Peringkat</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>`;
+                        
             var n = 0;
             $.each(data, function (key, value) {
-                t += '<tr><td>' + (value.tahun != null ? value.tahun : '-') + '</td>' +
-                    '<td>' + (value.unit != null ? value.unit.toUpperCase() : '-') + '</td>' +
-                    '<td>' + value.nilai + '</td><td>' + value.nilai_huruf + '</td><td><b>' + value.predikat + '</b></td>';
+                t += `<tr>
+                        <td> ${(value.tahun != null ? tahun : '-')} </td>
+                        <td> ${(value.unit != null ? value.unit.toUpperCase() : '-')} </td>
+                        <td> ${value.nilai} </td>
+                        <td> ${value.nilai_huruf} </td>
+                        <td> <b> ${value.predikat} </b> </td>
+                    </tr>`;
             });
 
             t += '</tbody></table>';
@@ -110,7 +124,7 @@ $(document).ready(function () {
 
         $('#chart').highcharts({
             title: {
-                text: 'Rekap Rangking Perangkat Daerah dalam CETTAR Tahun '+ $("#tahun").val()
+                text: 'Rekap Rangking Perangkat Daerah dalam CETTAR Tahun '+ $("#tahun option:selected").text()
             },
             plotOptions: {
                 column: {
@@ -156,7 +170,7 @@ $(document).ready(function () {
                 type: 'column'
             },
             title: {
-                text: 'Rekap Rangking '+ (tag=='opd'?'Perangkat Daerah':'Kabupaten/Kota')+' dalam CETTAR Tahun '+ $("#tahun").val(),
+                text: 'Rekap Rangking '+ (tag=='opd'?'Perangkat Daerah':'Kabupaten/Kota')+' dalam CETTAR Tahun '+ $("#tahun option:selected").text(),
                 style: {
                     fontFamily: 'oswald',
                     fontSize: '20px'

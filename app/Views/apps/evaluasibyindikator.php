@@ -71,19 +71,22 @@
                                         <table class="table table-hover table-striped" id="table-data" style="margin-bottom: 20px;">
                                             <thead>
                                                 <tr>
-                                                    <th width="80%" style="font-weight: bold;">
+                                                    <th width="60%" style="font-weight: bold;">
                                                         Nama 
                                                         Perangkat Daerah
                                                     </th>
+                                                    <th width="20%" class="text-center" style="font-weight: bold;">
+                                                        Nilai Awal
+                                                    </th>
                                                     <th class="text-center" style="font-weight: bold;">
-                                                        Nilai Indikator
+                                                        Nilai Konversi
                                                     </th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
                                                 <tr>
-                                                    <td colspan="2" class="text-center" id="data-text-info">Pilih indikator menggunakan pilihan diatas</td>
+                                                    <td colspan="3" class="text-center" id="data-text-info">Pilih indikator menggunakan pilihan diatas</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -94,7 +97,7 @@
                                             echo '<button type="button" id="submit-form" class="btn btn-primary btn-hide-first" style="display: none; padding: 10px 15px; font-size: 9pt">Simpan</button>';
                                         }
                                         ?>
-                                        <button type="button" class="btn btn-default btn-cancel btn-hide-first" style="display: none; padding: 10px 15px; font-size: 9pt">Cancel</button>
+                                        <button type="button" class="btn btn-default btn-cancel btn-hide-first cancel" style="display: none; padding: 10px 15px; font-size: 9pt">Cancel</button>
                                     </div>
                                 </form>
                             </blockquote>

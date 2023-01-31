@@ -88,14 +88,22 @@
             </div>
 
             <div class="col-md-12">
-                <a href="<?php echo base_url("read/detail/spirit/kab")?>" class="pull-right second-button btn-xs">
-                    Selengkapnya
-                </a>
+                <form class="text-right" method="GET" action="<?php echo base_url("read/detail/spirit/kab") ?>" style="margin-top: 50px;">
+                    <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
+                    <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
+                    <button type="submit" class="btn second-button btn-sm">
+                        Selengkapnya &nbsp;
+                        <i class="fa fa-arrow-right"></i>
+                    </button>
+                </form>
             </div>
         </div>
 
-        <div class="row mobile-bottom-fix" style="padding-top:20px !important">
-            <?php foreach($aspek as $key => $dataView) { ?>
+        <div class="row mobile-bottom-fix" style="padding-top:20px!important">
+            <?php 
+                $keys = 0;
+                foreach($aspek as $key => $dataView) { 
+            ?>
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.1s">
                     <div class="features-item row">
@@ -105,15 +113,15 @@
                                     <div class="text">
                                         <h4>ter <b><?= ucfirst($key) ?></b></h4>
                                         <h3>
-                                            <span class="text-danger text-bold lbl-tercepat">
-                                                <?= ($dataView) ? ucfirst($dataView->unit) : 'Belum Ada' ?>
+                                            <span class="text-danger text-bold lbl-tercepat aspek-info" id="unit_aspek_<?= ($dataView) ? $dataView->id_aspek : '' ?>">
+                                                
                                             </span>
                                         </h3>
                                     </div>
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <div id="chart-<?= ($dataView) ? $dataView->id_aspek : 'null' ?>"></div>
+                            <div id="chart-<?= $keys ?>"></div>
                         </div>
                         <div class="col-md-12">
                             <form class="text-right" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>/kab" style="margin-top: 50px;">
@@ -128,7 +136,7 @@
                         </div>
                     </div>
                 </div>
-            <?php } ?>
+            <?php $keys++; } ?>
         </div>
 
     </div>

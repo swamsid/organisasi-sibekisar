@@ -10,15 +10,17 @@ $(document).ready(function () {
 
     $(".select2").select2();
     
-    $(".nilai_konversi").on("keyup",function(){
+    $("#table-data").on("keyup", '.nilai_konversi',function(){
 
-        if($(this).val() > 100 ) {
+        // alert($(this).val().replaceAll(',', '.'));
+
+        if(parseFloat($(this).val().replaceAll(',', '.')) > 100 ) {
             $.toast({
                 heading: 'Danger',
                 text: 'Nilai maksimal adalah 100',
                 icon: 'error',
                 loaderBg: '#f96868',
-                position: 'top-center'
+                position: 'top-right'
             });
             $(this).val(100);
         }else if($(this).val() < 0 ) {
@@ -27,7 +29,7 @@ $(document).ready(function () {
                 text: 'Nilai minimal adalah 1',
                 icon: 'error',
                 loaderBg: '#f96868',
-                position: 'top-center'
+                position: 'top-right'
             });
             $(this).val(0);
         }
@@ -84,6 +86,14 @@ $(document).ready(function () {
     $("#frmsearch [name='tahun']").change(function(){
         $('#tahun').val($("#frmsearch [name='tahun'] option:selected").text());
         $('#periode').val($("#frmsearch [name='tahun']").val());
+
+        $('#id_indikator').val('');
+        $('.btn-hide-first').fadeOut(300);
+
+        $('#nilai_maks').val('');
+        $('#bobot').val('');
+
+        getIndikator();
     });
 
     $("#frmsearch [name='id_indikator']").change(function(){
@@ -95,19 +105,81 @@ $(document).ready(function () {
         getDataByIndikator();
     });
 
+    function getIndikator(){
+        periode = $("#frmsearch [name='tahun']").val();
+
+        let url = base_url + "/apps/getIndikatorByPeriode?tag="+$('#tag').val()+'&periode='+periode;
+        let htmlOption2 = "<option value='00000' selected disabled> -- Pilih indikator</option>";
+
+        let loadingKontent = `<span style="color: white;">Harap Tunggu...</span>`
+        
+        $('#layout .konten').html(loadingKontent);
+        $('#layout').show();
+
+        $.get(url).done(function (response) {
+            const data = JSON.parse(response) 
+
+            data.indikator.forEach((z, index) => { 
+                htmlOption2 +=  `<option value="${z.id_indikator}" data-nmaks="${z.nilai_maks}" data-bobot="${z.bobot}">${z.indikator}</option>`
+            });
+
+            $("#id_indikator_cmb").html(htmlOption2);
+            $('#table-data tbody').html(`
+                <tr>
+                    <td colspan="3" class="text-center" id="data-text-info">Pilih indikator menggunakan pilihan diatas</td>
+                </tr>
+            `);
+
+            $('#layout').fadeOut(300);
+        });
+    };
+
     $("#submit-form").click(function(){
         let url     = base_url + "/apps/simpanevaluasi";
         let params  = $('#formEvaluasi').serialize();
 
+        $('#submit-form').attr('disabled', 'true');
+        $('#submit-form').html('Menyimpan...');
+        $('.btn-hide-first.cancel').fadeOut();
+        
         $.post(url, params).done(function (response) {
             var rest = JSON.parse(response);
+
+            $('#submit-form').removeAttr('disabled');
+            $('#submit-form').html('Simpan');
+            $('.btn-hide-first.cancel').fadeIn();
             
-            if(rest.status == 'success'){
+            if(rest.status == 'ok'){
                 const data = rest.data;
+                $.toast({
+                    // heading: 'success',
+                    text: 'Penilaian berhasil disimpan',
+                    icon: 'success',
+                    loaderBg: '#f96868',
+                    position: 'top-right'
+                });
             }else{
 
             }
         })
+    });
+
+    $('#table-data').on('keypress', '.nilai_konversi', function(e){
+        const value = $(this).val();
+
+        if(isNaN(e.key) && e.key != ','){
+            $.toast({
+                // heading: 'success',
+                text: 'Inputan harus berupa angka',
+                icon: 'error',
+                loaderBg: '#f96868',
+                position: 'top-right'
+            });
+
+            return false;
+        }else if(e.key == ',' && value.indexOf(',') > 0){
+            return false
+        }
     });
 
     function getDataByIndikator(){
@@ -142,13 +214,17 @@ $(document).ready(function () {
                                 ${z.unit}
                             </td>
                             <td>
-                                <input type="text" class="form-control" style="height: 30px; text-align: center;" placeholder="Input nilai" name="nilai_konversi[]" value="${(z.nilai_konversi) ? z.nilai_konversi : 0 }">
+                                <input type="text" class="form-control nilai_awal" style="height: 30px; text-align: center;" placeholder="Input nilai Awal" name="nilai_awal[]" value="${(z.nilai_awal) ? z.nilai_awal : '' }">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control nilai_konversi" style="height: 30px; text-align: center;" placeholder="Input nilai" name="nilai_konversi[]" value="${(z.nilai_konversi) ? z.nilai_konversi.replaceAll('.', ',') : 0 }">
                             </td>
                         </tr>
                         `;
                     })
 
                     $('#table-data tbody').html(html);
+
                     setTimeout(() => {
                         $('#layout').fadeOut(300);
                     }, 0);
@@ -237,20 +313,20 @@ $(document).ready(function () {
     }
 
     function filterSelectOptions(selectElement, attributeName, attributeValue) {
-    if (selectElement.data("currentFilter") != attributeValue) {
-        selectElement.data("currentFilter", attributeValue);
-        var originalHTML = selectElement.data("originalHTML");
-        if (originalHTML)
-            selectElement.html(originalHTML)
-        else {
-            var clone = selectElement.clone();
-            clone.children("option[selected]").removeAttr("selected");
-            selectElement.data("originalHTML", clone.html());
+        if (selectElement.data("currentFilter") != attributeValue) {
+            selectElement.data("currentFilter", attributeValue);
+            var originalHTML = selectElement.data("originalHTML");
+            if (originalHTML)
+                selectElement.html(originalHTML)
+            else {
+                var clone = selectElement.clone();
+                clone.children("option[selected]").removeAttr("selected");
+                selectElement.data("originalHTML", clone.html());
+            }
+            if (attributeValue) {
+                selectElement.children("option:not([" + attributeName + "='" + attributeValue + "'],:not([" + attributeName + "]))").remove();
+            }
         }
-        if (attributeValue) {
-            selectElement.children("option:not([" + attributeName + "='" + attributeValue + "'],:not([" + attributeName + "]))").remove();
-        }
-    }
     }
 
     let loadingKontent = `<span style="color: white;">Harap Tunggu...</span>`

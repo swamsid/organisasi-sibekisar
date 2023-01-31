@@ -1,33 +1,33 @@
 <div class="content-wrapper">
-    <div class="page-header">
-        <h3 class="page-title"> Rangking <?php echo $label ?> </h3>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Rangking</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Data</li>
-            </ol>
-        </nav>
-    </div>
     <div class="card" id="divDataRekap">
         <div class="card-body" >
-            <h4 class="card-title">Rangking <?php echo $label ?></h4>
             <div class="row">
+                <div class="col-md-8">
+                    <h4 class="card-title">Rangking <?php echo $label ?></h4>
+                </div>
+                <div class="col-md-4">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb" style="text-align: right; border: 0px !important; margin-top: -10px;">
+                            <li class="breadcrumb-item"><a href="#">Rangking <?php echo $label ?></a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Data</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px;">
                 <div class="col-12">
                     <blockquote class="blockquote blockquote-primary">
                         <form id="frmsearch" class="forms-sample form-horizontal">
-                            <div class="form-group"><label>Filter pencarian</label>
                             <div class="form-group row">
                                 <div class="col-md-2">
                                     <label>Tahun</label>
                                     <input type="hidden" id="tag" value="<?php echo (isset($tag)?$tag:'opd') ?>">
                                     <select name="tahun" class="form-control" id="tahun">
                                         <?php
-                                        $year = date('Y');
-                                        $min = $year - 10;
-                                        $max = $year;
-                                        for( $i=$max; $i>=$min; $i-- ){
-                                            echo '<option value="'.$i.'">'.$i.'</option>';
-                                        }
+                                            foreach($periode as $key => $p ){
+                                                $selected = ($key == (count($periode) - 1)) ? 'selected' : '';
+                                                echo '<option value="'.$p->id_periode.'" '.$selected.'>'.$p->tahun_periode.'</option>';
+                                            }
                                         ?>
                                     </select>
                                 </div>
@@ -98,10 +98,10 @@
                          </form>
                     </blockquote>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12" style="margin-top: 20px;">
                     <div id="chart"></div>
 
-                    <div class="table-responsive" id="div-rekap">
+                    <div class="table-responsive" id="div-rekap" style="margin-top: 50px;">
                         <table class="table table-hover table-striped display" id="tableRekap">
                             <thead>
                             <tr>

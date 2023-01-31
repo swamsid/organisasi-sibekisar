@@ -4,13 +4,19 @@ $(document).ready(function () {
     $(".select2").select2();
 
     $("#tahun").on('change', function () {
+        $('#div-spirit').html(`
+            <div style="text-align: center; padding: 10px; font-size: 10pt;">Harap Tunggu ...</div>
+        `);
         tabspirit();
-        tabrekap();
+        // tabrekap();
     });
 
     $("#id_unit").on('change', function () {
+        $('#div-spirit').html(`
+            <div style="text-align: center; padding: 10px; font-size: 10pt;">Harap Tunggu ...</div>
+        `);
         tabspirit();
-        tabrekap();
+        // tabrekap();
     });
     tabspirit = function () {
         if ($.fn.DataTable.isDataTable("table.display")) $("table.display").DataTable().destroy();
@@ -24,10 +30,10 @@ $(document).ready(function () {
         var predikat = '';
         var req = $.post(url, param).done(function (data) {
 
-            var t = '<table class="table" id="tb-rekap-spirit" width="100%">' +
-                '<thead><tr><th>Spirit Budaya Kerja</th><th>Bobot</th>' +
-                '<th>Total Nilai</th><th>Indikator Penilaian</th><th>Bobot</th><th>Nilai</th>' +
-                '<th>Nilai Awal</th><th>Nilai Konversi</th><th>PD Pengampu</th>';
+            var t = '<table class="table" id="tb-rekap-spirit" width="100%" style="margin-top: 20px;">' +
+                '<thead><tr><th style="font-weight: bold; background: #ccc;">Spirit Budaya Kerja</th><th style="font-weight: bold; background: #ccc;">Bobot</th>' +
+                '<th style="font-weight: bold; background: #ccc;">Total Nilai</th><th style="font-weight: bold; background: #ccc;">Indikator Penilaian</th><th style="font-weight: bold; background: #ccc;">Bobot</th><th style="font-weight: bold; background: #ccc;">Nilai</th>' +
+                '<th style="font-weight: bold; background: #ccc;">Nilai Awal</th><th style="font-weight: bold; background: #ccc;">Nilai Konversi</th><th style="font-weight: bold; background: #ccc;">PD Pengampu</th>';
             t += '</tr></thead><tbody>';
             var n = 0;
             var skor_total = 0;
@@ -41,7 +47,7 @@ $(document).ready(function () {
                     '<td align="center" class="text-bold text-black"><b>' + (value.total_nilai?value.total_nilai:0) + '</b></td>' +
                     '<td>' + value.indikator + '</td><td align="center">' + parseInt(value.bobot_aspek * 100) + '</td>' +
                     '<td align="center" ><b>' + parseFloat(value.nilai_aspek).toFixed(2) + '</b></td>' +
-                    '<td align="center" ><b>' + (value.nilai_awal?parseFloat(value.nilai_awal).toFixed(2):'') + '</b></td>' +
+                    '<td align="center" ><b>' + (value.nilai_awal ? value.nilai_awal : '') + '</b></td>' +
                     '<td align="center" ><b>' + (value.nilai_konversi?parseFloat(value.nilai_konversi).toFixed(2):'') + '</b></td>' +
                     '<td>' + value.opd_pengampu.toUpperCase() + '</td>';
 
@@ -92,21 +98,25 @@ $(document).ready(function () {
         var url = base_url + "/apps/gridrekapaspek";
         var param = {
             tahun: $('#tahun').val(),
-            id_unit: $('#id_unit').val()
+            id_unit: $('#id_unit').val(),
+            tag    : $('#tag').val()
         };
 
         var tahun = $("#tahun").val();
         var id_aspek = '';
         var req = $.post(url, param).done(function (data) {
-            console.log(data);
+            console.log(data.aspek);
+
             var t = '', s = '';
             var colors = ['progress-bar-danger', 'progress-bar-primary', 'progress-bar-success', 'progress-bar-warning', 'progress-bar-info', 'progress-bar-danger'];
 
             var n = 0;
-            $.each(data, function (key, value) {
+            $.each(data.eval, function (key, value) {
+                console.log(value);
 
                 var persen = parseFloat(value['total_nilai'] / value['nilai_maks']) * 100;
                 var kurang = parseFloat(parseFloat(value['nilai_maks']) - parseFloat(value['total_nilai']));
+
                 if (kurang > 0) var str = '-';
                 else var str = '';
                 s += '<div class="col-xl-6 col-md-6"><span class="progress-title text-uppercase text-black"><b>' + value['aspek'] + '</b></span><br>' +
@@ -119,66 +129,8 @@ $(document).ready(function () {
                     '</div>';
                 n++;
             });
+
             $("#progress-aspek").html(s);
-
-            //if(data) grafikcettar(data, tahun,id_aspek);
-
-            /*var t = '<table class="table display rekap nowrap" id="tb-rekap-cetar" width="100%">' +
-                '<thead><tr><th>Periode</th><th>Unit</th><th>Aspek</th><th>Nilai Akhir</th><th>Nilai Maks</th><th>Total Nilai</th>';
-            t += '</tr></thead><tbody>';
-            var n = 0;
-
-            if(data) {
-                $.each(data, function (key, value) {
-                    n++;
-                    t += '<tr><td>' + (value.tahun != null ? value.tahun : '-') + '</td>' +
-                        '<td>' + (value.unit != null ? value.unit.toUpperCase() : '-') + '</td><td>' + value.aspek + '</td>' +
-                        '<td>' + value.nilai_akhir + '</td>' +
-                        '<td>' + value.nilai_maks + '</td>' +
-                        '<td><b>' + value.total_nilai + '</b></td>';
-
-                });
-            }
-            t += '</tbody></table>';
-            $('#div-rekap').html(t);
-
-            if(data) {
-                if (id_aspek == '') {
-                    oTable = $('#tb-rekap-cetar').DataTable({
-                        dom: 'B<"header">rt',
-                        responsive: true,
-                        order: [[1, 'desc']],
-                        rowGroup: {
-                            dataSrc: [0, 1]
-                        },
-                        columnDefs: [{
-                            targets: [0, 1],
-                            visible: false
-                        }],
-                        orderFixed: [[1, 'asc']],
-                        "footerCallback": function (row, data, start, end, display) {
-                        }
-                    });
-                } else {
-                    oTable = $('#tb-rekap-cetar').DataTable({
-                        dom: 'Bf<"header">rtip',
-                        responsive: true,
-                        order: [[5, 'desc']],
-                        rowGroup: {
-                            dataSrc: [0, 1]
-                        },
-                        columnDefs: [{
-                            targets: [0, 1],
-                            visible: false
-                        }],
-
-                        orderFixed: [[5, 'desc']],
-                        "footerCallback": function (row, data, start, end, display) {
-                        }
-                    });
-                }
-
-            }*/
         })
             .always(function () {
 

@@ -112,9 +112,14 @@
                 <div id="chart"></div>
             </div>
             <div class="col-md-12">
-                <a href="<?php echo base_url("read/detail/spirit")?>" class="pull-right second-button btn-xs">
-                    Selengkapnya
-                </a>
+                <form class="text-right" method="GET" action="<?php echo base_url("read/detail/spirit") ?>" style="margin-top: 50px;">
+                    <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
+                    <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
+                    <button type="submit" class="btn second-button btn-sm">
+                        Selengkapnya &nbsp;
+                        <i class="fa fa-arrow-right"></i>
+                    </button>
+                </form>
             </div>
         </div>
 

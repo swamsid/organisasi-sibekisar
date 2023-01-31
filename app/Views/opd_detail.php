@@ -89,34 +89,93 @@
                                     <?php
                                     if ($unit->kategori_unit == 'opd') {
                                     ?>
-                                        <b>Jumlah SDM</b> <?php echo ($unit->jumlah_sdm ? $unit->jumlah_sdm : '-') ?>
-                                        <hr><b>Tugas</b> <?php echo ($unit->tugas ? $unit->tugas : '-') ?>
-                                        <?php $misi = str_replace([".", ";", '"'], "<li>", $unit->fungsi) ?>
-                                        <hr><b>Fungsi</b> <?php echo ($misi ? $misi : '-') ?>
+                                        <b>Tugas</b> 
+                                        <div style="margin-top: 10px;"> 
+                                            <?php echo ($unit->tugas ? $unit->tugas : '-') ?>
+                                        </div>
+                                        <?php $misi = str_replace([";"], "&&&", $unit->fungsi) ?>
+                                        <hr>
+                                        <b>Fungsi</b> 
+                                        <div style="margin-top: 10px;">
+                                            <table width="100%">
+                                                <tbody>
+                                                    <?php 
+                                                        echo ($misi == '') ? '---' : '';
+                                                        
+                                                        $num = 1;
+                                                        foreach(explode('&&&', $misi) as $key => $data){
+                                                            if($data != '')
+                                                                echo '<tr><td width="3%" style="vertical-align: top; padding-bottom: 10px;">'.$num.'. </td>';
+                                                                echo '<td style=" padding-bottom: 10px;">'.str_replace('"', '', $data).'</td></tr>';
+
+                                                            $num++;
+                                                        }
+                                                    ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         <hr>
                                     <?php } else { ?>
-                                        <b>Jumlah SDM</b> <?php echo ($unit->jumlah_sdm ? $unit->jumlah_sdm : '-') ?>
-                                        <hr><b>Visi</b> <?php echo ($unit->tugas ? $unit->tugas : '-') ?>
+                                        <b>Visi</b> 
+                                        <div style="margin-top: 10px;"> 
+                                            <?php echo ($unit->tugas ? $unit->tugas : '-') ?>
+                                        </div>
                                         <?php $misi = str_replace([".", ";"], ".<li>", $unit->fungsi) ?>
-                                        <hr><b>Misi</b><br> <?php echo ($misi ? $misi : '-') ?>
+                                        <hr>
+                                        <b>Fungsi</b> 
+                                        <div style="margin-top: 10px;">
+                                            <table width="100%">
+                                                <tbody>
+                                                    <?php
+                                                        echo ($misi == '') ? '---' : '';
+
+                                                        $num = 1;
+                                                        foreach(explode('&&&', $misi) as $key => $data){
+                                                            if($data != '')
+                                                                echo '<tr><td width="3%" style="vertical-align: top; padding-bottom: 10px;">'.$num.'. </td>';
+                                                                echo '<td style=" padding-bottom: 10px;">'.str_replace('"', '', $data).'</td></tr>';
+
+                                                            $num++;
+                                                        }
+                                                    ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         <hr>
                                     <?php } ?>
-                                    Alamat:<br>
-                                    <i class="fa fa-map-marker"></i> <?php echo $unit->alamat ?><br>
-                                    <i class="fa fa-link"></i> <b><a href="<?php echo $unit->website ?>" target="_blank"><?php echo $unit->website ?></a></b>
-                                    <i class="fa fa-envelope"></i> <b><?php echo str_replace('@', '[at]', $unit->email) ?></b>
-                                    </br>Telp. <?php echo $unit->telp ?>, Fax. <?php echo $unit->fax ?>
-                                    <?php
-                                    if ($unit->kategori_unit == 'opd') {
-                                    ?>
-                                        <br>
-                                        <?php if ($unit->medsos_ig) { ?> <a href="http://instagram.com/<?php echo str_replace('@', '', $unit->medsos_ig) ?>" target="_blank"><i class="fa fa-instagram"></i> <?php echo $unit->medsos_ig ?>
-                                            </a>&nbsp;<?php } ?>
-                                            <?php if ($unit->medsos_fb) { ?><a href="http://facebook.com/<?php echo str_replace('@', '', $unit->medsos_fb) ?>" target="_blank"><i class="fa fa-facebook-square"></i> <?php echo $unit->medsos_fb ?>
-                                                </a>&nbsp;<?php } ?>
-                                                <?php if ($unit->medsos_twitter) { ?><a href="http://twitter.com/<?php echo str_replace('@', '', $unit->medsos_twitter) ?>" target="_blank"><i class="fa fa-twitter-square"></i> <?php echo $unit->medsos_twitter ?>
-                                                    </a><?php }
-                                                } ?>
+                                    <b>Alamat : </b>
+                                    <div style="margin-top: 10px;">
+                                        <div>
+                                            <i class="fa fa-map-marker fa-fw"></i> &nbsp;<?php echo $unit->alamat ?><br>
+                                        </div>
+
+                                        <div style="padding-left: 30px;">
+                                            Telp. <?php echo $unit->telp ?>, Fax. <?php echo $unit->fax ?>
+                                        </div>
+
+                                        <div style="margin-top: 30px;">
+                                            <i class="fa fa-link fa-fw"></i> &nbsp;<a href="<?php echo $unit->website ?>" target="_blank"><?php echo $unit->website ?></a>
+                                        </div>
+
+                                        <div>
+                                            <i class="fa fa-envelope fa-fw"></i> &nbsp;<?php echo $unit->email ?>
+                                        </div>
+
+                                        <div>
+                                            <?php
+                                                if ($unit->kategori_unit == 'opd') {
+                                            ?>
+                                                <br>
+                                                <?php if ($unit->medsos_ig) { ?> <a href="http://instagram.com/<?php echo str_replace('@', '', $unit->medsos_ig) ?>" target="_blank"><i class="fa fa-instagram"></i> <?php echo $unit->medsos_ig ?>
+                                                    </a>&nbsp;<?php } ?>
+                                                    <?php if ($unit->medsos_fb) { ?><a href="http://facebook.com/<?php echo str_replace('@', '', $unit->medsos_fb) ?>" target="_blank"><i class="fa fa-facebook-square"></i> <?php echo $unit->medsos_fb ?>
+                                                        </a>&nbsp;<?php } ?>
+                                                        <?php if ($unit->medsos_twitter) { ?><a href="http://twitter.com/<?php echo str_replace('@', '', $unit->medsos_twitter) ?>" target="_blank"><i class="fa fa-twitter-square"></i> <?php echo $unit->medsos_twitter ?>
+                                                            </a><?php }
+                                                        } 
+                                            ?>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>

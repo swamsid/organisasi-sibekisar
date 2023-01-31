@@ -111,6 +111,7 @@ $(document).ready(function () {
             },
             yAxis: {
                 min: 0,
+                max: 100,
                 title: {
                     text: '',
                     align: 'high'
@@ -182,46 +183,63 @@ $(document).ready(function () {
         var tahun=$("#tahun").val();
 
         var req = $.post(url, param).done(function (data) {
-            if (data) grafikaspek(data, tahun);
+            grafikaspek(data, tahun);
 
             $('#layout').fadeOut(500);
         });
     }
 
-    grafikaspek = function(dataSet,tahun){
+    grafikaspek = function(dataSet, tahun){
         const dataAspek = dataSet.aspek;
         const data      = dataSet.eval;
+        const aspekR    = dataSet.rekapAspek;
 
-        var a=[], b=[], c=[], d=[], e=[], f=[];
-        var ma=[], mb=[], mc=[], md=[], me=[], mf=[];
-        var kategori = [], aspek=[];
-        var flags=[],flag=[],series=[],seriesa=[],seriesb=[], seriesc=[],seriesd=[],seriese=[],seriesf=[], jml=[],unit=[],kategoriunit=[];
+        // setTimeout(() => {
+        //     generatechart(`chart-C020211`, 'judul', 'chartSeriesData', 'chartSeriesColor', 'chartUnit');
+        // }, 1000);
 
         dataAspek.forEach((aspek, index) => {
+
             let chartSeriesData=[];
             let chartSeriesColor=[], chartUnit=[];
 
-            data.filter((z) => { return z.id_aspek == aspek.id_aspek })
-                .sort(function(a,b){ return parseFloat(b.nilai_akhir) - parseFloat(a.nilai_akhir) })
-                .forEach((dataNilai, alpha) => {   
-                    if(alpha < 5){
-                        chartSeriesData.push([dataNilai['unit'], parseFloat(dataNilai['nilai_akhir'])]);
-                        chartSeriesColor.push((alpha == 0) ? '#127a2c' : '#a9c7ff');
-                        chartUnit.push(dataNilai['unit']);
-                    }else{
-                        return;
-                    }
-                })
+            if(data.length){
+                data.filter((z) => { return z.id_aspek == aspek.id_aspek })
+                    .sort(function(a,b){ return parseFloat(b.nilai_akhir) - parseFloat(a.nilai_akhir) })
+                    .forEach((dataNilai, alpha) => {   
+                        if(alpha < 5){
+                            chartSeriesData.push([dataNilai['unit'], parseFloat(dataNilai['nilai_akhir'])]);
+                            chartSeriesColor.push((alpha == 0) ? '#127a2c' : '#a9c7ff');
+                            chartUnit.push(dataNilai['unit']);
+                        }else{
+                            return;
+                        }
+                    })
+            }else{
+                chartSeriesData = [['?', 0], ['?', 0], ['?', 0], ['?', 0], ['?', 0]];
+                chartUnit       = ['?', '?', '?', '?', '?'];
+                chartSeriesColor =['#127a2c', '#127a2c', '#127a2c', '#127a2c', '#127a2c'];
+            }
+
+            let dataRekapAspek = aspekR.filter((f) => { return (f) ? f.aspek == aspek.aspek : false });
+
+            if(dataRekapAspek.length){
+                $('#unit_aspek_'+aspek.id_aspek).html(dataRekapAspek[0].unit)
+            }else{
+                $('.aspek-info').html('Belum Diketahui');
+            }
                 
-            var judul= `5 Perangkat Daerah Ter${aspek.aspek} dalam CETTAR Tahun ${$("#tahun").val()}`;
-            generatechart(`chart-${aspek.id_aspek}`, judul, chartSeriesData, chartSeriesColor, chartUnit);
+            var judul= `5 Perangkat Daerah Ter${aspek.aspek} dalam CETTAR Tahun ${$("#tahun option:selected").text()}`;
+            generatechart(`chart-${index}`, judul, chartSeriesData, chartSeriesColor, chartUnit);
+            
         });
     }
 
     tabaspek();
 
     generatechart = function(chart, judul, chartSeriesData, chartSeriesColor, chartUnit){
-        console.log(chart);
+
+        // console.log(chartSeriesData);
 
         $('#'+chart).highcharts({
             title: {
@@ -270,6 +288,7 @@ $(document).ready(function () {
             },
             yAxis: {
                 min: 0,
+                max: 100,
                 title: {
                     text: '',
                     align: 'high'
@@ -292,7 +311,7 @@ $(document).ready(function () {
                 type: 'bar',
                 name: 'Nilai',
                 pointWidth: 40,
-                data:chartSeriesData,
+                data: chartSeriesData,
                 dataLabels: {
                     enabled: false,
                     rotation: 0,
@@ -309,23 +328,28 @@ $(document).ready(function () {
                 for (var n = 0; n <= j; n++) {
                     /*if(n % 2 == 0) chart.series[0].data[n].update({color:'#44a441'});
                     else chart.series[0].data[n].update({color:'#a9c7ff'});*/
-                    if(n % 2 == 0) chart.series[0].data[n].update({
-                        /*color:'#a90000'*/
-                        color: {
-                            linearGradient: {
-                                x1: 0,
-                                x2: 0,
-                                y1: 0,
-                                y2: 1
-                            },
-                            stops: [
-                                [0, '#003399'],
-                                [1, '#ff66AA']
-                            ]
-                        }
-                    });
-                    
-                    else chart.series[0].data[n].update({color:'#5470C6'});
+                    if(n % 2 == 0) {
+                        chart.series[0].data[n].update({
+                            /*color:'#a90000'*/
+                            color: {
+                                linearGradient: {
+                                    x1: 0,
+                                    x2: 0,
+                                    y1: 0,
+                                    y2: 1
+                                },
+                                stops: [
+                                    [0, '#003399'],
+                                    [1, '#ff66AA']
+                                ]
+                            }
+                        });
+
+                        // console.log('update => true')
+                    }else{
+                        // console.log('update => else')
+                        chart.series[0].data[n].update({color:'#5470C6'});
+                    }
                 }
             });
         });

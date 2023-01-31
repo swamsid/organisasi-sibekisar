@@ -40,15 +40,18 @@ $(document).ready(function () {
                 });
                 grafikcettar(data, tahun,predikat,unit,chartSeriesData);
             }
+
             $('#div-rekap').html("");
+            $('#layout').fadeOut(500);
 
         })
-            .always(function () {
+        .always(function () {
 
-            });
+        });
     }
 
     tabrekap();
+
     grafikcettar_ori = function(data,tahun,predikat){
         var a=[], b=[], c=[], d=[], e=[], f=[], x=[];
         if(predikat=='') var kategori = ['SANGAT CETTAR','CETTAR','CUKUP CETTAR','KURANG CETTAR','TIDAK CETTAR'];
