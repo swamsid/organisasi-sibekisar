@@ -42,6 +42,7 @@ class Master extends BaseController
 
     function simpan_unit(){
         $data = $_REQUEST;
+        // return json_encode($data);
         $data['is_aktif'] = (isset($_REQUEST['is_aktif'])?$_REQUEST['is_aktif']:0);
         $data['unit'] = str_replace("'", "`",$data['unit']);
         $resultUpload = do_uploaded_file("foto", "file", "");
@@ -120,6 +121,7 @@ class Master extends BaseController
             'tag'           =>$data['tag'],
             'id_aspek'      =>$data['id_aspek'],
             'is_aktif'      =>$data['is_aktif'],
+            'keterangan'    =>$data['keterangan'],
             'periode'       => $data['periode-indikator']
         );
 

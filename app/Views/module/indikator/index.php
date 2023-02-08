@@ -52,7 +52,7 @@
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                     <a class="dropdown-item" href="#" style="font-size: 9pt;" id="tambah-data">Tambah Data Indikator</a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#" style="font-size: 9pt;">Duplikat Indikator</a>
+                                                    <!-- <a class="dropdown-item" href="#" style="font-size: 9pt;">Duplikat Indikator</a> -->
                                                 </div>
                                             </div>
                                         </td>

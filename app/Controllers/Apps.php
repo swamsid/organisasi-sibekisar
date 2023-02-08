@@ -150,7 +150,8 @@ class Apps extends BaseController
     {
         $data = $_REQUEST;
         // return json_encode($data);
-        $eval = $this->evaluasimodel->findDetailNilai($data);
+        $eval = $this->evaluasimodel->findDetailNilaiBaru($data);
+        // return json_encode($eval);
         $count = count($eval);
         return $this->response->setJSON($eval);
     }

@@ -20,33 +20,69 @@ $(document).ready(function () {
         var predikat='';
         var req = $.post(url, param).done(function (data) {
 
-            var t = '<table class="table" id="tb-rekap-spirit" width="100%">' +
-                '<thead><tr><th style="display:none"></th><th>Spirit Budaya Kerja</th><th>Bobot</th><th>Nilai</th><th>Indikator Penilaian</th><th>Bobot</th><th>Nilai</th><th>PD Pengampu</th>';
-            t += '</tr></thead><tbody>';
+            console.log(data);
+
+            var t = `<table class="table" id="tb-rekap-spirit" width="100%">
+                        <thead>
+                            <tr>
+                                <th width="1%" style="display:none"></th>
+                                <th width="20%">Spirit Budaya Kerja</th>
+                                <th width="8%">Bobot</th>
+                                <th width="8%">Nilai</th>
+                                <th width="24%">Indikator Penilaian</th>
+                                <th width="8%">Bobot</th>
+                                <th width="8%">Nilai</th>
+                                <th width="23%">Keterangan</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                    `;
             var n = 0;
             var skor_total=0;
             var nilai_huruf='';
             var predikat='';
+
             $.each(data, function (key, value) {
                 n++;
-                t += '<tr><td style="display:none">'+value.id_aspek+'</td>' +
-                    '<td>' + (value.aspek != null ? value.aspek.toUpperCase() : '-') + '</td>' +
-                    '<td align="center">'+value.nilai_maks+'</td>' +
-                    '<td align="center" class="text-bold text-black"><b>' + value.total_nilai + '</b></td>' +
-                    '<td>' + value.indikator + '</td><td align="center">'+ parseInt(value.bobot_aspek * 100)+'</td>' +
-                    '<td align="center" ><b>' + value.nilai_aspek + '</b></td><td>'+value.opd_pengampu.toUpperCase()+'</td>';
+                t += `<tr>
+                        <td style="display:none">${ value.id_aspek }</td>
+                        <td>${ (value.aspek != null) ? value.aspek.toUpperCase() : '-'}</td>
+                        <td align="center">${value.nilai_maks}</td>
+                        <td align="center" class="text-bold text-black"><b>${ value.total_nilai }</b></td>
+                        <td>${ value.indikator} </td>
+                        <td align="center">${ parseInt(value.bobot_aspek) }</td>
+                        <td align="center" ><b>${ Number(value.nilai_aspek).toFixed(2) }</b></td>
+                        <td>${ (!value.keterangan) ? value.opd_pengampu.toUpperCase() : value.keterangan.toUpperCase() }</td>
+                    `;
+
                 if(n==1){
-                    skor_total = value.nilai;
-                    nilai_huruf = value.nilai_huruf;
-                    predikat = value.predikat;
+                    skor_total = (value.nilai) ? value.nilai : 0;
+                    nilai_huruf = (value.nilai_huruf) ? value.nilai_huruf : 0;
+                    predikat = (value.predikat) ? value.predikat : 0;
                 }
             });
 
-            t += '</tbody><tfoot><tr><th colspan="3">Skor Total</th>' +
-                '<th colspan="5">'+skor_total+'</th> </tr>' +
-                '<tr><th colspan="3">Nilai</th><th colspan="5">'+nilai_huruf+'</th></tr>' +
-                '<tr><th colspan="3">Hasil Penilaian</th><th colspan="5">'+predikat+'</th></tr>' +
-                '</tfoot></table>';
+            t += `  </tbody>
+                
+                    <tfoot>
+                        <tr>
+                            <th colspan="3">Skor Total</th>
+                            <th colspan="5">${ skor_total }</th> 
+                        </tr>
+
+                        <tr>
+                            <th colspan="3">Nilai</th>
+                            <th colspan="5">${ nilai_huruf }</th>
+                        </tr>
+
+                        <tr>
+                            <th colspan="3">Hasil Penilaian</th>
+                            <th colspan="5">${ predikat }</th>
+                        </tr>
+                    </tfoot>
+                </table>`;
+
             $('#div-spirit').html(t);
 
             var oTable = $('#tb-rekap-spirit').DataTable({

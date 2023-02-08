@@ -120,15 +120,15 @@
                                         <div style="margin-top: 10px;"> 
                                             <?php echo ($unit->tugas ? $unit->tugas : '-') ?>
                                         </div>
-                                        <?php $misi = str_replace([".", ";"], ".<li>", $unit->fungsi) ?>
+                                        <?php $misi = str_replace([";"], "&&&", $unit->fungsi) ?>
                                         <hr>
                                         <b>Fungsi</b> 
                                         <div style="margin-top: 10px;">
                                             <table width="100%">
                                                 <tbody>
-                                                    <?php
+                                                    <?php 
                                                         echo ($misi == '') ? '---' : '';
-
+                                                        
                                                         $num = 1;
                                                         foreach(explode('&&&', $misi) as $key => $data){
                                                             if($data != '')

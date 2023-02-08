@@ -37,11 +37,11 @@
                 <div style="border-top: 1px solid #ddd;">&nbsp;</div>
 
                 <div class="form-group" style="margin-top: 15px;">
-                    <label>PD Pengampu</label>
+                    <label>Tim Penilai</label>
                     <div class="controls">
                         <input type="hidden" name="opd_pengampu" id="opd_pengampu">
                         <select name="id_opd" id="id_opd" class="form-control select2"  style="width:100%">
-                            <option value="">- Pilih PD Pengampu -</option>
+                            <option value="">- Pilih Tim Penilai -</option>
                             <?php
                             if(isset($unit)) {
                                 foreach ($unit as $key) {
@@ -50,6 +50,13 @@
                             }
                             ?>
                         </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Keterangan PD Pengampu <small></small></label>
+                    <div class="controls">
+                        <input type="text" class="form-control" id="keterangan" name="keterangan">
                     </div>
                 </div>
 
