@@ -47,25 +47,31 @@ class Master extends BaseController
         $data['unit'] = str_replace("'", "`",$data['unit']);
         $resultUpload = do_uploaded_file("foto", "file", "");
         $data['foto_pejabat']=0;
-        if($resultUpload) $data['foto_pejabat'] = $resultUpload['file_loc'];
+        if($resultUpload['status']) $data['foto_pejabat'] = $resultUpload['file_loc'];
 
         $where= array("id_unit"=>$data['id_unit']);
-        $data_ = array("unit"=>$data['unit'],"nama_unit"=>$data['unit'],
-            "pejabat"=>$data['pejabat'],
-            "foto_pejabat"=>$data['foto_pejabat'],
-            "alamat"=>$data['alamat'],
-            "telp"=>$data['telp'],
-            "website"=>$data['website'],
-            "kategori_unit"=>$data['kategori_unit'],
-            "jumlah_bidang"=>$data['jumlah_bidang'],
-            "jumlah_upt"=>$data['jumlah_upt'],
+        $data_ = array(
+            "unit"          =>$data['unit'],"nama_unit"=>$data['unit'],
+            "pejabat"       =>$data['pejabat'],
+            "alamat"        =>$data['alamat'],
+            "telp"          =>$data['telp'],
+            "website"       =>$data['website'],
+            "kategori_unit" =>$data['kategori_unit'],
+            "jumlah_bidang" =>$data['jumlah_bidang'],
+            "jumlah_upt"    =>$data['jumlah_upt'],
             "jumlah_anggaran"=>$data['jumlah_anggaran'],
             "jumlah_sdm"=>$data['jumlah_sdm'],
             "email"=>$data['email'],
             "is_aktif"=>$data['is_aktif'],
             "medsos_fb"=>$data['medsos_fb'],
             "medsos_ig"=>$data['medsos_ig'],
-            "medsos_twitter"=>$data['medsos_twitter']);
+            "medsos_twitter"=>$data['medsos_twitter']
+        );
+
+        if($data['foto_pejabat'] != '0') { 
+            $data_['foto_pejabat'] = $data['foto_pejabat'];
+        }
+        
         if(isset($data['id_unit']) && !empty($data['id_unit'])) $result = $this->mastermodel->updateMUnit($data_,$where);
         else $result = $this->mastermodel->insertMUnit($data);
 

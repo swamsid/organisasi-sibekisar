@@ -23,7 +23,8 @@ $(document).ready(function () {
         var url = base_url + "/apps/gridnilai";
         var param = {
             tahun: $('#tahun').val(),
-            id_unit: $('#id_unit').val()
+            id_unit: $('#id_unit').val(),
+            tag: $('#tag').val()
         };
 
         var tahun = $("#tahun").val();
@@ -33,7 +34,7 @@ $(document).ready(function () {
             var t = '<table class="table" id="tb-rekap-spirit" width="100%" style="margin-top: 20px;">' +
                 '<thead><tr><th style="font-weight: bold; background: #ccc;">Spirit Budaya Kerja</th><th style="font-weight: bold; background: #ccc;">Bobot</th>' +
                 '<th style="font-weight: bold; background: #ccc;">Total Nilai</th><th style="font-weight: bold; background: #ccc;">Indikator Penilaian</th><th style="font-weight: bold; background: #ccc;">Bobot</th><th style="font-weight: bold; background: #ccc;">Nilai</th>' +
-                '<th style="font-weight: bold; background: #ccc;">Nilai Awal</th><th style="font-weight: bold; background: #ccc;">Nilai Konversi</th><th style="font-weight: bold; background: #ccc;">PD Pengampu</th>';
+                '<th style="font-weight: bold; background: #ccc;">Nilai Awal</th><th style="font-weight: bold; background: #ccc;">Nilai Konversi</th><th style="font-weight: bold; background: #ccc;">Keterangan</th>';
             t += '</tr></thead><tbody>';
             var n = 0;
             var skor_total = 0;
@@ -41,15 +42,16 @@ $(document).ready(function () {
             var predikat = '';
             $.each(data, function (key, value) {
                 n++;
+                const print = (!value.keterangan) ? value.opd_pengampu.toUpperCase() : value.keterangan.toUpperCase();
                 t += '<tr>' +
                     '<td>' + (value.aspek != null ? value.aspek.toUpperCase() : '-') + '</td>' +
                     '<td align="center">' + value.nilai_maks + '</td>' +
                     '<td align="center" class="text-bold text-black"><b>' + (value.total_nilai?value.total_nilai:0) + '</b></td>' +
-                    '<td>' + value.indikator + '</td><td align="center">' + parseInt(value.bobot_aspek * 100) + '</td>' +
+                    '<td>' + value.indikator + '</td><td align="center">' + parseInt(value.bobot_aspek) + '</td>' +
                     '<td align="center" ><b>' + parseFloat(value.nilai_aspek).toFixed(2) + '</b></td>' +
                     '<td align="center" ><b>' + (value.nilai_awal ? value.nilai_awal : '') + '</b></td>' +
                     '<td align="center" ><b>' + (value.nilai_konversi?parseFloat(value.nilai_konversi).toFixed(2):'') + '</b></td>' +
-                    '<td>' + value.opd_pengampu.toUpperCase() + '</td>';
+                    '<td>' + print + '</td>';
 
                 if (n == 1) {
                     skor_total = parseFloat(value.nilai).toFixed(2);
@@ -79,7 +81,7 @@ $(document).ready(function () {
                             // $('#tb-rekap-spirit a').attr('href', base_url + "/apps/cetak/"+$("#id_unit").val()+"/"+$("#tahun").val());
                             // $('#tb-rekap-spirit a').attr('target', '_blank');
                             //location.href=base_url + "/apps/cetak/"+$("#id_unit").val()+"/"+$("#tahun").val();
-                            window.open(base_url + "/apps/cetak/" + $("#id_unit").val() + "/" + $("#tahun").val(), '_blank', 'width=800,height=800');
+                            window.open(base_url + "/apps/cetak/" + $("#id_unit").val() + "/" + $("#tahun").val() + "/" + $("#tag").val(), '_blank', 'width=800,height=800');
                         }
                     },'excel'],
                 "footerCallback": function (row, data, start, end, display) {

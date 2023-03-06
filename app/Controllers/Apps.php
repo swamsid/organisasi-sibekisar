@@ -170,14 +170,16 @@ class Apps extends BaseController
         )));
     }
 
-    function cetak($id = null, $tahun = null)
+    function cetak($id = null, $tahun = null, $tag = null)
     {
-        $data['id_unit'] = $id;
-        $data['tahun'] = $tahun;
+        // return 'okee';
+        $data['id_unit']    = $id;
+        $data['tahun']      = $tahun;
+        $data['tag']        = $tag;
 
         $dataTahunTable = $this->mastermodel->findPeriode([ 'id_periode' => $tahun ]);
 
-        $indikator = $this->evaluasimodel->findDetailNilai($data);
+        $indikator = $this->evaluasimodel->findDetailNilaiBaru($data);
         $html = '';
         $aspek = array();
         $unit = array();
@@ -212,7 +214,7 @@ class Apps extends BaseController
                                         <th>Nilai</th>
                                         <th>Nilai Awal</th>
                                         <th>Nilai Konversi</th>                                        
-                                        <th>PD Pengampu</th>
+                                        <th>Keterangan</th>
                                     </tr>
                                     </thead>
                                     <tbody>";
@@ -231,18 +233,19 @@ class Apps extends BaseController
                 foreach ($indikator as $key) {
                     if ($key->id_aspek == $row['id_aspek']) {
                         $i++;
+                        $print = (!$key->keterangan) ? $key->opd_pengampu : $key->keterangan;
                         if ($i == 1) $html .= " ";
                         else $html .= "<tr valign='top'>";
                         $html .= '<td valign="top">' . $key->indikator . '
                                                     </td>
                                                     <td valign="top" align="center">
-                                                       ' . ($key->bobot_aspek * 100) . '
+                                                       ' . ($key->bobot_aspek) . '
                                                     </td>
                                                     <td valign="top" align="center"><b>' . number_format($key->nilai_aspek, 2) . '</b></td>
                                                     <td valign="top" align="center"><b>' . $key->nilai_awal . '</b></td>
                                                     <td valign="top" align="center"><b>' . $key->nilai_konversi . '</b></td>
                                                     <td valign="top">
-                                                        ' . $key->opd_pengampu . '
+                                                        ' . $print . '
                                                     </td>
                                                     </tr>';
                     }

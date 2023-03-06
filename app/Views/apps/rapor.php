@@ -15,7 +15,7 @@
                 </div>
             </div>
             <input type="hidden" id="tmp-indikator" value="<?php echo (isset($id_indikator)?$id_indikator:'') ?>">
-            <input type="hidden" id="tag" value="<?php echo (isset($tag) ? $tag:'opd') ?>" readonly>
+            <input type="hidden" id="tag" value="<?php echo (isset($tag) ? $tag : 'opd') ?>" readonly>
             <div class="row">
                 <div class="col-12">
                     <blockquote class="blockquote blockquote-primary">

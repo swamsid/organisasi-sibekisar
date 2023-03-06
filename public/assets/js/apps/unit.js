@@ -114,6 +114,27 @@ $(document).ready(function (){
                 e.preventDefault();
 
                 var formData = new FormData($("#formunit")[0]);
+                const fileImage = $('#file-image').val();
+
+                if(fileImage){
+                    const indexLength = fileImage.substr(fileImage.lastIndexOf('\\') + 1).split('.').length; 
+                    const ext = fileImage.substr(fileImage.lastIndexOf('\\') + 1).split('.')[indexLength - 1];
+                    const index = ['jpg', 'jpeg'];
+
+                    if(index.indexOf(ext) < 0){
+                        $.toast({
+                            heading: '',
+                            text: 'Untuk sementara format foto hanya boleh JPEG, JPG',
+                            showHideTransition: 'slide',
+                            icon: 'info',
+                            loaderBg: '#f96868',
+                            position: 'top-right'
+                        })
+
+                        return;
+                    }
+                }
+
 
                 $.ajax({
                     url: base_url + "/module/master/simpan_unit",
@@ -123,6 +144,8 @@ $(document).ready(function (){
                     processData: false,
                     success: function (response) {
                         var m = JSON.parse(response);
+                        // console.log(response);
+                        // return;
                         if (m.status === "ok") {
                             $.toast({
                                 heading: 'Success',

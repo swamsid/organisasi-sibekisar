@@ -35,7 +35,7 @@
                 <div class="form-group">
                     <label>Kode <small><em>Note: Isikan kode unit</em></small></label>
                     <div class="controls">
-                        <input type="text" class="form-control" id="kode_unit" name="kode_unit" required>
+                        <input type="text" class="form-control" id="kode_unit" name="kode_unit">
                     </div>
                 </div>
                 <div class="form-group">
@@ -147,9 +147,9 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-12">
-                        <label>Foto pejabat <small><em>Note: Upload foto pejabat</em></small></label>
+                        <label>Foto pejabat <small><em>Note: Format foto hanya boleh format Jpeg</em></small></label>
                         <div class="controls">
-                        <input type="file" name="file" class="form-control" accept="image/*">
+                            <input type="file" id="file-image" name="file" class="form-control" accept="image/jpeg" />
                         </div>
                     </div>
                 </div>
