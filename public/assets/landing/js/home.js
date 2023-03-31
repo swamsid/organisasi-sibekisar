@@ -222,11 +222,12 @@ $(document).ready(function () {
             }
 
             let dataRekapAspek = aspekR.filter((f) => { return (f) ? f.aspek == aspek.aspek : false });
+            const concat = (aspek.id_aspek) ? index : '';
 
-            if(dataRekapAspek.length){
-                $('#unit_aspek_'+aspek.id_aspek).html(dataRekapAspek[0].unit)
+            if(dataRekapAspek.length && dataRekapAspek[0].nilai_akhir > 0){
+                $('#aspek_'+concat).html(dataRekapAspek[0].unit)
             }else{
-                $('.aspek-info').html('Belum Diketahui');
+                $('#aspek_'+concat).html('Belum Diketahui')
             }
                 
             var judul= `5 Perangkat Daerah Ter${aspek.aspek} dalam CETTAR Tahun ${$("#tahun option:selected").text()}`;

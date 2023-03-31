@@ -113,8 +113,7 @@
                                     <div class="text">
                                         <h4>ter <b><?= ucfirst($key) ?></b></h4>
                                         <h3>
-                                            <span class="text-danger text-bold lbl-tercepat aspek-info" id="unit_aspek_<?= ($dataView) ? $dataView->id_aspek : '' ?>">
-                                                
+                                            <span class="text-danger text-bold lbl-tercepat aspek-info" id="aspek_<?= ($dataView) ? $keys : '' ?>">
                                             </span>
                                         </h3>
                                     </div>

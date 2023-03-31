@@ -16,7 +16,7 @@ class Home extends BaseController
 	{
         $dataPeriode = $this->mastermodel->getPeriode();
         $periode = (count($dataPeriode)) ? $dataPeriode[count($dataPeriode) - 1]->id_periode : 0;
-        $periode = 1;
+        // $periode = 1;
         
         $data_['limit']=4;
         $data_['tahun']= $periode;
@@ -30,7 +30,7 @@ class Home extends BaseController
             $data1['limit']=1;
             $data1['tahun']= $periode;
             $data1['id_aspek'] = $dataAspek->id_aspek;
-            $data1['tag']= $dataAspek->tag;
+            $data1['tag']= 'opd';
 
             $data['aspek'][strtolower($dataAspek->aspek)] = $this->evaluasimodel->findCettarAspek($data1);
         }
@@ -58,7 +58,7 @@ class Home extends BaseController
             $data1['limit']=1;
             $data1['tahun']= $periode;
             $data1['id_aspek'] = $dataAspek->id_aspek;
-            $data1['tag']= $dataAspek->tag;
+            $data1['tag']= 'kab';
 
             $data['aspek'][strtolower($dataAspek->aspek)] = $this->evaluasimodel->findCettarAspek($data1);
         }

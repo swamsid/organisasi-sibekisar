@@ -51,7 +51,7 @@ class Read extends BaseController
 
     function detail($params=null, $tag=null){
 
-        return json_encode($params);
+        // return json_encode($params);
         
         $data['param']          = empty($params) ? 'spirit' : $params;
         
