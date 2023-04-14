@@ -180,9 +180,14 @@ class Apps extends BaseController
         $dataTahunTable = $this->mastermodel->findPeriode([ 'id_periode' => $tahun ]);
 
         $indikator = $this->evaluasimodel->findDetailNilaiBaru($data);
+        $unitGet   = $this->mastermodel->findMUnit([ 'id_unit' => $data['id_unit'] ]);
+
         $html = '';
         $aspek = array();
         $unit = array();
+
+        // return json_encode($indikator);
+
         foreach ($indikator as $key):
             $temp = array(
                 "id_aspek" => $key->id_aspek,
@@ -203,51 +208,75 @@ class Apps extends BaseController
 
         $rowspan = array_count_values(array_column($indikator, 'id_aspek'));
         foreach ($unit as $runit) {
-            $html .= "<h2>Raport Budaya Kerja CETTAR <br>" . $runit['unit'] . " Tahun " . $dataTahunTable->tahun_periode . "</h2>
-                        <table class='table' cellpadding='2' cellspacing='1' border='1'><thead>
-                                    <tr>
-                                        <th>Spirit Budaya Kerja</th>
-                                        <th>Bobot</th>
-                                        <th>Total Nilai</th>
-                                        <th>Indikator Penilaian</th>
-                                        <th>Bobot</th>
-                                        <th>Nilai</th>
-                                        <th>Nilai Awal</th>
-                                        <th>Nilai Konversi</th>                                        
-                                        <th>Keterangan</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>";
+            $html .= "
+                        <table width='100%' style='margin-bottom: 25px;'>
+                            <tbody>
+                                <tr>
+                                    <td width='75%' style='text-align: left; display: block; line-height: 26px;'>
+                                        <span style='font-weight: bold; font-size: 16pt; margin-bottom: 300px;'>Raport Budaya Kerja CETTAR</span> <br/>
+                                        <span style='line-height: 200px; margin-top: 300px;'>".$unitGet[0]->unit."</span> <br/>
+                                        <span style='font-size: 10pt; font-weight: normal; margin-top: 5px;font-style: italic; color: #555;'>Tahun " . $dataTahunTable->tahun_periode."</span>
+                                    </td>
+                                    <td width='25%' style='text-align: right;'>
+                                        
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <table width='100%' class='table' cellpadding='2' cellspacing='1' border='1' style='border-collapse: collapse; margin-top: 5px;'>
+                            <thead>
+                                <tr>
+                                    <th width='13%' style='background: #eee; padding: 10px 0px;'>Spirit Budaya Kerja</th>
+                                    <th width='7%' style='background: #eee; padding: 10px 0px;'>Bobot</th>
+                                    <th width='7%' style='background: #eee; padding: 10px 0px;'>Total Nilai</th>
+                                    <th width='17%' style='background: #eee; padding: 10px 0px;'>Indikator Penilaian</th>
+                                    <th width='7%' style='background: #eee; padding: 10px 0px;'>Bobot</th>
+                                    <th width='7%' style='background: #eee; padding: 10px 0px;'>Nilai</th>
+                                    <th width='7%' style='background: #eee; padding: 10px 0px;'>Nilai Awal</th>
+                                    <th width='7%' style='background: #eee; padding: 10px 0px;'>Nilai Konversi</th>                                        
+                                    <th width='28%' style='background: #eee; padding: 10px 0px;'>Keterangan</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>";
             foreach ($aspek as $row) {
                 $i = 0;
                 $html .= '<tr valign="top">
-                                        <td rowspan="' . ($rowspan[$row['id_aspek']] + 0) . '" valign="top" style="vertical-align : top!important;text-align:left;">
-                                            <b>' . strtoupper($row['aspek']) . '</b>
-                                        </td>
-                                        <td rowspan="' . ($rowspan[$row['id_aspek']] + 0) . '" valign="top" style="vertical-align : top!important;text-align:center!important;" align="center">
-                                            ' . $row['nilai_maks'] . '
-                                        </td>
-                                        <td rowspan="' . ($rowspan[$row['id_aspek']] + 0) . '" valign="top" style="vertical-align : top!important;text-align:center;">
-                                            <b>' . $row['total_nilai'] . '</b>
-                                        </td>';
+                            <td rowspan="' . ($rowspan[$row['id_aspek']] + 0) . '" valign="top" style="vertical-align : top !important; text-align: left; padding: 10px; font-weight: 600;">
+                                ' . strtoupper($row['aspek']) . '
+                            </td>
+                            <td rowspan="' . ($rowspan[$row['id_aspek']] + 0) . '" valign="top" style="vertical-align : top !important; text-align: center; padding: 10px;">
+                                ' . $row['nilai_maks'] . '
+                            </td>
+                            <td rowspan="' . ($rowspan[$row['id_aspek']] + 0) . '" valign="top" style="vertical-align : top !important; text-align:center; padding: 10px;">'
+                                . $this->is_decimal($row['total_nilai']) .
+                            '</td>';
+
                 foreach ($indikator as $key) {
                     if ($key->id_aspek == $row['id_aspek']) {
                         $i++;
                         $print = (!$key->keterangan) ? $key->opd_pengampu : $key->keterangan;
                         if ($i == 1) $html .= " ";
                         else $html .= "<tr valign='top'>";
-                        $html .= '<td valign="top">' . $key->indikator . '
-                                                    </td>
-                                                    <td valign="top" align="center">
-                                                       ' . ($key->bobot_aspek) . '
-                                                    </td>
-                                                    <td valign="top" align="center"><b>' . number_format($key->nilai_aspek, 2) . '</b></td>
-                                                    <td valign="top" align="center"><b>' . $key->nilai_awal . '</b></td>
-                                                    <td valign="top" align="center"><b>' . $key->nilai_konversi . '</b></td>
-                                                    <td valign="top">
-                                                        ' . $print . '
-                                                    </td>
-                                                    </tr>';
+                        $html .= '
+                                    <td valign="top" style="height: 40px; padding: 10px;">' . $key->indikator . '</td>
+                                    <td valign="top" align="center" style="height: 40px; padding: 10px;">
+                                        ' . $this->is_decimal($key->bobot_aspek) . '
+                                    </td>
+                                    <td valign="top" align="center" style="height: 40px; padding: 10px;">
+                                        <b>' . $this->is_decimal($key->nilai_aspek) . '</b>
+                                    </td>
+                                    <td valign="top" align="center" style="height: 40px; padding: 10px;">
+                                        <b>' . $key->nilai_awal . '</b>
+                                    </td>
+                                    <td valign="top" align="center" style="height: 40px; padding: 10px;">
+                                        <b>' . $this->is_decimal($key->nilai_konversi) . '</b>
+                                    </td>
+                                    <td valign="top" style="height: 40px; padding: 10px;">
+                                        ' . $print . '
+                                    </td>
+                                </tr>';
                     }
                 }
             }
@@ -258,11 +287,19 @@ class Apps extends BaseController
                         </tfoot></table>";
         }
 
-        $mpdf = new Mpdf(['debug' => FALSE, 'mode' => 'utf-8', 'orientation' => 'P']);
+        $mpdf = new Mpdf(['debug' => FALSE, 'mode' => 'utf-8', 'orientation' => 'L']);
 
         $mpdf->WriteHTML($html);
         $mpdf->Output('raport_cettar.pdf', 'I');
         exit;
+    }
+
+    public function is_decimal( $val )
+    {
+        if(is_numeric( $val ) && floor( $val ) != $val)
+            return number_format($val, 2);
+
+        return number_format($val, 0);
     }
 
     public function gridevaluasi()
