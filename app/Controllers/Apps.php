@@ -29,6 +29,9 @@ class Apps extends BaseController
         //$data['username']='ro_organisasi';
         //$url='https://api.bpkad.jatimprov.go.id/penyerapan?username=ro_organisasi&password=EkfqzpxfM7CXAGlsNaFRGkP2QORShEKEeXEzpqkCzOdfnk00qrirNRshyccUY4KP&tgl='.date("Y-m-d").'&id_unit=0';
         $url = "https://api.bpkad.jatimprov.go.id/realisasi/biro-organisasi?username=ro_organisasi&password=EkfqzpxfM7CXAGlsNaFRGkP2QORShEKEeXEzpqkCzOdfnk00qrirNRshyccUY4KP&tgl_awal=" . $_REQUEST['tahun'] . "-01-01&tgl_akhir=" . $_REQUEST['tahun'] . "-12-31&id_unit=0&tahun=" . $_REQUEST['tahun'];
+
+        return $url;
+
         $response = $this->curl->request('GET', $url, ['verify' => false]);
         $row = json_decode($response->getBody());
         // var_dump($row);

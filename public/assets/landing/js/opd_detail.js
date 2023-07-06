@@ -20,8 +20,6 @@ $(document).ready(function () {
         var predikat='';
         var req = $.post(url, param).done(function (data) {
 
-            console.log(data);
-
             var t = `<table class="table" id="tb-rekap-spirit" width="100%">
                         <thead>
                             <tr>
@@ -44,11 +42,12 @@ $(document).ready(function () {
             var predikat='';
 
             $.each(data, function (key, value) {
+                console.log(data);
                 n++;
                 t += `<tr>
                         <td style="display:none">${ value.id_aspek }</td>
                         <td>${ (value.aspek != null) ? value.aspek.toUpperCase() : '-'}</td>
-                        <td align="center">${value.nilai_maks}</td>
+                        <td align="center">${value.bobot}</td>
                         <td align="center" class="text-bold text-black"><b>${ value.total_nilai }</b></td>
                         <td>${ value.indikator} </td>
                         <td align="center">${ parseInt(value.bobot_aspek) }</td>
@@ -114,7 +113,6 @@ $(document).ready(function () {
         var tahun=$("#tahun").val();
         var id_aspek='';
         var req = $.post(url, param).done(function (data) {
-            console.log(data);
             var t='', s='';
             var colors = ['progress-bar-danger','progress-bar-primary','progress-bar-success','progress-bar-warning','progress-bar-info','progress-bar-danger'];
         
