@@ -115,14 +115,17 @@
                                             </table>
                                         </div>
                                         <hr>
-                                    <?php } else { ?>
+                                    <?php 
+                                        } else {
+                                            if($unit->tujuan == '') { 
+                                    ?>
                                         <b>Visi</b> 
                                         <div style="margin-top: 10px;"> 
                                             <?php echo ($unit->tugas ? $unit->tugas : '-') ?>
                                         </div>
                                         <?php $misi = str_replace([";"], "&&&", $unit->fungsi) ?>
                                         <hr>
-                                        <b>Fungsi</b> 
+                                        <b>Misi</b> 
                                         <div style="margin-top: 10px;">
                                             <table width="100%">
                                                 <tbody>
@@ -141,8 +144,34 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                    <?php   } else { ?>
+
+                                        <?php $tujuan = str_replace([";"], "&&&", $unit->tujuan) ?>
+
+                                        <b>Tujuan</b> 
+                                        <div style="margin-top: 10px;">
+                                            <table width="100%">
+                                                <tbody>
+                                                    <?php 
+                                                        echo ($tujuan == '') ? '---' : '';
+                                                        
+                                                        $num = 1;
+                                                        foreach(explode('&&&', $tujuan) as $key => $data){
+                                                            if($data != '')
+                                                                echo '<tr><td width="3%" style="vertical-align: top; padding-bottom: 10px;">'.$num.'. </td>';
+                                                                echo '<td style=" padding-bottom: 10px;">'.str_replace('"', '', $data).'</td></tr>';
+
+                                                            $num++;
+                                                        }
+                                                    ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         <hr>
-                                    <?php } ?>
+                                    <?php 
+                                            }
+                                        }
+                                    ?>
                                     <b>Alamat : </b>
                                     <div style="margin-top: 10px;">
                                         <div>

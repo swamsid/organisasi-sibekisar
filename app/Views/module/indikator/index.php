@@ -68,12 +68,12 @@
                                 <table id="indikator-datatable" class="table table-striped table-centered mb-0">
                                     <thead>
                                     <tr>
-                                        <th>Spirit</th>
-                                        <th>Bobot Spirit</th>
-                                        <th>Indikator</th>
-                                        <th>Bobot</th>
-                                        <th>PD Pengampu</th>
-                                        <th>Act</th>
+                                        <th width="15">Spirit</th>
+                                        <th width="15">Bobot Spirit</th>
+                                        <th width="25">Indikator</th>
+                                        <th width="15">Bobot</th>
+                                        <th width="15">PD Pengampu</th>
+                                        <th width="15">Act</th>
                                     </tr>
                                     </thead>
                                     <tbody>

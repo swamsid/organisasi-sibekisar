@@ -70,7 +70,7 @@
                 <div class="form-group">
                     <label>Bobot <small><em>Note: Isikan bobot indikator</em></small></label>
                     <div class="controls">
-                        <input type="number" class="form-control" id="bobot" name="bobot" required>
+                        <input type="number" class="form-control" id="bobot" name="bobot" step="any" required>
                     </div>
                 </div>
 

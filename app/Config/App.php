@@ -23,7 +23,7 @@ class App extends BaseConfig
 	 *
 	 * @var string
 	 */
-	public $baseURL = 'http://localhost:8074';
+	public $baseURL = 'http://dev.smartid.or.id/sibekisar/';
 
 	/**
 	 * --------------------------------------------------------------------------

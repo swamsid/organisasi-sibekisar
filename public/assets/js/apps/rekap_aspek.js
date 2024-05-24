@@ -26,19 +26,18 @@ $(document).ready(function () {
             id_aspek: $('#id_aspek').val()
         };
 
-        var tahun=$("#tahun option:selected").text();
+        var tahun=$("#tahun").val();
         var id_aspek=$("#id_aspek").val();
-        
         var req = $.post(url, param).done(function (data) {
 
-            if (data && id_aspek != '') grafikcettar(data.eval, $('#tahun').val(), id_aspek);
+            if (data) grafikcettar(data, tahun,id_aspek);
 
             var t = '<table class="table display nowrap" id="tb-rekap-cetar" width="100%">' +
                 '<thead><tr><th>Periode</th><th>Unit</th><th>Aspek</th><th>Nilai Akhir</th><th>Nilai Maks</th><th>Total Nilai</th>';
             t += '</tr></thead><tbody>';
             var n = 0;
-            $.each(data.eval, function (key, value) {
-                t += '<tr><td>' + (tahun != null ? tahun : '-') + '</td>' +
+            $.each(data, function (key, value) {
+                t += '<tr><td>' + (value.tahun != null ? value.tahun : '-') + '</td>' +
                     '<td>' + (value.unit != null ? value.unit.toUpperCase() : '-') + '</td><td>'+value.aspek+'</td>' +
                     '<td>' + value.nilai_akhir + '</td>' +
                     '<td>' + value.nilai_maks + '</td>' +
@@ -91,7 +90,6 @@ $(document).ready(function () {
 
 
     tabrekap();
-
     grafikcettar = function(data,tahun,id_aspek){
         var tag = $("#tag").val();
         var a=[], b=[], c=[], d=[], e=[], f=[], g=[];
@@ -136,7 +134,6 @@ $(document).ready(function () {
                                 a[j] = parseFloat(value['total_nilai']);
                                 ma[j] = parseFloat(value['nilai_maks']);
                             }
-
                             if (value['id_aspek'] == 'C02') {
                                 b[j] = parseFloat(value['total_nilai']);
                                 mb[j] = parseFloat(value['nilai_maks']);
@@ -213,7 +210,7 @@ $(document).ready(function () {
 
         $('#chart').highcharts({
             title: {
-                text: 'Rekap Rangking '+ (tag=='opd'?'Perangkat Daerah':'Kabupaten/Kota')+'  dalam Spirit Tahun '+ $("#tahun option:selected").text()
+                text: 'Rekap Rangking '+ (tag=='opd'?'Perangkat Daerah':'Kabupaten/Kota')+'  dalam Spirit Tahun '+ $("#tahun").val()
             },
             plotOptions: {
                 column: {

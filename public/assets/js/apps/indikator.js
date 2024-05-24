@@ -134,6 +134,7 @@ $(document).ready(function (){
             $('#layout').fadeOut(300);
         });
 
+        $("#formindikator [name='id_opd']").val('').trigger('change')
         $(".periode-show-text").text($("#periode-tahun-show option:selected").text());
         $(".page-form #formindikator")[0].reset();
         $(".page-content").slideUp();
@@ -177,6 +178,7 @@ $(document).ready(function (){
 
             setTimeout(() => {
                 for (var key in aData) {
+                    // console.log(aData);
                     try {
                         if(key=='id_opd') $("#formindikator [name='id_opd']").val(aData[key]).trigger('change');
                         $('#formindikator [name=' + key + ']').val(aData[key]);

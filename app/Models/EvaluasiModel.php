@@ -33,8 +33,20 @@ class EvaluasiModel extends Model
 
     function insertDataSerapan($data = null)
     {
-        $builder = $this->db->table('_sync_serapan');
-        return $builder->replace($data);
+        $params = [
+            'id_tmp'    => $data['id_unit']
+        ];
+
+        $cekIndikator = $this->db->table('m_unit');
+        $cekIndikator->where($params);
+        $cekIndikator->select('m_unit.*');
+
+        $result = $cekIndikator->get()->getRow();
+
+        if($result){
+            $builder = $this->db->table('_sync_serapan');
+            $builder->replace($data);
+        }
     }
 
     function evaluasibulk($data)
@@ -56,7 +68,7 @@ class EvaluasiModel extends Model
                         INNER JOIN m_unit ON _sync_serapan.id_unit = m_unit.id_tmp
                         INNER JOIN m_indikator ON _sync_serapan.id_indikator = m_indikator.id_indikator
                         INNER JOIN m_aspek ON m_indikator.id_aspek = m_aspek.id_aspek
-                         WHERE year(_sync_serapan.tanggal)='" . $data['tahun'] . "'
+                         WHERE year(_sync_serapan.tanggal)='" . $data['tanggal'] . "'
                         ";
         return $this->db->query($query)->getResult();
     }
@@ -236,6 +248,7 @@ class EvaluasiModel extends Model
         
         $builder->where('kategori_unit', $data['tag']);
         $builder->select('m_unit.unit, ,m_unit.id_unit as unit_id, evaluasi.*', 'mid(md5(evaluasi.id_evaluasi),9,6) as id_evaluasi_hash');
+        $builder->orderBy('m_unit.unit');
 
         return $builder->get()->getResult();
     }

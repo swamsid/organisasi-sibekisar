@@ -24,13 +24,15 @@ $(document).ready(function () {
                         <thead>
                             <tr>
                                 <th width="1%" style="display:none"></th>
-                                <th width="20%">Spirit Budaya Kerja</th>
+                                <th width="12%">Spirit Budaya Kerja</th>
                                 <th width="8%">Bobot</th>
                                 <th width="8%">Nilai</th>
                                 <th width="24%">Indikator Penilaian</th>
                                 <th width="8%">Bobot</th>
-                                <th width="8%">Nilai</th>
-                                <th width="23%">Keterangan</th>
+                                <th width="8%">Nilai Awal</th>
+                                <th width="8%">Nilai Konversi</th>
+                                <th width="8%">Nilai Akhir</th>
+                                <th width="11%">Keterangan</th>
                             </tr>
                         </thead>
 
@@ -51,6 +53,8 @@ $(document).ready(function () {
                         <td align="center" class="text-bold text-black"><b>${ value.total_nilai }</b></td>
                         <td>${ value.indikator} </td>
                         <td align="center">${ parseInt(value.bobot_aspek) }</td>
+                        <td align="center" ><b>${ Number(value.nilai_awal.replace(',', '.')).toFixed(2) }</b></td>
+                        <td align="center" ><b>${ Number(value.nilai_konversi.replace(',', '.')).toFixed(2) }</b></td>
                         <td align="center" ><b>${ Number(value.nilai_aspek).toFixed(2) }</b></td>
                         <td>${ (!value.keterangan) ? value.opd_pengampu.toUpperCase() : value.keterangan.toUpperCase() }</td>
                     `;
@@ -67,17 +71,17 @@ $(document).ready(function () {
                     <tfoot>
                         <tr>
                             <th colspan="3">Skor Total</th>
-                            <th colspan="5">${ skor_total }</th> 
+                            <th colspan="7">${ skor_total }</th> 
                         </tr>
 
                         <tr>
                             <th colspan="3">Nilai</th>
-                            <th colspan="5">${ nilai_huruf }</th>
+                            <th colspan="7">${ nilai_huruf }</th>
                         </tr>
 
                         <tr>
                             <th colspan="3">Hasil Penilaian</th>
-                            <th colspan="5">${ predikat }</th>
+                            <th colspan="7">${ predikat }</th>
                         </tr>
                     </tfoot>
                 </table>`;

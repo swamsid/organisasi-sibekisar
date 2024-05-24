@@ -38,7 +38,7 @@
                             <a href="<?php echo base_url('auth') ?>" >Login</a>
                          </li>
                          <li class="scroll-to-section">
-                            <a href="http://berakhlak.multi.web.id" target="_blank" style="color: var(--danger); font-weight: bold;">
+                            <a href="http://sibekisar.jatimprov.go.id/berakhlak" target="_blank" style="color: var(--danger); font-weight: bold;">
                                 Berakhlak &nbsp;<i class="fa fa-caret-right"></i>
                             </a>
                         </li>

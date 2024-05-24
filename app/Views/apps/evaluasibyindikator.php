@@ -44,16 +44,22 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4 text-right">
+                            <!-- <div class="col-md-4 text-right">
                                 <?php
                                 if($_SESSION['user']->id_role==1 or ($_SESSION['user']->id_role==2 && $_SESSION['user']->id_unit==6))
                                 {
                                     echo '<br><button type="button" id="sync-serapan" class="btn btn-danger">Sinkronisasi Serapan Anggaran</button>';
                                 }
                                 ?>
-                            </div>
+                            </div> -->
                         </div>
                     </form>
+
+                    <div class="row" style="padding: 0px 10px;">
+                        <div class="col-md-12" id="lock-info" style="background: var(--primary); color: white; padding: 10px 20px; font-size: 10pt; border-radius: 10px; display: none; margin-bottom: 10px;">
+                            <b>Read Only !</b> Periode ini sudah dikunci, Nilai yang sudah tersimpan tidak bisa diedit.
+                        </div>
+                    </div>
 
                     <div class="row" style="margin-top: 10px;">
                         <div class="col-md-12">
@@ -62,6 +68,7 @@
                                     <input type="hidden" name="id_indikator" id="id_indikator" readonly>
                                     <input type="hidden" name="tahun" id="tahun" readonly>
                                     <input type="hidden" name="periode" id="periode" readonly>
+                                    <input type="hidden" name="periode_status" id="periode_status" readonly>
                                     <input type="hidden" name="nilai_maks" id="nilai_maks" readonly>
                                     <input type="hidden" name="bobot" id="bobot" readonly>
                                     <input type="hidden" name="id_role" id="id_role" value="<?php echo $_SESSION['user']->id_role ?>">

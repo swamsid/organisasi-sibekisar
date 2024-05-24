@@ -187,6 +187,13 @@
                 <i class="icon-calendar menu-icon"></i>
             </a>
         </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo base_url('module/api/index') ?>">
+                <span class="menu-title">API Center</span>
+                <i class="icon-share menu-icon"></i>
+            </a>
+        </li>
     <?php } ?>
         <li class="nav-item nav-category"><span class="nav-link">Help</span></li>
         <li class="nav-item">

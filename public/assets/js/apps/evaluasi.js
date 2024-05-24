@@ -5,8 +5,8 @@ $(document).ready(function () {
         }
     });
 
-    var aPos="";
-    var aData="";
+    var aPos  = "";
+    var aData = "";
 
     $(".select2").select2();
     
@@ -36,6 +36,7 @@ $(document).ready(function () {
     });
 
     $("#sync-serapan").on("click",function(){
+        alert(base_url+"/apps/sync_serapan");
         swal({
             title: "Apakah Anda yakin?",
             text: 'Sistem akan melakukan sinkronisasi nilai serapan anggaran dengan BPKAD.',
@@ -87,6 +88,10 @@ $(document).ready(function () {
         $('#tahun').val($("#frmsearch [name='tahun'] option:selected").text());
         $('#periode').val($("#frmsearch [name='tahun']").val());
 
+        $('#periode_status').val($("#frmsearch [name='tahun'] option:selected").data('status'));
+
+        cekStatus();
+
         $('#id_indikator').val('');
         $('.btn-hide-first').fadeOut(300);
 
@@ -98,7 +103,9 @@ $(document).ready(function () {
 
     $("#frmsearch [name='id_indikator']").change(function(){
         $('#id_indikator').val($("#frmsearch [name='id_indikator']").val());
-        $('.btn-hide-first').fadeIn(300);
+
+        if(cekStatus() == 'aktif')
+            $('.btn-hide-first').fadeIn(300);
 
         $('#nilai_maks').val($("#frmsearch [name='id_indikator'] option:selected").data('nmaks'));
         $('#bobot').val($("#frmsearch [name='id_indikator'] option:selected").data('bobot'));
@@ -206,6 +213,8 @@ $(document).ready(function () {
                 if (data) {
                     let html = '';
 
+                    let type = (cekStatus() == 'lock') ? 'readonly' : '';
+
                     data.forEach((z, alpha) => {
                         html += `
                         <tr>
@@ -214,10 +223,10 @@ $(document).ready(function () {
                                 ${z.unit}
                             </td>
                             <td>
-                                <input type="text" class="form-control nilai_awal" style="height: 30px; text-align: center;" placeholder="Input nilai Awal" name="nilai_awal[]" value="${(z.nilai_awal) ? z.nilai_awal : '' }">
+                                <input type="text" class="form-control nilai_awal" style="height: 30px; text-align: center; background: white;" placeholder="Input nilai Awal" name="nilai_awal[]" value="${(z.nilai_awal) ? z.nilai_awal : '' }" ${type}>
                             </td>
                             <td>
-                                <input type="text" class="form-control nilai_konversi" style="height: 30px; text-align: center;" placeholder="Input nilai" name="nilai_konversi[]" value="${(z.nilai_konversi) ? z.nilai_konversi.replaceAll('.', ',') : 0 }">
+                                <input type="text" class="form-control nilai_konversi" style="height: 30px; text-align: center; background: white;" placeholder="Input nilai" name="nilai_konversi[]" value="${(z.nilai_konversi) ? z.nilai_konversi.replaceAll('.', ',') : 0 }" ${type}>
                             </td>
                         </tr>
                         `;
@@ -295,8 +304,14 @@ $(document).ready(function () {
 
         $.get(url).done(function (response) {
             const data = JSON.parse(response) 
-            data.periode.forEach((z, index) => { 
-                htmlOption +=  `<option value="${z.id_periode}" ${ (z.tahun_periode == data.selected) ? 'selected' : '' }>${z.tahun_periode}</option>`
+            data.periode.forEach((z, index) => {
+                let selected = '';
+
+                if(z.tahun_periode == data.selected){
+                    selected = 'selected';
+                }
+
+                htmlOption +=  `<option data-status="${ z.status_periode }" value="${z.id_periode}" ${ selected }>${z.tahun_periode}</option>`
             });
 
             data.indikator.forEach((z, index) => { 
@@ -305,11 +320,23 @@ $(document).ready(function () {
 
             $("#tahun").val(data.selected)
             $("#periode").val(data.periode[(data.periode.length - 1)].id_periode)
+            $("#periode_status").val(data.periode[(data.periode.length - 1)].status_periode)
             $("#tahun-periode").html(htmlOption);
             $("#id_indikator_cmb").html(htmlOption2);
 
             $('#layout').fadeOut(300);
+            cekStatus();
         });
+    }
+
+    function cekStatus(){
+        if($('#periode_status').val() == 'lock'){
+            $('#lock-info').fadeIn(300);
+            return 'lock';
+        }else{
+            $('#lock-info').fadeOut(300);
+            return 'aktif';
+        }
     }
 
     function filterSelectOptions(selectElement, attributeName, attributeValue) {
