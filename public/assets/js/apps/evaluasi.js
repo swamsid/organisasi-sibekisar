@@ -228,6 +228,12 @@ $(document).ready(function () {
                             <td>
                                 <input type="text" class="form-control nilai_konversi" style="height: 30px; text-align: center; background: white;" placeholder="Input nilai" name="nilai_konversi[]" value="${(z.nilai_konversi) ? z.nilai_konversi.replaceAll('.', ',') : 0 }" ${type}>
                             </td>
+                            <td>
+                                <input type="text" class="form-control catatan" style="height: 30px; text-align: center; background: white;" placeholder="Catatan" name="catatan[]" value="${(z.catatan) ? z.catatan : '' }" ${type}>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control rekomendasi" style="height: 30px; text-align: center; background: white;" placeholder="Rekomendasi" name="rekomendasi[]" value="${(z.rekomendasi) ? z.rekomendasi : '' }" ${type}>
+                            </td>
                         </tr>
                         `;
                     })
