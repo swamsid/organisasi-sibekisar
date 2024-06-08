@@ -5,8 +5,39 @@ $(document).ready(function () {
         }
     });
 
-    var aPos  = "";
-    var aData = "";
+    $('body').addClass('sidebar-icon-only');
+
+    $('#summernote-catatan').summernote({
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline']],
+            ['para', ['ul', 'ol']]
+        ],
+
+        placeholder         : 'Tulis Catatan Disini...',
+        shortcuts           : false,
+        tabDisable          : true,
+        disableResizeEditor : true,
+        height              : 200,
+    });
+
+    $('#summernote-rekomendasi').summernote({
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline']],
+            ['para', ['ul', 'ol']],
+        ],
+
+        placeholder         : 'Tulis Catatan Disini...',
+        shortcuts           : false,
+        tabDisable          : true,
+        disableResizeEditor : true,
+        height              : 200
+    });
+
+    var aPos            = "";
+    var aData           = "";
+    let dataNilai       = null;
+    let idCatatan       = null;
+    let idRekomendasi   = null;
 
     $(".select2").select2();
     
@@ -189,6 +220,160 @@ $(document).ready(function () {
         }
     });
 
+    // script untuk handle catatan
+        $('#table-data').on('click', '.btn-catatan', function(evt){
+            idCatatan       = $(this).data('id');
+            let catatan     = $('#catatan-'+idCatatan).val();
+
+            $('#summernote-catatan').summernote('code', catatan);
+            // $('#summernote-catatan').summernote('fontSizeUnit', 'pt');
+            // $('#summernote-catatan').summernote('fontSize', '12');
+
+            $('#modal-catatan').modal('show');
+        })
+
+        $('#simpan-catatan').on('click', function(evt){
+            const value = $('#summernote-catatan').summernote('code');
+
+            if(value != '' && value != '<br>' && value != '<br/>'){
+                $('#btn-catatan-'+idCatatan).addClass('filled');
+                $('#btn-catatan-'+idCatatan).text('Perbarui Catatan');
+            }else{
+                $('#btn-catatan-'+idCatatan).removeClass('filled');
+                $('#btn-catatan-'+idCatatan).text('Tambahkan Catatan');
+            }
+
+            $('#catatan-'+idCatatan).val(value);
+            $('#modal-catatan').modal('hide');
+
+            pdValueChange(idCatatan);
+        })
+
+    // script untuk handle rekomendasi
+        $('#table-data').on('click', '.btn-rekomendasi', function(evt){
+            idRekomendasi   = $(this).data('id');
+            let rekomendasi = $('#rekomendasi-'+idRekomendasi).val();
+
+            $('#summernote-rekomendasi').summernote('code', rekomendasi);
+            // $('#summernote-rekomendasi').summernote('fontSizeUnit', 'pt');
+            // $('#summernote-rekomendasi').summernote('fontSize', '12');
+
+            $('#modal-rekomendasi').modal('show');
+        })
+
+        $('#simpan-rekomendasi').on('click', function(evt){
+            const value = $('#summernote-rekomendasi').summernote('code');
+
+            if(value != '' && value != '<br>' && value != '<br/>'){
+                $('#btn-rekomendasi-'+idRekomendasi).addClass('filled');
+                $('#btn-rekomendasi-'+idRekomendasi).text('Perbarui Rekomendasi');
+            }else{
+                $('#btn-rekomendasi-'+idRekomendasi).removeClass('filled');
+                $('#btn-rekomendasi-'+idRekomendasi).text('Tambahkan Rekomendasi');
+            }
+
+            $('#rekomendasi-'+idRekomendasi).val(value);
+            $('#modal-rekomendasi').modal('hide');
+
+            pdValueChange(idRekomendasi);
+        })
+
+    // script untuk handle perubahan nilai
+        $('#table-data').on('keyup', '.nilai_awal, .nilai_konversi', function(target){
+            const input = $(this);
+            pdValueChange(input.data('index'));
+        })
+
+        function pdValueChange(index){
+            const nilaiAwalInput    = $(`.nilai_awal[data-index="${index}"]`);
+            const nilaiKonversi     = $(`.nilai_konversi[data-index="${index}"]`);
+            const nilaiCatatan      = $(`.catatan[data-index="${index}"]`);
+            const nilaiRekomendasi  = $(`.rekomendasi[data-index="${index}"]`);
+
+            if(dataNilai && dataNilai.length > 0){
+                const dataReal          = dataNilai[index];
+                let html                = '';
+
+                // console.log(nilaiCatatan.val()+' = '+dataReal.catatan_indikator+' index'+index);
+                // console.log(nilaiRekomendasi.val()+' = '+dataReal.rekomendasi_indikator+' index'+index);
+
+                if(nilaiAwalInput.val() == dataReal.nilai_awal && nilaiKonversi.val() == dataReal.nilai_konversi && nilaiCatatan.val() == dataReal.catatan_indikator && nilaiRekomendasi.val() == dataReal.rekomendasi_indikator){
+                    html = `
+                        <button type="button" class="btn btn-block btn-xs" style="color: var(--primary);">
+                            <i class="icon-check" style="font-size: 8pt; "></i> &nbsp;Tersimpan
+                        </button>
+                    `;
+                }else{
+                    html = `
+                        <button type="button" class="btn btn-block btn-xs" style="color: var(--danger);">
+                            <i class="icon-cloud-upload" style="font-size: 8pt;"></i> &nbsp;Simpan
+                        </button>
+                    `;
+                }
+                $(`.btn-simpan[data-index="${index}`).html(html);
+            }
+        }
+
+    $('#table-data').on('click', '.btn-simpan', function(evt){
+        const input = $(this);
+        const index = input.data('index');
+        
+        if(dataNilai && dataNilai.length > 0 && dataNilai[index]){
+            const dataJson = {
+                bobot                   : $('#formEvaluasi [name="bobot"]').val(),
+                id_indikator            : $('#formEvaluasi [name="id_indikator"]').val(),
+                id_role                 : $('#formEvaluasi [name="id_role"]').val(),
+                nilai_maks              : $('#formEvaluasi [name="nilai_maks"]').val(),
+                periode                 : $('#formEvaluasi [name="periode"]').val(),
+                periode_status          : $('#formEvaluasi [name="periode_status"]').val(),
+                tahun                   : $('#formEvaluasi [name="tahun"]').val(),
+                id_unit                 : $(`.id_unit[data-index="${index}"]`).val(),
+                nilai_awal              : $(`.nilai_awal[data-index="${index}"]`).val(),
+                nilai_konversi          : $(`.nilai_konversi[data-index="${index}"]`).val(),
+                catatan_indikator       : $(`.catatan[data-index="${index}"]`).val(),
+                rekomendasi_indikator   : $(`.rekomendasi[data-index="${index}"]`).val(),
+            }
+
+            let url         = base_url + "/apps/simpanevaluasipeserta";
+            let params      = dataJson;
+            const lastHTML  = $(`.btn-simpan[data-index="${input.data('index')}"]`).html();
+
+            $(`.btn-simpan[data-index="${input.data('index')}"]`).html('<span style="font-size: 8pt; color: #bbb;">Menyimpan...</span>');
+            
+            $.post(url, params).done(function (response) {
+                var rest = JSON.parse(response);
+
+                if(rest.status == 'ok'){
+                    const data = rest.data;
+
+                    // $.toast({
+                    //     // heading: 'success',
+                    //     text: 'Penilaian berhasil disimpan',
+                    //     icon: 'success',
+                    //     loaderBg: '#f96868',
+                    //     position: 'top-right'
+                    // });
+
+                    dataNilai[index].nilai_awal             = dataJson.nilai_awal;
+                    dataNilai[index].nilai_konversi         = dataJson.nilai_konversi;
+                    dataNilai[index].catatan_indikator      = dataJson.catatan_indikator;
+                    dataNilai[index].rekomendasi_indikator  = dataJson.rekomendasi_indikator;
+
+                    const html = `
+                        <button type="button" class="btn btn-block btn-xs" style="color: var(--primary);">
+                            <i class="icon-check" style="font-size: 8pt; "></i> &nbsp;Tersimpan
+                        </button>
+                    `;
+
+                    $(`.btn-simpan[data-index="${input.data('index')}"]`).html(html);
+                }else{
+                    $(`.btn-simpan[data-index="${input.data('index')}"]`).html(lastHTML);
+                }
+            })
+        }
+        
+    })
+
     function getDataByIndikator(){
         let url     = base_url + "/apps/finddetailbyindikator";
         let params  = {
@@ -211,28 +396,63 @@ $(document).ready(function () {
                 const data = rest.data;
 
                 if (data) {
-                    let html = '';
+                    let html    = '';
+                    dataNilai   = data;
 
-                    let type = (cekStatus() == 'lock') ? 'readonly' : '';
-
+                    let type                = (cekStatus() == 'lock') ? 'readonly' : '';
+                    
                     data.forEach((z, alpha) => {
+                        let buttonSimpanHTML    =  `
+                            <button type="button" class="btn btn-block btn-xs" style="color: var(--danger);">
+                                <i class="icon-cloud-upload" style="font-size: 8pt;"></i> &nbsp;Simpan
+                            </button>
+                        `;
+
+                        if(z.nilai_awal != null || z.nilai_konversi != null || z.catatan_indikator != null || z.rekomendasi_indikator != null){
+                            buttonSimpanHTML =  `
+                                <button type="button" class="btn btn-block btn-xs" style="color: var(--primary);">
+                                    <i class="icon-check" style="font-size: 8pt; "></i> &nbsp;Tersimpan
+                                </button>`;
+                        }
+
+                        let btnCatatanClass = ''; let btnCatatanText = 'Tambahkan Catatan';
+                        
+                        if(z.catatan_indikator != '' && z.catatan_indikator != '<br>' && z.catatan_indikator != '<br/>' && z.catatan_indikator != null){
+                            btnCatatanClass = 'filled'; btnCatatanText = 'Perbarui Catatan'
+                        }
+
+                        let btnRekomenasiClass = ''; let btnRekomendasiText = 'Tambahkan Rekomendasi';
+
+                        if(z.rekomendasi_indikator != '' && z.rekomendasi_indikator != '<br>' && z.rekomendasi_indikator != '<br/>' && z.rekomendasi_indikator != null){
+                            btnRekomenasiClass = 'filled'; btnRekomendasiText = 'Perbarui Rekomendasi'
+                        }
+
+                        console.log(btnRekomenasiClass);
+                        
                         html += `
                         <tr>
                             <td>
-                                <input type="hidden" name="id_unit[]" value="${z.unit_id}" readonly>
+                                <input type="hidden" name="id_unit[]" class="id_unit" data-index="${alpha}" value="${z.unit_id}" readonly>
                                 ${z.unit}
                             </td>
                             <td>
-                                <input type="text" class="form-control nilai_awal" style="height: 30px; text-align: center; background: white;" placeholder="Input nilai Awal" name="nilai_awal[]" value="${(z.nilai_awal) ? z.nilai_awal : '' }" ${type}>
+                                <input type="text" class="form-control nilai_awal" data-index="${alpha}" style="height: 30px; text-align: center; background: white;" placeholder="Input nilai Awal" name="nilai_awal[]" value="${(z.nilai_awal) ? z.nilai_awal : '' }" ${type}>
                             </td>
                             <td>
-                                <input type="text" class="form-control nilai_konversi" style="height: 30px; text-align: center; background: white;" placeholder="Input nilai" name="nilai_konversi[]" value="${(z.nilai_konversi) ? z.nilai_konversi.replaceAll('.', ',') : 0 }" ${type}>
+                                <input type="text" class="form-control nilai_konversi" data-index="${alpha}" style="height: 30px; text-align: center; background: white;" placeholder="Input nilai" name="nilai_konversi[]" value="${(z.nilai_konversi) ? z.nilai_konversi.replaceAll('.', ',') : '' }" ${type}>
                             </td>
                             <td>
-                                <input type="text" class="form-control catatan" style="height: 30px; text-align: center; background: white;" placeholder="Catatan" name="catatan[]" value="${(z.catatan) ? z.catatan : '' }" ${type}>
+                                <button type="button" id="btn-catatan-${alpha}" class="btn btn-block btn-xs btn-custom btn-catatan ${btnCatatanClass}" data-id="${alpha}">${btnCatatanText}</button>
+                                <textarea id="catatan-${alpha}" class="catatan" data-index="${alpha}" name="catatan[]" style="height: 50px; resize: none; display: none;" readonly="true">${(z.catatan_indikator != null) ? z.catatan_indikator : ''}</textarea>
                             </td>
                             <td>
-                                <input type="text" class="form-control rekomendasi" style="height: 30px; text-align: center; background: white;" placeholder="Rekomendasi" name="rekomendasi[]" value="${(z.rekomendasi) ? z.rekomendasi : '' }" ${type}>
+                                <button type="button" id="btn-rekomendasi-${alpha}" class="btn btn-block btn-xs btn-custom btn-rekomendasi ${btnRekomenasiClass}" data-id="${alpha}">${btnRekomendasiText}</button>
+                                <textarea id="rekomendasi-${alpha}" class="rekomendasi" data-index="${alpha}" name="rekomendasi[]" style="height: 50px; resize: none; display: none;" readonly="true">${(z.rekomendasi_indikator != null) ? z.rekomendasi_indikator : ''}</textarea>
+                            </td>
+                            <td>
+                                <div class="btn-simpan" data-index="${alpha}">
+                                    ${buttonSimpanHTML}
+                                </div>
                             </td>
                         </tr>
                         `;

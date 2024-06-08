@@ -215,35 +215,35 @@
             
             <div class="card col-md-12" style="margin-top:20px">
                 <div class="card-body" >
-                    <h4 class="card-title">Rapor CETTAR</h4>
                     <div class="row">
-                        <div class="col-12">
-                            <blockquote class="blockquote blockquote-primary">
-                                <form id="frmsearch" class="forms-sample form-horizontal">
-                                    <div class="form-group">
-                                        <div class="form-group row">
-                                            <div class="col-md-2">
-                                                <input type="hidden" id="id_unit" value="<?php echo $unit->id_unit ?>">
-                                                <label>Tahun</label>
-                                                <select name="tahun" class="form-control" id="tahun">
-                                                    <?php
-                                                        foreach($dataPeriode as $key => $dPeriode){
-                                                            if(isset($_GET['t']))
-                                                                $selected = ($dPeriode->id_periode == $_GET['t']) ? 'selected' : '';
-                                                            else
-                                                                $selected = ($key == (count($dataPeriode) - 1)) ? 'selected' : '';
-
-
-                                                            echo '<option value="'.$dPeriode->id_periode.'" '.$selected.'>'.$dPeriode->tahun_periode.'</option>';
-                                                        }
-                                                    ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                </form>
-                            </blockquote>
+                        <div class="col-md-6">
+                            <h4>Rapor CETTAR</h4>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-4 text-right" style="padding-top: 8px; padding-right: 0px;">
+                            <b>Tahun Periode</b>                                    
+                        </div>
+                        <div class="col-md-2">
+                            <form id="frmsearch" class="forms-sample form-horizontal">
+                                <div class="form-group">
+                                    <input type="hidden" id="id_unit" value="<?php echo $unit->id_unit ?>">
+                                    <select name="tahun" class="form-control" id="tahun">
+                                        <?php
+                                            foreach($dataPeriode as $key => $dPeriode){
+                                                if(isset($_GET['t']))
+                                                    $selected = ($dPeriode->id_periode == $_GET['t']) ? 'selected' : '';
+                                                else
+                                                    $selected = ($key == (count($dataPeriode) - 1)) ? 'selected' : '';
+
+
+                                                echo '<option value="'.$dPeriode->id_periode.'" '.$selected.'>'.$dPeriode->tahun_periode.'</option>';
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-md-12" style="margin-top: 20px;">
                             <div class="table-responsive" id="div-spirit">
                                 <table class="table table-hover table-striped display" id="tableSpirit">
                                     <thead>

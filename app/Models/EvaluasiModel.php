@@ -394,7 +394,9 @@ class EvaluasiModel extends Model
             m_indikator.bobot as bobot_aspek,
             coalesce(evaluasi.nilai_akhir, 0)  as nilai_aspek,
             coalesce(evaluasi.nilai_awal, 0) as nilai_awal,
-            coalesce(evaluasi.nilai_konversi, 0) as nilai_konversi
+            coalesce(evaluasi.nilai_konversi, 0) as nilai_konversi,
+            evaluasi.catatan_indikator,
+            evaluasi.rekomendasi_indikator
         ');
         
         $builder->groupBy('m_indikator.id_indikator');

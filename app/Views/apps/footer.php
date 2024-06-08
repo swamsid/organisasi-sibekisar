@@ -48,6 +48,7 @@ if(isset($scripts)){
 <script src="<?php echo base_url("assets/vendors/highchart/highcharts.js") ?>"></script>
 <script src="<?php echo base_url("assets/vendors/highchart/highcharts-3d.js") ?>"></script>
 <script src="<?php echo base_url("assets/vendors/daterangepicker/daterangepicker.js") ?>"></script>
+<script src="<?php echo base_url("assets/vendors/summernote/summernote-lite.js") ?>"></script>
 <!-- End plugin js for this page -->
 <!-- inject:js -->
 <script src="<?php echo base_url("assets/js/off-canvas.js") ?>"></script>

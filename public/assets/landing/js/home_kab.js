@@ -145,10 +145,10 @@ $(document).ready(function () {
                 }
             }]
         },function(chart){
-            var j = 9;
+            var j = chart.series[0].data.length;
 
             $.each(chart.series[0].data, function(i,data){
-                for (var n = 0; n <= j; n++) {
+                for (var n = 0; n < j; n++) {
                    /*if(n % 2 == 0) chart.series[0].data[n].update({color:'#44a441'});
                    else chart.series[0].data[n].update({color:'#a9c7ff'});*/
                     if(n % 2 == 0) chart.series[0].data[n].update({
@@ -323,10 +323,10 @@ $(document).ready(function () {
                 }
             }]
         },function(chart){
-            var j = 4;
+            var j = chart.series[0].data.length;
 
             $.each(chart.series[0].data, function(i,data){
-                for (var n = 0; n <= j; n++) {
+                for (var n = 0; n < j; n++) {
                     /*if(n % 2 == 0) chart.series[0].data[n].update({color:'#44a441'});
                     else chart.series[0].data[n].update({color:'#a9c7ff'});*/
                     if(n % 2 == 0) {

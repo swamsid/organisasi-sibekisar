@@ -14,7 +14,9 @@
 		"laminas/laminas-escaper": "^2.6",
 		"psr/log": "^1.1",
 		"mpdf/mpdf": "^8.0",
-		"tecnickcom/tcpdf": "^6.4"
+		"tecnickcom/tcpdf": "^6.7",
+		"dompdf/dompdf": "^3.0",
+		"fpdf/fpdf": "^1.86"
 	},
 	"require-dev": {
 		"codeigniter4/codeigniter4-standard": "^1.0",

@@ -43,12 +43,34 @@
     #table-data tbody tr:nth-child(even){
         background: #f2f2f2;
     }
+
+    .btn-custom{
+        background: var(--cyan);
+        color: white;
+        line-height: 13px;
+    }
+
+    .btn-simpan button{
+        background: white;
+        border: 1px solid #ccc;
+        color: #222;
+    }
+
+    .btn.filled{
+        background: white !important;
+        border: 1px solid #ccc !important;
+        color: #222 !important;
+    }
+
+    .btn.filled:hover{
+        color: #006d32 !important;
+    }
 </style>
 
 <div class="content-wrapper" style="margin-top: -20px;">
     <div class="page-header">
         <h3 class="page-title"> 
-            Form Penilaian <?php echo $tag == 'opd' ? 'Perangkat Daerah' : 'Kabupaten/Kota' ?>
+            Form Penilaian <?php echo $tag == 'kab' ? 'Kabupaten/Kota' : 'Perangkat Daerah' ?>
         </h3>
 
         <nav aria-label="breadcrumb">
@@ -61,7 +83,7 @@
         </nav>
     </div>
 
-    <div class="card" id="divDataEvaluasi">
+    <div class="card" id="divDataEvaluasi" style="margin-bottom: 20px;">
         <div class="card-body" >            
             <input type="hidden" id="tmp-indikator" value="<?php echo (isset($id_indikator)?$id_indikator:'') ?>">
             <input type="hidden" id="tag" value="<?php echo ($tag) ? $tag : 'opd' ?>">
@@ -109,7 +131,7 @@
                     </div>
 
                     <div class="row" style="margin-top: 10px;">
-                        <div class="col-md-12">
+                        <div class="col-md-12 table-wrap">
                             <form id="formEvaluasi" enctype="multipart/form-data" method="post" class="forms-sample form-horizontal">
                                 <input type="hidden" name="id_indikator" id="id_indikator" readonly>
                                 <input type="hidden" name="tahun" id="tahun" readonly>
@@ -124,40 +146,43 @@
                                     <table id="table-data" style="margin-bottom: 20px;">
                                         <thead>
                                             <tr>
-                                                <th width="40%" style="font-weight: bold;">
+                                                <th width="37%" style="font-weight: bold;">
                                                     Nama 
                                                     Perangkat Daerah
                                                 </th>
-                                                <th width="15%" class="text-center" style="font-weight: bold;">
+                                                <th width="13%" class="text-center" style="font-weight: bold;">
                                                     Nilai Awal
                                                 </th>
-                                                <th width="15%" class="text-center" style="font-weight: bold;">
+                                                <th width="13%" class="text-center" style="font-weight: bold;">
                                                     Nilai Konversi
                                                 </th>
-                                                <th width="15%" class="text-center" style="font-weight: bold;">
+                                                <th width="12%" class="text-center" style="font-weight: bold;">
                                                     Catatan
                                                 </th>
-                                                <th width="15%" class="text-center" style="font-weight: bold;">
+                                                <th width="12%" class="text-center" style="font-weight: bold;">
                                                     Rekomendasi
+                                                </th>
+                                                <th width="13%" class="text-center" style="font-weight: bold;">
+                                                    #
                                                 </th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
                                             <tr>
-                                                <td colspan="5" class="text-center" id="data-text-info">Pilih indikator menggunakan pilihan diatas</td>
+                                                <td colspan="6" class="text-center" id="data-text-info">Pilih indikator menggunakan pilihan diatas</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 <!-- </div> -->
 
-                                <div class="form-group" style="text-align: right; margin-top: 50px;"><?php
+                                <!-- <div class="form-group" style="text-align: right; margin-top: 50px;"><?php
                                     if ($_SESSION['user']->id_role==1 or ($_SESSION['user']->id_role==2 && !empty($_SESSION['user']->id_unit))){
                                         echo '<button type="button" id="submit-form" class="btn btn-primary btn-hide-first" style="display: none; padding: 10px 15px; font-size: 9pt">Simpan</button>';
                                     }
                                     ?>
                                     <button type="button" class="btn btn-default btn-cancel btn-hide-first cancel" style="display: none; padding: 10px 15px; font-size: 9pt">Cancel</button>
-                                </div>
+                                </div> -->
                             </form>
                         </div>
                     </div>
@@ -165,6 +190,47 @@
             </div>
         </div>
     </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="modal-catatan">
+        <div class="modal-dialog" role="document" style="min-width: 60vw; width: 60vw;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambahkan Catatan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="background: white; padding: 0px;">
+                    <textarea id="summernote-catatan" name="editordata"></textarea>
+                </div>
+                <div class="modal-footer" style="border-top: 0px;">
+                    <button type="button" class="btn btn-primary btn-xs" id="simpan-catatan">Simpan</button>
+                    <button type="button" class="btn btn-secondary btn-xs" data-dismiss="modal">Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="modal-rekomendasi">
+        <div class="modal-dialog" role="document" style="min-width: 60vw; width: 60vw;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambahkan Rekomendasi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="background: white; padding: 0px;">
+                    <textarea id="summernote-rekomendasi" name="editordata"></textarea>
+                </div>
+                <div class="modal-footer" style="border-top: 0px;">
+                    <button type="button" class="btn btn-primary btn-xs" id="simpan-rekomendasi">Simpan</button>
+                    <button type="button" class="btn btn-secondary btn-xs" data-dismiss="modal">Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!--<div class="card" >
         <div class="card-body" >
             <h4 class="card-title">Form Penilaian</h4>

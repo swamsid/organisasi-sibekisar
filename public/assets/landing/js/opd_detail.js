@@ -21,18 +21,22 @@ $(document).ready(function () {
         var req = $.post(url, param).done(function (data) {
 
             var t = `<table class="table" id="tb-rekap-spirit" width="100%">
-                        <thead>
+                        <thead style="color: #038558; background: #f5f5f5;">
                             <tr>
-                                <th width="1%" style="display:none"></th>
-                                <th width="12%">Spirit Budaya Kerja</th>
-                                <th width="8%">Bobot</th>
-                                <th width="8%">Nilai</th>
-                                <th width="24%">Indikator Penilaian</th>
-                                <th width="8%">Bobot</th>
-                                <th width="8%">Nilai Awal</th>
-                                <th width="8%">Nilai Konversi</th>
-                                <th width="8%">Nilai Akhir</th>
-                                <th width="11%">Keterangan</th>
+                                <th width="1%" rowspan="2" style="display:none;"></th>
+                                <th width="12%" rowspan="2" style="vertical-align: middle; border-top-left-radius: 15px;">Spirit</th>
+                                <th width="8%" rowspan="2" style="vertical-align: middle;">Bobot</th>
+                                <th width="8%" rowspan="2" style="vertical-align: middle;">Nilai</th>
+                                <th width="24%" rowspan="2" style="vertical-align: middle;">Indikator Penilaian</th>
+                                <th width="8%" rowspan="2" style="vertical-align: middle;">Bobot</th>
+                                <th width="8%" colspan="3" style="text-align: center;">Nilai Indikator</th>
+                                <th width="11%" rowspan="2" style="vertical-align: middle; border-top-right-radius: 15px;"">Pengampu</th>
+                            </tr>
+
+                            <tr>
+                                <th width="8%">Awal</th>
+                                <th width="8%">Konversi</th>
+                                <th width="8%">Akhir</th>
                             </tr>
                         </thead>
 
@@ -52,8 +56,8 @@ $(document).ready(function () {
                         <td align="center">${value.bobot}</td>
                         <td align="center" class="text-bold text-black"><b>${ value.total_nilai }</b></td>
                         <td>${ value.indikator} </td>
-                        <td align="center">${ parseInt(value.bobot_aspek) }</td>
-                        <td align="center" ><b>${ Number(value.nilai_awal.replace(',', '.')).toFixed(2) }</b></td>
+                        <td align="center">${ parseFloat(value.bobot_aspek) }</td>
+                        <td align="center" ><b>${ value.nilai_awal }</b></td>
                         <td align="center" ><b>${ Number(value.nilai_konversi.replace(',', '.')).toFixed(2) }</b></td>
                         <td align="center" ><b>${ Number(value.nilai_aspek).toFixed(2) }</b></td>
                         <td>${ (!value.keterangan) ? value.opd_pengampu.toUpperCase() : value.keterangan.toUpperCase() }</td>

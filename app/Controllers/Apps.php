@@ -5,6 +5,9 @@ namespace App\Controllers;
 use App\Models\EvaluasiModel;
 use App\Models\MasterModel;
 use Mpdf\Mpdf;
+use Dompdf\Dompdf;
+use App\Libraries\PDF;
+// use tecnickcom\tcpdf;
 
 //use TCPDF;
 
@@ -173,6 +176,7 @@ class Apps extends BaseController
     function cetak($id = null, $tahun = null, $tag = null)
     {
         // return 'okee';
+
         $data['id_unit']    = $id;
         $data['tahun']      = $tahun;
         $data['tag']        = $tag;
@@ -207,91 +211,126 @@ class Apps extends BaseController
         endforeach;
 
         $rowspan = array_count_values(array_column($indikator, 'id_aspek'));
+        
         foreach ($unit as $runit) {
-            $html .= "
-                        <table width='100%' style='margin-bottom: 25px;'>
-                            <tbody>
-                                <tr>
-                                    <td width='75%' style='text-align: left; display: block; line-height: 26px;'>
-                                        <span style='font-weight: bold; font-size: 16pt; margin-bottom: 300px;'>Raport Budaya Kerja CETTAR</span> <br/>
-                                        <span style='line-height: 200px; margin-top: 300px;'>".$unitGet[0]->unit."</span> <br/>
-                                        <span style='font-size: 10pt; font-weight: normal; margin-top: 5px;font-style: italic; color: #555;'>Tahun " . $dataTahunTable->tahun_periode."</span>
-                                    </td>
-                                    <td width='25%' style='text-align: right;'>
-                                        
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        
-                        <table width='100%' class='table' cellpadding='2' cellspacing='1' border='1' style='border-collapse: collapse; margin-top: 5px;'>
-                            <thead>
-                                <tr>
-                                    <th width='13%' style='background: #eee; padding: 10px 0px;'>Spirit Budaya Kerja</th>
-                                    <th width='7%' style='background: #eee; padding: 10px 0px;'>Bobot</th>
-                                    <th width='7%' style='background: #eee; padding: 10px 0px;'>Total Nilai</th>
-                                    <th width='17%' style='background: #eee; padding: 10px 0px;'>Indikator Penilaian</th>
-                                    <th width='7%' style='background: #eee; padding: 10px 0px;'>Bobot</th>
-                                    <th width='7%' style='background: #eee; padding: 10px 0px;'>Nilai</th>
-                                    <th width='7%' style='background: #eee; padding: 10px 0px;'>Nilai Awal</th>
-                                    <th width='7%' style='background: #eee; padding: 10px 0px;'>Nilai Konversi</th>                                        
-                                    <th width='28%' style='background: #eee; padding: 10px 0px;'>Keterangan</th>
-                                </tr>
-                            </thead>
+            $html .= '
+                <table width="100%" style="border-collapse: collapse;">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span style="font-weight: bold; font-size: 24pt;">Raport Budaya Kerja CETTAR</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span style="line-height: 46pt; font-size: 14pt;">'.$unitGet[0]->unit.'</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span style="font-size: 12pt; font-weight: normal; color: #555;">Tahun ' . $dataTahunTable->tahun_periode.'</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <table cellpadding="5" width="100%" class="table"  style="border: 1px solid #000; margin-top: 5px; font-size: 12pt;">
+                    <thead>
+                        <tr>
+                            <th width="6%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">
+                                Spirit Budaya Kerja
+                            </th>
+                            <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Bobot</th>
+                            <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Total Nilai</th>
+                            <th width="7%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Indikator Penilaian</th>
+                            <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Bobot</th>
 
-                            <tbody>";
+                            <th width="15%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" colspan="3">Nilai Indikator</th>
+                            
+                            <th width="9%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Pengampu</th>
+                            <th width="24%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Catatan</th>
+                            <th width="24%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Rekomendasi</th>
+                        </tr>
+
+                        <tr>
+                            <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Awal</th>
+                            <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Konversi</th>                                        
+                            <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Akhir</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>';
+
             foreach ($aspek as $row) {
                 $i = 0;
-                $html .= '<tr valign="top">
-                            <td rowspan="' . ($rowspan[$row['id_aspek']] + 0) . '" valign="top" style="vertical-align : top !important; text-align: left; padding: 10px; font-weight: 600;">
-                                ' . strtoupper($row['aspek']) . '
-                            </td>
-                            <td rowspan="' . ($rowspan[$row['id_aspek']] + 0) . '" valign="top" style="vertical-align : top !important; text-align: center; padding: 10px;">
-                                ' . $row['nilai_maks'] . '
-                            </td>
-                            <td rowspan="' . ($rowspan[$row['id_aspek']] + 0) . '" valign="top" style="vertical-align : top !important; text-align:center; padding: 10px;">'
-                                . $this->is_decimal($row['total_nilai']) .
-                            '</td>';
+                $html .= '
+                        <tr>
+                            <td width="6%" rowspan="'. ($rowspan[$row['id_aspek']] + 0) .'" style="border: 1px solid #000;">'.strtoupper($row['aspek']).'</td>
+                            <td width="5%" rowspan="'. ($rowspan[$row['id_aspek']] + 0) .'" style="text-align: center; border: 1px solid #000;">'.$row['nilai_maks'].'</td>
+                            <td width="5%" rowspan="'. ($rowspan[$row['id_aspek']] + 0) .'" style="text-align:center; border: 1px solid #000;">'.$this->is_decimal($row['total_nilai']).'</td>';
 
                 foreach ($indikator as $key) {
                     if ($key->id_aspek == $row['id_aspek']) {
                         $i++;
                         $print = (!$key->keterangan) ? $key->opd_pengampu : $key->keterangan;
+                        
                         if ($i == 1) $html .= " ";
                         else $html .= "<tr valign='top'>";
+
+                        $printCatatan = ($key->catatan_indikator) ? str_replace('14px;', '12px;', htmlentities($key->catatan_indikator)) : '';
+                        $printRekomendasi = ($key->rekomendasi_indikator) ? str_replace('14px;', '12px;', htmlentities($key->rekomendasi_indikator)) : '';
+                        
                         $html .= '
-                                    <td valign="top" style="height: 40px; padding: 10px;">' . $key->indikator . '</td>
-                                    <td valign="top" align="center" style="height: 40px; padding: 10px;">
-                                        ' . $this->is_decimal($key->bobot_aspek) . '
-                                    </td>
-                                    <td valign="top" align="center" style="height: 40px; padding: 10px;">
-                                        <b>' . $this->is_decimal($key->nilai_aspek) . '</b>
-                                    </td>
-                                    <td valign="top" align="center" style="height: 40px; padding: 10px;">
-                                        <b>' . $key->nilai_awal . '</b>
-                                    </td>
-                                    <td valign="top" align="center" style="height: 40px; padding: 10px;">
-                                        <b>' . $this->is_decimal($key->nilai_konversi) . '</b>
-                                    </td>
-                                    <td valign="top" style="height: 40px; padding: 10px;">
-                                        ' . $print . '
-                                    </td>
-                                </tr>';
+                            <td width="7%" style="height: 20px; border: 1px solid #000;">'.$key->indikator.'</td>
+                            <td width="5%" align="center" style="height: 40px; border: 1px solid #000;">'.$this->is_decimal($key->bobot_aspek).'</td>
+                            <td width="5%" align="center" style="height: 40px; border: 1px solid #000;"><b>'.$key->nilai_awal.'</b></td>
+                            <td width="5%" align="center" style="height: 40px; border: 1px solid #000;"><b>'.$this->is_decimal($key->nilai_konversi).'</b></td>
+                            <td width="5%" align="center" style="height: 40px; border: 1px solid #000;"><b>'.$this->is_decimal($key->nilai_aspek).'</b></td>
+                            <td width="9%" style="height: 40px; border: 1px solid #000;">'.$print.'</td>
+                            <td width="24%" class="listed" style="height: 40px; border: 1px solid #000;">'.html_entity_decode($printCatatan).'</td>
+                            <td width="24%" style="height: 40px; border: 1px solid #000;">'.html_entity_decode($printRekomendasi).'</td>
+                        </tr>';
                     }
                 }
             }
-            $html .= "</tbody><tfoot>
-                        <tr><th colspan='2'>Skor Total</th><th colspan='7'>" . $runit['skor_total'] . "</th> </tr>
-                        <tr><th colspan='2'>Nilai</th><th colspan='7'>" . $runit['nilai_huruf'] . "</th> </tr>
-                        <tr><th colspan='2'>Predikat</th><th colspan='7'>" . $runit['predikat'] . "</th> </tr>
-                        </tfoot></table>";
+                    
+            $html .= '
+                    </tbody>
+                </table>';
+        
         }
 
-        $mpdf = new Mpdf(['debug' => FALSE, 'mode' => 'utf-8', 'orientation' => 'L']);
+        // $dompdf = new Dompdf();
+        // $dompdf->loadHtml($html);
+        // $dompdf->setPaper('A3', 'landscape');
+        // $dompdf->render();
+        // $dompdf->stream('contoh.pdf', array("Attachment" => false));
 
-        $mpdf->WriteHTML($html);
-        $mpdf->Output('raport_cettar.pdf', 'I');
-        exit;
+        // $mpdf = new Mpdf(['debug' => FALSE, 'mode' => 'utf-8', 'format' => 'A3-L']);
+        // $mpdf->WriteHTML($html);
+        // $mpdf->Output('raport_cettar.pdf', 'I');
+
+        // $pdf= new PDF('L', 'mm', 'A3');
+        // $pdf->AddPage();
+        // $pdf->SetFont('Arial','',12);
+
+        // $pdf->WriteHTML($html);
+        // $pdf->Output();
+
+        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->AddPage('L',"A3");
+        $pdf->setListIndentWidth(8);
+
+        $pdf->setHtmlVSpace(array(
+            'li' => array(
+                'h' => 1, // margin in mm
+            ) 
+        ));
+
+        $pdf->writeHTML($html, true, false, true, false, '');
+        $pdf->Output('surekhatech.pdf', 'I');
+
+        exit(0);
     }
 
     public function is_decimal( $val )
@@ -396,6 +435,7 @@ class Apps extends BaseController
 
     public function evaluasi($tag = null, $id_indikator = null)
     {
+        // return $tag;
         if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
             header('Location: ' . base_url('auth'));
             //return redirect()->to('auth');
@@ -489,7 +529,7 @@ class Apps extends BaseController
     {
         if (empty($_POST)) echo json_encode($this->failed);
 
-        // return json_encode($_POST);
+        return json_encode($_POST);
 
         // return json_encode([ 'status' => 'success' ]); 
 
@@ -501,7 +541,6 @@ class Apps extends BaseController
         if (!empty($_POST['id_indikator'])) {
             $i = 0;
             foreach ($_POST['id_unit'] as $index => $key) {
-                
                 $i++;
                 $id_indikator = $_POST['id_indikator'];
                 $id_unit = $key;
@@ -547,6 +586,59 @@ class Apps extends BaseController
             }
         }
 
+    }
+
+    function simpanevaluasipeserta(){
+        if (empty($_POST)) echo json_encode($this->failed);
+
+        $cek = $_POST['catatan_indikator'];
+        // return json_encode($cek);
+
+        if (!empty($_POST['id_indikator'])) {
+            $id_indikator = $_POST['id_indikator'];
+            $fzeropadded = sprintf("%04d", $_POST['id_unit']);
+            $id_evaluasi = $_POST['tahun'] . $fzeropadded . '_' . $id_indikator;
+
+            $nilai = (float) str_replace(',', '.', $_POST['nilai_konversi']);
+            $bobot = (float) ($_POST['bobot'] / 100);
+
+            $nilai_akhir = ($nilai * $bobot);
+            // return json_encode($nilai);
+
+            $dataKomponen = array(
+                'id_indikator'          => $id_indikator,
+                'id_evaluasi'           => $id_evaluasi,
+                'nilai_awal'            => $_POST['nilai_awal'],
+                'nilai_konversi'        => $nilai,
+                'nilai_akhir'           => $nilai_akhir,
+                'bobot'                 => $bobot,
+                'nilai_maks'            => $_POST['nilai_maks'],
+                'bulan_mulai'           => '1',
+                'bulan_selesai'         => '1',
+                'tahun'                 => $_POST['periode'],
+                'id_unit'               => $_POST['id_unit'],
+                'catatan_indikator'     => $_POST['catatan_indikator'],
+                'rekomendasi_indikator' => $_POST['rekomendasi_indikator'],
+                'periode'               => $_POST['tahun'],
+                'user_verifikasi'       => '0',
+                'catatan_verifikasi'    => '',
+                'waktu_verifikasi'      => '',
+                'is_verify'             => '0',
+                'timestamp'             => date("Y-m-d H:i:s"),
+                'id_user'               => $_SESSION['user']->id_user
+            );
+
+            // return json_encode($dataKomponen);
+
+            $result = $this->evaluasimodel->insertData($dataKomponen);
+
+            if ($result) {
+                $this->evaluasimodel->call_sp_aspek();
+                $b = $this->evaluasimodel->call_sp_spirit();
+                if ($b) echo json_encode($this->success);
+                exit;
+            }
+        }
     }
 
     function simpanverifikasi()

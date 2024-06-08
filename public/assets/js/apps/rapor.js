@@ -34,7 +34,7 @@ $(document).ready(function () {
             var t = '<table class="table" id="tb-rekap-spirit" width="100%" style="margin-top: 20px;">' +
                 '<thead><tr><th style="font-weight: bold; background: #ccc;">Spirit Budaya Kerja</th><th style="font-weight: bold; background: #ccc;">Bobot</th>' +
                 '<th style="font-weight: bold; background: #ccc;">Total Nilai</th><th style="font-weight: bold; background: #ccc;">Indikator Penilaian</th><th style="font-weight: bold; background: #ccc;">Bobot</th><th style="font-weight: bold; background: #ccc;">Nilai</th>' +
-                '<th style="font-weight: bold; background: #ccc;">Nilai Awal</th><th style="font-weight: bold; background: #ccc;">Nilai Konversi</th><th style="font-weight: bold; background: #ccc;">Keterangan</th>';
+                '<th style="font-weight: bold; background: #ccc;">Nilai Awal</th><th style="font-weight: bold; background: #ccc;">Nilai Konversi</th><th style="font-weight: bold; background: #ccc;">Pengampu</th>';
             t += '</tr></thead><tbody>';
             var n = 0;
             var skor_total = 0;

@@ -28,7 +28,7 @@ $(document).ready(function () {
 
     grafikcettar = function(data,tahun,predikat){
 
-        // console.log(data);
+        // console.log(data.length+'aa'); return;
 
         var flags=[],unit=[];
 
@@ -38,12 +38,14 @@ $(document).ready(function () {
             unit.push(data[i]['unit'].toUpperCase());
         }
 
-       var  data_r=[];
+        var  data_r=[];
         var chartSeriesData=[];
         var chartSeriesColor=[];
         var chartSeries =[];
+        
         if (data) {
             var j=0;
+            // console.log(data.length);
             $.each(data, function (key, value) {
                 j++;
                     if(j==1) color = '#FF530D';
@@ -57,6 +59,7 @@ $(document).ready(function () {
                     });
                     var seriesColor = color;
                     var series = [l,parseFloat(value['nilai'])];
+
                     chartSeriesData.push(series);
                     chartSeriesColor.push(color);
             });
@@ -145,12 +148,17 @@ $(document).ready(function () {
                 }
             }]
         },function(chart){
-            var j = 9;
+            var j = chart.series[0].data.length;
+
+            // console.log(j); return;
 
             $.each(chart.series[0].data, function(i,data){
-                for (var n = 0; n <= j; n++) {
-                   /*if(n % 2 == 0) chart.series[0].data[n].update({color:'#44a441'});
-                   else chart.series[0].data[n].update({color:'#a9c7ff'});*/
+                for (var n = 0; n < j; n++) {
+                    
+                    // console.log(chart.series[0].data[n]);
+                    // console.log(n);
+                    // return;
+
                     if(n % 2 == 0) chart.series[0].data[n].update({
                         color: {
                             linearGradient: {
@@ -240,7 +248,8 @@ $(document).ready(function () {
 
     generatechart = function(chart, judul, chartSeriesData, chartSeriesColor, chartUnit){
 
-        // console.log(chartSeriesData);
+        // console.log(chartSeriesData); 
+        // return;
 
         $('#'+chart).highcharts({
             title: {
@@ -323,10 +332,11 @@ $(document).ready(function () {
                 }
             }]
         },function(chart){
-            var j = 4;
+            var j = chart.series[0].data.length;
+            // console.log(j); return;
 
             $.each(chart.series[0].data, function(i,data){
-                for (var n = 0; n <= j; n++) {
+                for (var n = 0; n < j; n++) {
                     /*if(n % 2 == 0) chart.series[0].data[n].update({color:'#44a441'});
                     else chart.series[0].data[n].update({color:'#a9c7ff'});*/
                     if(n % 2 == 0) {
@@ -348,7 +358,7 @@ $(document).ready(function () {
 
                         // console.log('update => true')
                     }else{
-                        // console.log('update => else')
+                        // console.log(chart.series[0].data[n]);
                         chart.series[0].data[n].update({color:'#5470C6'});
                     }
                 }
