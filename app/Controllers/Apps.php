@@ -217,6 +217,13 @@ class Apps extends BaseController
                 <table width="100%" style="border-collapse: collapse;">
                     <tbody>
                         <tr>
+                            <td style="height: 20pt;"></td>
+                            <td rowspan="3" align="right">
+                                <table><tr><td style="height: 40pt;"></td></tr></table>
+                                <span style="font-weight: bold; font-size: 14pt;">sibekisar.jatimprov.go.id &nbsp;&nbsp;&nbsp;</span>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>
                                 <span style="font-weight: bold; font-size: 24pt;">Raport Budaya Kerja CETTAR</span>
                             </td>
@@ -232,6 +239,10 @@ class Apps extends BaseController
                             </td>
                         </tr>
                     </tbody>
+                </table>
+
+                <table>
+                    <tr><td style="height: 20pt;">&nbsp;</td></tr>
                 </table>
                 
                 <table cellpadding="5" width="100%" class="table"  style="border: 1px solid #000; margin-top: 5px; font-size: 12pt;">
@@ -293,12 +304,28 @@ class Apps extends BaseController
                     }
                 }
             }
-                    
-            $html .= '
-                    </tbody>
-                </table>';
+
+            // return json_encode($runit);
         
+            $html .= '
+                        </tbody>
+                        <tfoot>
+                            <tr style="font-size: 14pt; font-weight: bold;">
+                                <th colspan="2" style="border: 1px solid #000;">Skor Total</th>
+                                <th colspan="9" style="border: 1px solid #000;">' . $runit['skor_total'] . '</th>
+                            </tr>
+                            <tr style="font-size: 14pt; font-weight: bold;">
+                                <th colspan="2" style="border: 1px solid #000;">Nilai</th>
+                                <th colspan="9" style="border: 1px solid #000;">' . $runit['nilai_huruf'] . '</th>
+                            </tr>
+                            <tr style="font-size: 14pt; font-weight: bold;">
+                                <th colspan="2" style="border: 1px solid #000;">Predikat</th>
+                                <th colspan="9" style="border: 1px solid #000;">' . $runit['predikat'] . '</th>
+                            </tr>
+                        </tfoot>
+                    </table>';
         }
+
 
         // $dompdf = new Dompdf();
         // $dompdf->loadHtml($html);
@@ -328,7 +355,7 @@ class Apps extends BaseController
         ));
 
         $pdf->writeHTML($html, true, false, true, false, '');
-        $pdf->Output('surekhatech.pdf', 'I');
+        $pdf->Output('Raport_sibekisar_'.$tahun.'.pdf', 'I');
 
         exit(0);
     }
