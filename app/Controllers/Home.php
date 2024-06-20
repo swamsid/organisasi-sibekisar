@@ -22,7 +22,7 @@ class Home extends BaseController
         $data_['tahun']= $periode;
         $data_['tag']='opd';
         $data['cettar'] = $this->evaluasimodel->findCettar($data_);
-
+        
         $aspek = $this->evaluasimodel->findAspek([ 'periode' => $periode, 'tag' => 'opd']);
         $data['dataPeriode']    = $this->mastermodel->getPeriode();
 

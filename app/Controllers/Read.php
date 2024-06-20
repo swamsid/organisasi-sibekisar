@@ -18,7 +18,7 @@ class Read extends BaseController
 
     function opd($param=null){
         $data['kategori_unit']='opd';
-        $data['label']='Perangkat Daerah';
+        $data['label']='Perangkat Daerah/UOBK';
         $data['tag']='opd';
         $data['dataPeriode']    = $this->mastermodel->getPeriode();
        if(isset($param) &&!empty($param)) {
@@ -62,7 +62,7 @@ class Read extends BaseController
         $data['indikator']      = $this->mastermodel->findMIndikator($param);
 
         $data['unit'] = $this->mastermodel->findMUnit($param);
-        $data['label']=((isset($tag) && $tag=='kab')?'Kabupaten/Kota':'Perangkat Daerah');
+        $data['label']=((isset($tag) && $tag=='kab')?'Kabupaten/Kota':'Perangkat Daerah/UOBK');
         $data['tag'] = $param['tag'];
 
         if($params != 'spirit'){

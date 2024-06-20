@@ -8,6 +8,10 @@ $(document).ready(function () {
     $("#tahun").on('change',function(){
         tabrekap();
     });
+    $("#tag").on('change',function(){
+        tabrekap();
+        // alert('okee');
+    });
     $("#id_unit").on('change',function(){
         tabrekap();
     });
@@ -21,12 +25,16 @@ $(document).ready(function () {
         var param = {
             tahun: $('#tahun').val(),
             id_unit: $('#id_unit').val(),
+            tag: $('#tag').val(),
             predikat: $('#predikat').val(),
             tag:$("#tag").val()
         };
 
+        // console.log(param);
+
         var tahun=$("#tahun").val();
         var predikat=$("#predikat").val();
+
         var req = $.post(url, param).done(function (data) {
             if (data) {
                 var unit = [], chartSeriesData = [], series = '';

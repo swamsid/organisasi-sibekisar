@@ -246,10 +246,18 @@ class EvaluasiModel extends Model
             'left'
         );
         
-        $builder->where('kategori_unit', $data['tag']);
-        $builder->select('m_unit.unit, ,m_unit.id_unit as unit_id, evaluasi.*', 'mid(md5(evaluasi.id_evaluasi),9,6) as id_evaluasi_hash');
-        $builder->orderBy('m_unit.unit');
+        if($data['tag'] == 'opd'){
+            $builder->where('kategori_unit <>', 'kab');
+        }else{
+            $builder->where('kategori_unit', $data['tag']);
+        }
+        
 
+        $builder->select('m_unit.unit, ,m_unit.id_unit as unit_id, evaluasi.*', 'mid(md5(evaluasi.id_evaluasi),9,6) as id_evaluasi_hash');
+        
+        $builder->orderBy('m_unit.kategori_unit');
+        $builder->orderBy('m_unit.unit');
+        
         return $builder->get()->getResult();
     }
 
@@ -269,34 +277,47 @@ class EvaluasiModel extends Model
     function findCettar($data = null)
     {
         $builder = $this->db->table('vw_rekap_by_spirit');
-        $builder->select('*, mid(md5(id_unit),9,6) as id_unit_hash');
+        $builder->select('vw_rekap_by_spirit.*, mid(md5(vw_rekap_by_spirit.id_unit),9,6) as id_unit_hash');
+
+        $builder->join('m_unit', 'vw_rekap_by_spirit.id_unit = m_unit.id_unit');
 
         if (isset($data['tahun']) && !empty($data['tahun'])) $builder->where('tahun', $data['tahun']);
-        if (isset($data['tag']) && !empty($data['tag'])) $builder->where('tag', $data['tag']);
-        if (isset($data['id_unit']) && !empty($data['id_unit'])) $builder->where('id_unit', $data['id_unit']);
+        
+        if (isset($data['tag']) && !empty($data['tag'])) $builder->where('m_unit.kategori_unit', $data['tag']);
+
+        if (isset($data['id_unit']) && !empty($data['id_unit'])) $builder->where('m_unit.id_unit', $data['id_unit']);
+
         if (isset($data['id_unit_hash']) && !empty($data['id_unit_hash'])) {
             // $builder->where('id_unit',$data['id_unit']);
-            $where = " (mid(md5(id_unit),9,6)='" . $data['id_unit'] . "')";
+            $where = " (mid(md5(m_unit.id_unit),9,6)='" . $data['id_unit'] . "')";
             $builder->where($where);
         }
+
         if (isset($data['predikat']) && !empty($data['predikat'])) $builder->where('predikat', $data['predikat']);
+        
         if (isset($data['limit']) && !empty($data['limit'])) {
             $builder->orderBy('nilai', 'DESC');
             $builder->limit($data['limit']);
 
         } else  $builder->orderBy('nilai', 'DESC');
+        
         if (isset($data['limit']) && $data['limit'] == 1) return $builder->get()->getRow();
         else return $builder->get()->getResult();
     }
 
     function findCettarAspek($data = null)
     {
+        // return 'okee';
         $builder = $this->db->table('vw_rekap_by_aspek');
+
         $builder->select('vw_rekap_by_aspek.*, mid(md5(vw_rekap_by_aspek.id_unit),9,6) as id_unit_hash');
+
         $builder->join('vw_rekap_by_spirit', 'vw_rekap_by_spirit.tahun = vw_rekap_by_aspek.tahun AND vw_rekap_by_spirit.id_unit = vw_rekap_by_aspek.id_unit');
 
+        $builder->join('m_unit', 'vw_rekap_by_spirit.id_unit = m_unit.id_unit');
+
         if (isset($data['tahun']) && !empty($data['tahun'])) $builder->where('vw_rekap_by_aspek.tahun', $data['tahun']);
-        if (isset($data['tag']) && !empty($data['tag'])) $builder->where('vw_rekap_by_aspek.tag', $data['tag']);
+        if (isset($data['tag']) && !empty($data['tag'])) $builder->where('m_unit.kategori_unit', $data['tag']);
         if (isset($data['id_unit_hash']) && !empty($data['id_unit_hash'])) {
             $where = " (mid(md5(vw_rekap_by_aspek.id_unit),9,6)='" . $data['id_unit'] . "')";
             $builder->where($where);
@@ -309,9 +330,11 @@ class EvaluasiModel extends Model
         if (isset($data['id_aspek']) && !empty($data['id_aspek'])) $builder->where('id_aspek', $data['id_aspek']);
 
         //  $builder->orderBy('id_aspek', 'ASC');
+
         $builder->orderBy('vw_rekap_by_aspek.total_nilai', 'DESC');
         $builder->orderBy('vw_rekap_by_spirit.nilai', 'DESC');
         $builder->orderBy('vw_rekap_by_aspek.nilai_akhir', 'DESC');
+        
         if (isset($data['limit']) && !empty($data['limit'])) {
             $builder->limit($data['limit']);
         }

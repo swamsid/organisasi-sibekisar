@@ -382,7 +382,9 @@ class Apps extends BaseController
     public function gridrekapcettar()
     {
         $data = $_REQUEST;
-        // return json_encode('aa');
+        
+        // return json_encode($_REQUEST);
+
         $eval = $this->evaluasimodel->findCettar($data);
         $count = count($eval);
 
@@ -411,7 +413,10 @@ class Apps extends BaseController
         $data = $_REQUEST;
         // return json_encode($data);
         $eval = $this->evaluasimodel->findCettarAspek($data);
-        $aspek = $this->evaluasimodel->findAspek([ 'periode' => $data['tahun'], 'tag' => $data['tag']]);
+
+        $tags = ($data['tag'] == 'kab') ? 'kab' : 'opd';
+
+        $aspek = $this->evaluasimodel->findAspek([ 'periode' => $data['tahun'], 'tag' => $tags]);
         $rekapAspek = [];
 
         foreach($aspek as $key => $dataAspek){

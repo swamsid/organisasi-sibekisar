@@ -42,6 +42,31 @@
             transform: translate(-50%, -50%);
             z-index: 9999;
         }
+
+        .animated-text{
+            background: linear-gradient(
+                to right,
+                #048063 20%,
+                #127084 30%,
+                #0190cd 70%,
+                #245ab0 80%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-fill-color: transparent;
+            background-size: 500% auto;
+            animation: textShine 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textShine {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
     </style>
 </head>
 
@@ -84,8 +109,8 @@
     <div class="container">
         <div class="center-heading">
             <div class="row">
-                <div class="col-md-9">
-                    <h2> Top 10 Perangkat Daerah <em>Tercettar</em></h2>
+                <div class="col-md-9" style="padding-top: 7px;">
+                    <h3 style="font-weight: 800; font-size: 26pt;">Top Perangkat Daerah dan UOBK <span style="font-weight: normal;">Ter</span> <span style="color: #008d5a;">CETTAR</span></h3>
                 </div>
 
                 <div class="col-md-3" style="padding-top: 8px;">
@@ -108,11 +133,26 @@
         </div>
 
         <div class="row mobile-bottom-fix-big"  data-scroll-reveal="enter left move 30px over 0.6s after 0.1s" style="margin-top: 30px;">
-            <div class="col-lg-12 col-md-12 col-sm-12" style="top:0px!important">
-                <div id="chart"></div>
+            <div class="col-lg-7 col-md-7 col-sm-12" style="top:0px !important; padding: 0px 5px;">
+                <div style="padding: 20px; background: white; box-shadow: 0px 0px 10px #ccc; border-radius: 10px;">
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 10px; padding-bottom: 20px; border-bottom: 2px dashed #f0f0f0;">
+                        Top 10 Perangkat Daerah
+                    </div>
+
+                    <div id="chart"></div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-12" style="top:0px !important; padding: 0px 5px;">
+                <div style="padding: 20px; background: white; box-shadow: 0px 0px 10px #ccc; border-radius: 10px;">
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 10px; padding-bottom: 20px; border-bottom: 2px dashed #f0f0f0;">
+                        Top Unit Organisasi Bersifat Khusus (UOBK)
+                    </div>
+
+                    <div id="chart-uobk"></div>
+                </div>
             </div>
             <div class="col-md-12">
-                <form class="text-right" method="GET" action="<?php echo base_url("read/detail/spirit") ?>" style="margin-top: 50px;">
+                <form class="text-right" method="GET" action="<?php echo base_url("read/detail/spirit/opd") ?>" style="margin-top: 50px;">
                     <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
                     <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
                     <button type="submit" class="btn second-button btn-sm">
@@ -130,24 +170,48 @@
             ?>
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.1s">
-                    <div class="features-item row">
-                        <div class="col-md-4">
-                            <div class="features-icon">
-                                <img src="<?php echo base_url("assets/landing/images/fast-time1.png") ?>" alt="">
+                    <div class="features-item row" style="padding: 30px;">
+                        <div class="col-md-12" style="font-weight: bold; font-size: 20pt;">
+                            <img src="<?php echo base_url("assets/landing/images/fast-time1.png") ?>" alt="" style="width: 5%; margin-top: 40px;"> &nbsp;&nbsp;
+                            5 Perangkat Daerah dan UOBK <span style="font-weight: normal;">Ter</span> 
+                            <span class="animated-text"><?= ucfirst($key) ?></span>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="chart-<?= $keys ?>"></div>
+                            <div style="margin-top: 45px;">
+                                <div class="features-icon">
                                     <div class="text">
-                                        <h4>ter <b><?= ucfirst($key) ?></b></h4>
-                                        <h3>
-                                            <span class="text-danger text-bold lbl-tercepat aspek-info" id="aspek_<?= ($dataView) ? $keys : '' ?>">
+                                        <div style="font-size: 18pt !important; margin-bottom: 15px;">
+                                            Perangkat Daerah ter <b><?= ucfirst($key) ?></b>
+                                        </div>
+                                        <div style="font-size: 18pt !important; font-weight: bold;">
+                                            <span class="text-danger lbl-tercepat aspek-info" id="aspek_<?= ($dataView) ? $keys : '' ?>">
                                             </span>
-                                        </h3>
+                                        </div>
                                     </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-8">
-                            <div id="chart-<?= $keys ?>"></div>
+
+                        <div class="col-md-6">
+                            <div id="chart-uobk-<?= $keys ?>"></div>
+                            <div style="margin-top: 45px;">
+                                <div class="features-icon">
+                                    <div class="text">
+                                        <div style="font-size: 18pt !important; margin-bottom: 15px;">
+                                            UOBK ter <b><?= ucfirst($key) ?></b>
+                                        </div>
+                                        <div style="font-size: 18pt !important; font-weight: bold;">
+                                            <span class="text-danger lbl-tercepat aspek-info" id="uobk_ter_<?= ($dataView) ? $keys : '' ?>">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="col-md-12">
-                            <form class="text-right" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>" style="margin-top: 50px;">
+                            <form class="text-right" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>/opd" style="margin-top: 50px;">
                                 <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
                                 <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
                                 <input type="hidden" name="ids" value="<?= ($dataView) ? $dataView->id_aspek : null ?>" readonly>

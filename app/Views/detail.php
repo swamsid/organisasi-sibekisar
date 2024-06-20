@@ -76,7 +76,16 @@
                             <div class="col-12">
                                 <blockquote class="blockquote blockquote-primary">
                                     <form id="frmsearch" class="forms-sample form-horizontal">
-                                        <input type="hidden" id="tag" value="<?php echo (isset($tag)?$tag:'opd') ?>">
+                                        <?php
+                                            $link = $_SERVER['PHP_SELF'];
+                                            $link_array = explode('/',$link);
+                                            $page = end($link_array);
+                                        ?>
+
+                                        <?php if($page == 'kab') { ?>
+                                            <input type="hidden" id="tag" value="kab">
+                                        <?php } ?>
+
                                         <input type="hidden" id="lblunit" value="<?php echo $label ?>">
 
                                         <div class="form-group"><label>Filter pencarian</label>
@@ -86,14 +95,25 @@
                                                     <select name="tahun" class="form-control" id="tahun">
                                                         <?php 
                                                             foreach($dataPeriode as $key => $dPeriode){
-                                                                $selected = ($dPeriode->id_periode == $periode) ? 'selected' : '';
+                                                                $selected = ($dPeriode->id_periode == $_GET['t']) ? 'selected' : '';
 
                                                                 echo '<option value="'.$dPeriode->id_periode.'" '.$selected.'>'.$dPeriode->tahun_periode.'</option>';
                                                             }
                                                         ?>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-6">
+
+                                                <?php if($page != 'kab') { ?>
+                                                    <div class="col-md-2">
+                                                        <label>Jenis</label>
+                                                        <select name="tag" class="form-control" id="tag">
+                                                            <option value="opd">OPD</option>
+                                                            <option value="uobk">UOBK</option>
+                                                        </select>
+                                                    </div>
+                                                <?php } ?>
+
+                                                <div class="col-md-5">
                                                     <label><?php echo $label ?></label><br>
                                                     <select name="id_unit" id="id_unit" class="form-control select2" width="100%">
                                                         <option value="">- Semua <?php echo $label ?> -</option>
@@ -106,7 +126,7 @@
                                                         ?>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-4 filter-cettar" style="display:none">
+                                                <div class="col-md-3 filter-cettar" style="display:none">
                                                     <label>Predikat</label>
                                                     <div>
                                                         <select name="predikat" id="predikat" class="form-control" width="100%">
@@ -127,7 +147,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 filter-aspek" style="display:none">
+                                                <div class="col-md-3 filter-aspek" style="display:none">
                                                     <label>Aspek</label>
                                                     <div>
 

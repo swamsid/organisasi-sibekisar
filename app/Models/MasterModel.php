@@ -43,13 +43,21 @@ class MasterModel extends Model
         if(isset($data['id_parent']) && !empty($data['id_parent'])) $builder->where('m_unit.id_unit', $data['id_parent']);
         if(isset($data['is_aktif']) && !empty($data['is_aktif'])) $builder->where('m_unit.is_aktif', $data['is_aktif']);
         if(isset($data['kode_unit']) && !empty($data['kode_unit'])) $builder->where('m_unit.kode_unit', $data['kode_unit']);
-        if(isset($data['kategori_unit']) && !empty($data['kategori_unit'])) $builder->where('m_unit.kategori_unit', $data['kategori_unit']);
+
+        if(isset($data['kategori_unit']) && !empty($data['kategori_unit'])){
+            if($data['kategori_unit'] == 'opd')
+                $builder->where('m_unit.kategori_unit <>', 'kab');
+            else
+                $builder->where('m_unit.kategori_unit', $data['kategori_unit']);
+        }
 
         if(isset($data['search']) && !empty($data['search'])){
             $builder->where("(m_unit.unit like '%".$data['search']."%')");
         }
 
-        $builder->orderBy('m_unit.kode_unit ASC');
+        $builder->orderBy('kategori_unit');
+        $builder->orderBy('unit');
+
         if(isset($data['limit']) && !empty($data['limit'])){
             if (isset($data['offset']) && !empty($data['offset'])) {
                 $builder->offset($data['offset']);
