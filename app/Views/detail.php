@@ -106,9 +106,15 @@
                                                 <?php if($page != 'kab') { ?>
                                                     <div class="col-md-2">
                                                         <label>Jenis</label>
+                                                        
+                                                        <?php 
+                                                            $opd = isset($_GET['tags']) && $_GET['tags'] == 'opd' ? 'selected' : '';
+                                                            $uobk = isset($_GET['tags']) && $_GET['tags'] == 'uobk' ? 'selected' : '';
+                                                        ?>
+
                                                         <select name="tag" class="form-control" id="tag">
-                                                            <option value="opd">OPD</option>
-                                                            <option value="uobk">UOBK</option>
+                                                            <option value="opd" <?= $opd ?>>OPD</option>
+                                                            <option value="uobk" <?= $uobk ?>>UOBK</option>
                                                         </select>
                                                     </div>
                                                 <?php } ?>
@@ -156,6 +162,7 @@
                                                             // echo '<option value="">- Semua Aspek -</option>';
                                                             if(isset($indikator)){
                                                                 $aspek=array();
+                                                                
                                                                 foreach ($indikator as $key):
                                                                     $temp = array(
                                                                         "id_aspek" => $key->id_aspek,

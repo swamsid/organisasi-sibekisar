@@ -110,7 +110,7 @@
         <div class="center-heading">
             <div class="row">
                 <div class="col-md-9" style="padding-top: 7px;">
-                    <h3 style="font-weight: 800; font-size: 26pt;">Top Perangkat Daerah dan UOBK <span style="font-weight: normal;">Ter</span> <span style="color: #008d5a;">CETTAR</span></h3>
+                    <h3 style="font-weight: 800; font-size: 20pt;">Top 10 Perangkat Daerah, UOBK dan Kab/Kota <span style="font-weight: normal;">Ter</span> <span style="color: #008d5a;">CETTAR</span></h3>
                 </div>
 
                 <div class="col-md-3" style="padding-top: 8px;">
@@ -132,78 +132,163 @@
             </div>
         </div>
 
-        <div class="row mobile-bottom-fix-big"  data-scroll-reveal="enter left move 30px over 0.6s after 0.1s" style="margin-top: 30px;">
-            <div class="col-lg-7 col-md-7 col-sm-12" style="top:0px !important; padding: 0px 5px;">
+        <div class="row mobile-bottom-fix-big"  style="margin-top: 30px;">
+            <div class="col-lg-12 col-md-12 col-sm-12" data-scroll-reveal="enter left move 20px over 0.6s after 0.1s" style="top:0px !important; padding: 0px 5px; margin-bottom: 50px;">
                 <div style="padding: 20px; background: white; box-shadow: 0px 0px 10px #ccc; border-radius: 10px;">
                     <div style="text-align: center; font-weight: bold; margin-bottom: 10px; padding-bottom: 20px; border-bottom: 2px dashed #f0f0f0;">
-                        Top 10 Perangkat Daerah
+                        <table width="100%">
+                            <tr>
+                                <td width="80%">
+                                    Top 10 Perangkat Daerah
+                                </td>
+                                <td width="20%">
+                                    <form class="text-right" method="GET" action="<?php echo base_url("read/detail/spirit/opd") ?>">
+                                        <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
+                                        <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
+
+                                        <button type="submit" class="btn second-button btn-xs">
+                                            Selengkapnya &nbsp;
+                                            <i class="fa fa-arrow-right"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
 
                     <div id="chart"></div>
                 </div>
             </div>
-            <div class="col-lg-5 col-md-5 col-sm-12" style="top:0px !important; padding: 0px 5px;">
+
+            <div class="col-lg-12 col-md-12 col-sm-12" data-scroll-reveal="enter left move 20px over 0.6s after 0.1s" style="top:0px !important; padding: 0px 5px; margin-bottom: 50px;">
                 <div style="padding: 20px; background: white; box-shadow: 0px 0px 10px #ccc; border-radius: 10px;">
                     <div style="text-align: center; font-weight: bold; margin-bottom: 10px; padding-bottom: 20px; border-bottom: 2px dashed #f0f0f0;">
-                        Top Unit Organisasi Bersifat Khusus (UOBK)
+                        <table width="100%">
+                            <tr>
+                                <td width="80%">
+                                    Top Unit Organisasi Bersifat Khusus (UOBK)
+                                </td>
+
+                                <td width="20%">
+                                    <form class="text-right" method="GET" action="<?php echo base_url("read/detail/spirit/opd") ?>">
+                                        <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
+                                        <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
+                                        <input type="hidden" class="input-tag" name="tags" value="uobk" readonly>
+
+                                        <button type="submit" class="btn second-button btn-xs">
+                                            Selengkapnya &nbsp;
+                                            <i class="fa fa-arrow-right"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
 
                     <div id="chart-uobk"></div>
                 </div>
             </div>
-            <div class="col-md-12">
-                <form class="text-right" method="GET" action="<?php echo base_url("read/detail/spirit/opd") ?>" style="margin-top: 50px;">
-                    <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
-                    <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
-                    <button type="submit" class="btn second-button btn-sm">
-                        Selengkapnya &nbsp;
-                        <i class="fa fa-arrow-right"></i>
-                    </button>
-                </form>
+
+            <div class="col-lg-12 col-md-12 col-sm-12"  style="top:0px !important; padding: 0px 5px; margin-bottom: 50px;">
+                <div style="padding: 20px; background: white; box-shadow: 0px 0px 10px #ccc; border-radius: 10px;">
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 10px; padding-bottom: 20px; border-bottom: 2px dashed #f0f0f0;">
+                        <table width="100%">
+                            <tr>
+                                <td width="80%">
+                                    Top 10 Kabupaten/Kota Provinsi Jawa Timur
+                                </td>
+
+                                <td width="20%">
+                                    <form class="text-right" method="GET" action="<?php echo base_url("read/detail/spirit/kab") ?>">
+                                        <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
+                                        <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
+
+                                        <button type="submit" class="btn second-button btn-xs">
+                                            Selengkapnya &nbsp;
+                                            <i class="fa fa-arrow-right"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="chart-kab"></div>
+                </div>
             </div>
         </div>
 
         <div class="row mobile-bottom-fix" style="padding-top:20px!important">
             <?php 
-                $keys = 0;
+                $keys   = 0;
+                $icons  = [
+                    base_url("assets/landing/images/fast-time1.png"),
+                    base_url("assets/landing/images/time-management1.png"),
+                    base_url("assets/landing/images/clock1.png"),
+                    base_url("assets/landing/images/accounting1.png"),
+                    base_url("assets/landing/images/rocket1.png"),
+                ];
+                
                 foreach($aspek as $key => $dataView) { 
             ?>
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.1s">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" data-scroll-reveal="enter right move 30px over 0.6s after 0.1s" style="margin-bottom: 30px;">
                     <div class="features-item row" style="padding: 30px;">
                         <div class="col-md-12" style="font-weight: bold; font-size: 20pt;">
-                            <img src="<?php echo base_url("assets/landing/images/fast-time1.png") ?>" alt="" style="width: 5%; margin-top: 40px;"> &nbsp;&nbsp;
+                            <img src="<?php echo $icons[$keys]  ?>" alt="" style="width: 5%; margin-top: 40px;"> &nbsp;&nbsp;
                             5 Perangkat Daerah dan UOBK <span style="font-weight: normal;">Ter</span> 
-                            <span class="animated-text"><?= ucfirst($key) ?></span>
+                            <span class="animated-text"><?= ucfirst($dataView->aspek) ?></span>
                         </div>
-                        <div class="col-md-6">
-                            <div id="chart-<?= $keys ?>"></div>
-                            <div style="margin-top: 45px;">
-                                <div class="features-icon">
-                                    <div class="text">
-                                        <div style="font-size: 18pt !important; margin-bottom: 15px;">
-                                            Perangkat Daerah ter <b><?= ucfirst($key) ?></b>
-                                        </div>
-                                        <div style="font-size: 18pt !important; font-weight: bold;">
-                                            <span class="text-danger lbl-tercepat aspek-info" id="aspek_<?= ($dataView) ? $keys : '' ?>">
-                                            </span>
+
+                        <div class="col-md-12 p-0">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div id="chart-<?= $keys ?>"></div>
+                                    <div style="margin-top: 35px;">
+                                        <div class="features-icon">
+                                            <div class="text">
+                                                <div style="font-size: 14pt !important; margin-bottom: 15px;">
+                                                    Perangkat Daerah <br> ter <b><?= ucfirst($dataView->aspek) ?></b>
+                                                </div>
+                                                <div style="font-size: 14pt !important; font-weight: bold;">
+                                                    <span class="text-danger lbl-tercepat aspek-info" id="aspek_<?= $key ?>">
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div id="chart-uobk-<?= $keys ?>"></div>
-                            <div style="margin-top: 45px;">
-                                <div class="features-icon">
-                                    <div class="text">
-                                        <div style="font-size: 18pt !important; margin-bottom: 15px;">
-                                            UOBK ter <b><?= ucfirst($key) ?></b>
+        
+                                <div class="col-md-4">
+                                    <div id="chart-uobk-<?= $keys ?>"></div>
+                                    <div style="margin-top: 35px;">
+                                        <div class="features-icon">
+                                            <div class="text">
+                                                <div style="font-size: 14pt !important; margin-bottom: 15px;">
+                                                    UOBK <br> ter <b><?= ucfirst($dataView->aspek) ?></b>
+                                                </div>
+                                                <div style="font-size: 14pt !important; font-weight: bold;">
+                                                    <span class="text-danger lbl-tercepat aspek-info" id="uobk_ter_<?= $key ?>">
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div style="font-size: 18pt !important; font-weight: bold;">
-                                            <span class="text-danger lbl-tercepat aspek-info" id="uobk_ter_<?= ($dataView) ? $keys : '' ?>">
-                                            </span>
+                                    </div>
+                                </div>
+        
+                                <div class="col-md-4">
+                                    <div id="chart-kab-<?= $keys ?>"></div>
+                                    <div style="margin-top: 35px;">
+                                        <div class="features-icon">
+                                            <div class="text">
+                                                <div style="font-size: 14pt !important; margin-bottom: 15px;">
+                                                    Kab/Kota <br> ter <b><?= ucfirst($dataView->aspek) ?></b>
+                                                </div>
+                                                <div style="font-size: 14pt !important; font-weight: bold;">
+                                                    <span class="text-danger lbl-tercepat aspek-info" id="kab_ter_<?= $key ?>">
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -211,15 +296,47 @@
                         </div>
 
                         <div class="col-md-12">
-                            <form class="text-right" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>/opd" style="margin-top: 50px;">
-                                <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
-                                <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
-                                <input type="hidden" name="ids" value="<?= ($dataView) ? $dataView->id_aspek : null ?>" readonly>
-                                <button type="submit" class="btn second-button btn-sm">
-                                    Selengkapnya &nbsp;
-                                    <i class="fa fa-arrow-right"></i>
-                                </button>
-                            </form>
+                            <div class="row">
+                                <div class="col-md-4" style="text-align: center; padding-top: 30px;">
+                                    <form class="text-center" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>/opd">
+                                        <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
+                                        <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
+                                        <input type="hidden" name="ids" value="<?= ($dataView) ? $dataView->id_aspek : null ?>" readonly>
+
+                                        <button type="submit" style="font-size: 10pt; color: #999; border: none; background: none; padding: 0px; outline: none;">
+                                            Selengkapnya &nbsp;
+                                            <i class="fa fa-arrow-right"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div class="col-md-4" style="text-align: center; padding-top: 30px;">
+                                    <form class="text-center" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>/opd">
+                                        <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
+                                        <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
+                                        <input type="hidden" name="ids" value="<?= ($dataView) ? $dataView->id_aspek : null ?>" readonly>
+                                        <input type="hidden" name="tags" value="uobk" readonly>
+
+                                        <button type="submit" style="font-size: 10pt; color: #999; border: none; background: none; padding: 0px; outline: none;">
+                                            Selengkapnya &nbsp;
+                                            <i class="fa fa-arrow-right"></i>
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div class="col-md-4" style="text-align: center; padding-top: 30px;">
+                                    <form class="text-center" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>/kab">
+                                        <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
+                                        <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
+                                        <input type="hidden" name="ids" value="<?= (count($aspekKab) && $aspekKab[$key]) ? $aspekKab[$key]->id_aspek : '' ?>" readonly>
+
+                                        <button type="submit" style="font-size: 10pt; color: #999; border: none; background: none; padding: 0px; outline: none;">
+                                            Selengkapnya &nbsp;
+                                            <i class="fa fa-arrow-right"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

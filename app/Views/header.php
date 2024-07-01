@@ -23,26 +23,18 @@
                         <li class="scroll-to-section"><a href="<?php  echo base_url('home') ?>" >Home</a></li>
                         <li class="scroll-to-section"><a href="<?php echo base_url('read/tentang') ?>" >Tentang</a></li>
                         <li class="scroll-to-section"><a href="<?php echo base_url('read/opd') ?>" >Perangkat Daerah</a></li>
+                        <li class="scroll-to-section"><a href="<?php echo base_url('read/kab') ?>" >Kab/Kota</a></li>
 
-
-                        <!--<li class="scroll-to-section"><a href="<?php //echo base_url('home/kab') ?>" class="menu-item">Kab/Kota</a>
-                         </li>-->
-                         <li class="submenu">
-                             <a href="javascript:;">Kab/Kota</a>
-                             <ul>
-                                 <li><a href="<?php echo base_url('home/kab') ?>">Rekap</a></li>
-                                 <li><a href="<?php echo base_url('read/kab') ?>">Raport</a></li>
-                             </ul>
-                         </li>
-                         <li class="scroll-to-section" style="border-right: 2px solid #eee; padding-right: 20px;">
+                        <li class="scroll-to-section" style="border-right: 2px solid #eee; padding-right: 20px;">
                             <a href="<?php echo base_url('auth') ?>" >Login</a>
-                         </li>
-                         <li class="scroll-to-section">
+                        </li>
+                        <li class="scroll-to-section">
                             <a href="http://sibekisar.jatimprov.go.id/berakhlak" target="_blank" style="color: var(--danger); font-weight: bold;">
                                 Berakhlak &nbsp;<i class="fa fa-caret-right"></i>
                             </a>
                         </li>
                     </ul>
+                    
                     <a class='menu-trigger'>
                         <span>Menu</span>
                     </a>

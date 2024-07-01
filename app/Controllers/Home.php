@@ -23,7 +23,9 @@ class Home extends BaseController
         $data_['tag']='opd';
         $data['cettar'] = $this->evaluasimodel->findCettar($data_);
         
-        $aspek = $this->evaluasimodel->findAspek([ 'periode' => $periode, 'tag' => 'opd']);
+        $aspek  = $this->evaluasimodel->findAspek([ 'periode' => $periode, 'tag' => 'opd']);
+        $aspekK = $this->evaluasimodel->findAspek([ 'periode' => $periode, 'tag' => 'kab']);
+
         $data['dataPeriode']    = $this->mastermodel->getPeriode();
 
         foreach($aspek as $key => $dataAspek){
@@ -35,7 +37,10 @@ class Home extends BaseController
             $data['aspek'][strtolower($dataAspek->aspek)] = $this->evaluasimodel->findCettarAspek($data1);
         }
 
-        // return json_encode($data['aspek']);
+        $data['aspek']      = $aspek;
+        $data['aspekKab']   = $aspekK;
+
+        // return json_encode($data['aspekKab']);
 
         return view('home', $data);
 	}
