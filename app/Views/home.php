@@ -110,7 +110,7 @@
         <div class="center-heading">
             <div class="row">
                 <div class="col-md-9" style="padding-top: 7px;">
-                    <h3 style="font-weight: 800; font-size: 20pt;">Top 10 Perangkat Daerah, UOBK dan Kab/Kota <span style="font-weight: normal;">Ter</span> <span style="color: #008d5a;">CETTAR</span></h3>
+                    <h3 style="font-weight: 800; font-size: 20pt;">10 Perangkat Daerah, UOBK dan Kab/Kota <span style="font-weight: normal;">Ter</span> <span style="color: #008d5a;">CETTAR</span></h3>
                 </div>
 
                 <div class="col-md-3" style="padding-top: 8px;">
@@ -138,8 +138,8 @@
                     <div style="text-align: center; font-weight: bold; margin-bottom: 10px; padding-bottom: 20px; border-bottom: 2px dashed #f0f0f0;">
                         <table width="100%">
                             <tr>
-                                <td width="80%">
-                                    Top 10 Perangkat Daerah
+                                <td width="80%" style="font-size: 20pt; text-align: center;">
+                                    10 Perangkat Daerah <span style="font-weight: normal;">Ter</span> Cettar
                                 </td>
                                 <td width="20%">
                                     <form class="text-right" method="GET" action="<?php echo base_url("read/detail/spirit/opd") ?>">
@@ -165,8 +165,8 @@
                     <div style="text-align: center; font-weight: bold; margin-bottom: 10px; padding-bottom: 20px; border-bottom: 2px dashed #f0f0f0;">
                         <table width="100%">
                             <tr>
-                                <td width="80%">
-                                    Top Unit Organisasi Bersifat Khusus (UOBK)
+                                <td width="80%" style="font-size: 20pt; text-align: center;">
+                                    Unit Organisasi Bersifat Khusus (UOBK) <span style="font-weight: normal;">Ter</span> Cettar
                                 </td>
 
                                 <td width="20%">
@@ -194,8 +194,8 @@
                     <div style="text-align: center; font-weight: bold; margin-bottom: 10px; padding-bottom: 20px; border-bottom: 2px dashed #f0f0f0;">
                         <table width="100%">
                             <tr>
-                                <td width="80%">
-                                    Top 10 Kabupaten/Kota Provinsi Jawa Timur
+                                <td width="80%" style="font-size: 20pt; text-align: center;">
+                                    10 Kabupaten/Kota Provinsi Jawa Timur <span style="font-weight: normal;">Ter</span> Cettar
                                 </td>
 
                                 <td width="20%">
@@ -224,9 +224,10 @@
                 $icons  = [
                     base_url("assets/landing/images/fast-time1.png"),
                     base_url("assets/landing/images/time-management1.png"),
-                    base_url("assets/landing/images/clock1.png"),
-                    base_url("assets/landing/images/accounting1.png"),
                     base_url("assets/landing/images/rocket1.png"),
+                    base_url("assets/landing/images/accounting1.png"),
+                    base_url("assets/landing/images/user1.png"),
+                    base_url("assets/landing/images/clock1.png"),
                 ];
                 
                 foreach($aspek as $key => $dataView) { 
@@ -236,7 +237,7 @@
                     <div class="features-item row" style="padding: 30px;">
                         <div class="col-md-12" style="font-weight: bold; font-size: 20pt;">
                             <img src="<?php echo $icons[$keys]  ?>" alt="" style="width: 5%; margin-top: 40px;"> &nbsp;&nbsp;
-                            5 Perangkat Daerah dan UOBK <span style="font-weight: normal;">Ter</span> 
+                            5 Perangkat Daerah, UOBK dan Kabupaten/Kota <?= $keys ?> <span style="font-weight: normal;">Ter</span> 
                             <span class="animated-text"><?= ucfirst($dataView->aspek) ?></span>
                         </div>
 

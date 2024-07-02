@@ -6,20 +6,28 @@ $(document).ready(function () {
     $(".filter-aspek").hide();
 
     $("#tahun").on('change',function(){
-        tabrekap();
-    });
-    $("#tag").on('change',function(){
-        tabrekap();
-        // alert('okee');
-    });
-    $("#id_unit").on('change',function(){
-        tabrekap();
-    });
-    $("#predikat").on('change',function(){
+        $('#layout').fadeIn(500);
         tabrekap();
     });
 
-    tabrekap = function () {
+    $("#tag").on('change',function(){
+        $('#layout').fadeIn(500);
+        $('#id_unit').val('');
+
+        tabrekap(true);
+    });
+
+    $("#id_unit").on('change',function(){
+        $('#layout').fadeIn(500);
+        tabrekap();
+    });
+    
+    $("#predikat").on('change',function(){
+        $('#layout').fadeIn(500);
+        tabrekap();
+    });
+
+    tabrekap = function (resetUnit = false) {
         if ($.fn.DataTable.isDataTable("table.display")) $("table.display").DataTable().destroy();
         var url = base_url + "/apps/gridrekapcettar";
         var param = {
@@ -39,13 +47,27 @@ $(document).ready(function () {
             if (data) {
                 var unit = [], chartSeriesData = [], series = '';
                 var j=0;
+
+                // console.log(data);
+                
+                let html = `<option value="">- Semua ${ $('#tag').val() } -</option>`;
+
                 $.each(data, function (key, value) {
                     j++;
-                   var l = '<a href="'+base_url +'/read/'+$("#tag").val()+'/'+value['id_unit_hash']+'">'+value['unit'].toUpperCase()+'</a>';
+
+                    var l = '<a href="'+base_url +'/read/'+$("#tag").val()+'/'+value['id_unit_hash']+'">'+value['unit'].toUpperCase()+'</a>';
                     var series = [l,parseFloat(value['nilai'])];
                     chartSeriesData.push(series);
                     unit.push(l);
+
+                    if(resetUnit){
+                        html += `<option value="${value['id_unit']}">${value['unit']}</option>`
+                    }
                 });
+
+                if(resetUnit)
+                    $('#id_unit').html(html);
+
                 grafikcettar(data, tahun,predikat,unit,chartSeriesData);
             }
 
@@ -58,7 +80,7 @@ $(document).ready(function () {
         });
     }
 
-    tabrekap();
+    tabrekap(true);
 
     grafikcettar_ori = function(data,tahun,predikat){
         var a=[], b=[], c=[], d=[], e=[], f=[], x=[];

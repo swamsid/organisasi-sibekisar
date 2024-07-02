@@ -249,6 +249,7 @@
 <script src="<?php echo base_url("assets/vendors/datatables/dataTables.rowGroup.min.js") ?>"></script>
 <script src="<?php echo base_url("assets/vendors/highchart/highcharts.js") ?>"></script>
 <script src="<?php echo base_url("assets/vendors/highchart/highcharts-3d.js") ?>"></script>
+
 <?php
 if(isset($param) && $param=='spirit'){
     ?>

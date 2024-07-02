@@ -1,6 +1,7 @@
 $(document).ready(function () {
     var aPos="";
     var aData="";
+    
     $(".select2").select2();
 
     $(".filter-cettar").hide();
@@ -10,6 +11,13 @@ $(document).ready(function () {
         $('#layout').fadeIn(500);
         tabrekap();
     });
+
+    $("#tag").on('change',function(){
+        $('#layout').fadeIn(500);
+        tabrekap(true);
+        // alert('okee');
+    });
+
     $("#id_unit").on('change',function(){
         $('#layout').fadeIn(500);
         tabrekap();
@@ -19,7 +27,7 @@ $(document).ready(function () {
         tabrekap();
     });
 
-    tabrekap = function () {
+    tabrekap = function (resetUnit = false) {
         if ($.fn.DataTable.isDataTable("table.display")) $("table.display").DataTable().destroy();
         var url = base_url + "/apps/gridrekapaspek";
         var param = {
@@ -33,6 +41,17 @@ $(document).ready(function () {
         var id_aspek=$("#id_aspek").val();
 
         var req = $.post(url, param).done(function (data) {
+
+            if(resetUnit){
+                let html = `<option value="">- Semua ${ $('#tag').val() } -</option>`;
+
+                data.eval.forEach(function(data, index){
+                    html += `<option value="${data['id_unit']}">${data['unit']}</option>`    
+                })
+
+                $('#id_unit').html(html);
+            }
+
             if (data) grafikaspek(data.eval, tahun, id_aspek);
             $('#div-rekap').html("");
             $('#layout').fadeOut(500);
@@ -40,7 +59,7 @@ $(document).ready(function () {
     }
 
 
-    tabrekap();
+    tabrekap(true);
 
     grafikaspek = function(data,tahun,id_aspek){
 
