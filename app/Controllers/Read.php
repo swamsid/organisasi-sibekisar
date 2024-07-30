@@ -16,15 +16,36 @@ class Read extends BaseController
         return view('tentang');
     }
 
-    function opd($param=null){
-        $data['kategori_unit']='opd';
-        $data['label']='Perangkat Daerah/UOBK';
-        $data['tag']='opd';
-        $data['dataPeriode']    = $this->mastermodel->getPeriode();
+    function opd($param=null){ 
+
+        $data['kategori_unit'] = 'opd';
+        $data['label']         = 'Perangkat Daerah/UOBK';
+        $data['tag']           = 'opd';
+        $data['dataPeriode']   = $this->mastermodel->getPeriode();
+
        if(isset($param) &&!empty($param)) {
            $data['id_unit_hash'] = $param;
-           $data['unit'] = $this->mastermodel->getMUnit($data);
+           $data['unit']         = $this->mastermodel->getMUnit($data);
+;
+           return view('opd_detail', $data);
+       }else {
+           $data['unit'] = $this->mastermodel->findMUnit($data);
            
+           return view('opd', $data);
+       }
+    }
+
+    function uobk($param=null){ 
+
+        $data['kategori_unit'] = 'uobk';
+        $data['label']         = 'Perangkat Daerah/UOBK';
+        $data['tag']           = 'uobk';
+        $data['dataPeriode']   = $this->mastermodel->getPeriode();
+
+       if(isset($param) &&!empty($param)) {
+           $data['id_unit_hash'] = $param;
+           $data['unit']         = $this->mastermodel->getMUnit($data);
+;
            return view('opd_detail', $data);
        }else {
            $data['unit'] = $this->mastermodel->findMUnit($data);
@@ -73,7 +94,7 @@ class Read extends BaseController
         $data['periode'] = $_GET['p'];
         $data['dataPeriode'] = $this->mastermodel->getPeriode();
 
-        // return json_encode($data['dataPeriode']);
+        // return json_encode($data['page']);
 
         //if($data['kategori']=='spirit') $this->addScript("assets/landing/js/detail.js");
         //else $this->addScript("assets/landing/js/detail_aspek.js");

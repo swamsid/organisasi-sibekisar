@@ -390,9 +390,11 @@ class EvaluasiModel extends Model
 
     function findDetailNilaiBaru($data = null)
     {
+        $tags = ($data['tag'] != 'kab') ? 'opd' : 'kab';
+
         $builder = $this->db->table('m_indikator');
         $builder->where('m_indikator.periode', $data['tahun']);
-        $builder->where('m_indikator.tag', $data['tag']);
+        $builder->where('m_indikator.tag', $tags);
         $builder->where('m_indikator.is_aktif', '1');
         $builder->join('m_aspek', 'm_aspek.id_aspek = m_indikator.id_aspek');
         $builder->join('vw_rekap_by_aspek', 'm_aspek.id_aspek = vw_rekap_by_aspek.id_aspek and vw_rekap_by_aspek.tahun = "'.$data['tahun'].'" and vw_rekap_by_aspek.id_unit = '.$data['id_unit'], 'left');

@@ -77,10 +77,12 @@
                                 <blockquote class="blockquote blockquote-primary">
                                     <form id="frmsearch" class="forms-sample form-horizontal">
                                         <?php
-                                            $link = $_SERVER['PHP_SELF'];
+                                            $link = strtok($_SERVER['REQUEST_URI'], '?');
                                             $link_array = explode('/',$link);
                                             $page = end($link_array);
                                         ?>
+
+                                        <?php print($page) ?>
 
                                         <?php if($page == 'kab') { ?>
                                             <input type="hidden" id="tag" value="kab">

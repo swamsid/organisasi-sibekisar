@@ -87,6 +87,7 @@
                                 </div>
                                 <div class="col-lg-9 col-md-9">
                                     <?php
+                                    // echo $unit->kategori_unit;
                                     if ($unit->kategori_unit == 'opd') {
                                     ?>
                                         <b>Tugas</b> 

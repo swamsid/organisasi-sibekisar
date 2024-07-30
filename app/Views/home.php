@@ -299,7 +299,7 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-4" style="text-align: center; padding-top: 30px;">
-                                    <form class="text-center" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>/opd">
+                                    <form class="text-center" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>1/opd">
                                         <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
                                         <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
                                         <input type="hidden" name="ids" value="<?= ($dataView) ? $dataView->id_aspek : null ?>" readonly>
@@ -312,7 +312,7 @@
                                 </div>
 
                                 <div class="col-md-4" style="text-align: center; padding-top: 30px;">
-                                    <form class="text-center" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>/opd">
+                                    <form class="text-center" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>1/opd">
                                         <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
                                         <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
                                         <input type="hidden" name="ids" value="<?= ($dataView) ? $dataView->id_aspek : null ?>" readonly>
@@ -326,7 +326,7 @@
                                 </div>
 
                                 <div class="col-md-4" style="text-align: center; padding-top: 30px;">
-                                    <form class="text-center" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>/kab">
+                                    <form class="text-center" method="GET" action="<?php echo base_url("read/detail/".str_replace(' ', '-', $key))?>1/kab">
                                         <input type="hidden" class="input-periode" name="p" value="<?= $dataPeriode[count($dataPeriode) - 1]->tahun_periode ?>" readonly>
                                         <input type="hidden" class="input-tahun" name="t" value="<?= $dataPeriode[count($dataPeriode) - 1]->id_periode ?>" readonly>
                                         <input type="hidden" name="ids" value="<?= (count($aspekKab) && $aspekKab[$key]) ? $aspekKab[$key]->id_aspek : '' ?>" readonly>

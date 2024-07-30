@@ -1,4 +1,7 @@
 $(document).ready(function () {
+
+    // alert('okee');
+
     var aPos="";
     var aData="";
     $("#tahun").on('change',function(){
@@ -110,6 +113,9 @@ $(document).ready(function () {
 
     tabrekap = function () {
         $('#div-rekap').html("");
+
+        // alert('bla bla bla');
+
         if ($.fn.DataTable.isDataTable("table.rekap")) $("table.rekap").DataTable().destroy();
         var url = base_url + "/apps/gridrekapaspek";
         var param = {

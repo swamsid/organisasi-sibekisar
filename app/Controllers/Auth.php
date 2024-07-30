@@ -67,7 +67,7 @@ class Auth extends BaseController
     public function logout()
     {
         $this->session->destroy();
-        return redirect()->to(site_url());
+        return redirect()->to(base_url());
     }
 
     private function generateHash($password)

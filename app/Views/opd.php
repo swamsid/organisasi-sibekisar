@@ -39,7 +39,7 @@
                         <div class="col-md-12">
                             <input type="hidden" id="tag" value="<?php echo (isset($tag)?$tag:'opd') ?>">
                             <blockquote><small>*Klik pada <?php echo $label ?> untuk melihat detail informasi.</small></blockquote>
-                            <div class="table-responsive" id="div-unit">
+                            <div class="table-responsive" id="div-unit" style="margin-top: 20px;">
 
                                 <table class="table table-hover table-striped display" id="tableUnit" width="100%">
                                     <thead>
@@ -56,12 +56,15 @@
                                     if(isset($unit) && $unit){
                                         $i=0;
                                         foreach ($unit as $key):
+
+                                            $jeniss = $key->kategori_unit;
                                             $i++;
-                                        $judul_link = trim(preg_replace('/[ \/]/', '-', (preg_replace('/ +/', ' ', preg_replace('/[^A-Za-z0-9 \/]/', '', strtolower(trim($key->unit)))))));
-                                           ?>
+
+                                            $judul_link = trim(preg_replace('/[ \/]/', '-', (preg_replace('/ +/', ' ', preg_replace('/[^A-Za-z0-9 \/]/', '', strtolower(trim($key->unit)))))));
+                                    ?>
                                         <tr>
                                             <td><?php echo $i ?>.</td>
-                                            <td class="text-black"><a href="<?php echo base_url('read/'.$key->kategori_unit.'/'.$key->id_unit_hash.'/'.$judul_link)?>" class="text-black"><span class="text-black" style="color:#000;font-weight:500"> <?php echo ($key->nama_unit?$key->nama_unit:$key->unit) ?></span></a></td>
+                                            <td class="text-black"><a href="<?php echo base_url('read/'.$jeniss.'/'.$key->id_unit_hash.'/'.$judul_link)?>" class="text-black"><span class="text-black" style="color:#000;font-weight:500"> <?php echo ($key->nama_unit?$key->nama_unit:$key->unit) ?></span></a></td>
                                             <td><?php echo $key->alamat ?></td>
                                             <td><a href="<?php echo $key->website ?>" target="_blank"><?php echo $key->website ?></a></td>
                                             <td><?php echo $key->telp ?></td>
