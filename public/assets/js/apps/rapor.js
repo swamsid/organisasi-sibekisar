@@ -83,7 +83,12 @@ $(document).ready(function () {
                             //location.href=base_url + "/apps/cetak/"+$("#id_unit").val()+"/"+$("#tahun").val();
                             window.open(base_url + "/apps/cetak/" + $("#id_unit").val() + "/" + $("#tahun").val() + "/" + $("#tag").val(), '_blank', 'width=800,height=800');
                         }
-                    },'excel'],
+                    },{
+                        text : 'Excel',
+                        action: function(e, dt, node, config){
+                            window.open(base_url + "/apps/excel/" + $("#id_unit").val() + "/" + $("#tahun").val() + "/" + $("#tag").val(), '_blank');
+                        }
+                    }],
                 "footerCallback": function (row, data, start, end, display) {
                 }
             });
