@@ -248,24 +248,24 @@ class Apps extends BaseController
                 <table cellpadding="5" width="100%" class="table"  style="border: 1px solid #000; margin-top: 5px; font-size: 12pt;">
                     <thead>
                         <tr>
-                            <th width="6%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">
+                            <th width="10%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">
                                 Spirit Budaya Kerja
                             </th>
                             <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Bobot</th>
                             <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Total Nilai</th>
-                            <th width="7%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Indikator Penilaian</th>
+                            <th width="9%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Indikator Penilaian</th>
                             <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Bobot</th>
 
-                            <th width="15%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" colspan="3">Nilai Indikator</th>
+                            <th width="16%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" colspan="3">Nilai Indikator</th>
                             
                             <th width="9%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Pengampu</th>
-                            <th width="24%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Catatan</th>
-                            <th width="24%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Rekomendasi</th>
+                            <th width="20%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Catatan</th>
+                            <th width="20%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Rekomendasi</th>
                         </tr>
 
                         <tr>
                             <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Awal</th>
-                            <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Konversi</th>                                        
+                            <th width="6%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Konversi</th>                                        
                             <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Akhir</th>
                         </tr>
                     </thead>
@@ -276,7 +276,7 @@ class Apps extends BaseController
                 $i = 0;
                 $html .= '
                         <tr>
-                            <td width="6%" rowspan="'. ($rowspan[$row['id_aspek']] + 0) .'" style="border: 1px solid #000;">'.strtoupper($row['aspek']).'</td>
+                            <td width="10%" rowspan="'. ($rowspan[$row['id_aspek']] + 0) .'" style="border: 1px solid #000;">'.strtoupper($row['aspek']).'</td>
                             <td width="5%" rowspan="'. ($rowspan[$row['id_aspek']] + 0) .'" style="text-align: center; border: 1px solid #000;">'.$row['nilai_maks'].'</td>
                             <td width="5%" rowspan="'. ($rowspan[$row['id_aspek']] + 0) .'" style="text-align:center; border: 1px solid #000;">'.$this->is_decimal($row['total_nilai']).'</td>';
 
@@ -292,14 +292,16 @@ class Apps extends BaseController
                         $printRekomendasi = ($key->rekomendasi_indikator) ? str_replace('14px;', '12px;', htmlentities($key->rekomendasi_indikator)) : '';
                         
                         $html .= '
-                            <td width="7%" style="height: 20px; border: 1px solid #000;">'.$key->indikator.'</td>
+                            <td width="9%" style="height: 20px; border: 1px solid #000;">'.$key->indikator.'</td>
                             <td width="5%" align="center" style="height: 40px; border: 1px solid #000;">'.$this->is_decimal($key->bobot_aspek).'</td>
-                            <td width="5%" align="center" style="height: 40px; border: 1px solid #000;"><b>'.$key->nilai_awal.'</b></td>
-                            <td width="5%" align="center" style="height: 40px; border: 1px solid #000;"><b>'.$this->is_decimal($key->nilai_konversi).'</b></td>
+                            <td width="5%" align="center" style="height: 40px; border: 1px solid #000;"><b>
+                                '.$this->is_decimal((float)str_replace(',', '.', $key->nilai_awal)).'
+                            </b></td>
+                            <td width="6%" align="center" style="height: 40px; border: 1px solid #000;"><b>'.$this->is_decimal($key->nilai_konversi).'</b></td>
                             <td width="5%" align="center" style="height: 40px; border: 1px solid #000;"><b>'.$this->is_decimal($key->nilai_aspek).'</b></td>
                             <td width="9%" style="height: 40px; border: 1px solid #000;">'.$print.'</td>
-                            <td width="24%" class="listed" style="height: 40px; border: 1px solid #000;">'.html_entity_decode($printCatatan).'</td>
-                            <td width="24%" style="height: 40px; border: 1px solid #000;">'.html_entity_decode($printRekomendasi).'</td>
+                            <td width="20%" class="listed" style="height: 40px; border: 1px solid #000;">'.strip_tags($key->catatan_indikator).'</td>
+                            <td width="20%" style="height: 40px; border: 1px solid #000;">'.strip_tags($key->rekomendasi_indikator).'</td>
                         </tr>';
                     }
                 }
@@ -326,25 +328,8 @@ class Apps extends BaseController
                     </table>';
         }
 
-
-        // $dompdf = new Dompdf();
-        // $dompdf->loadHtml($html);
-        // $dompdf->setPaper('A3', 'landscape');
-        // $dompdf->render();
-        // $dompdf->stream('contoh.pdf', array("Attachment" => false));
-
-        // $mpdf = new Mpdf(['debug' => FALSE, 'mode' => 'utf-8', 'format' => 'A3-L']);
-        // $mpdf->WriteHTML($html);
-        // $mpdf->Output('raport_cettar.pdf', 'I');
-
-        // $pdf= new PDF('L', 'mm', 'A3');
-        // $pdf->AddPage();
-        // $pdf->SetFont('Arial','',12);
-
-        // $pdf->WriteHTML($html);
-        // $pdf->Output();
-
         $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->setOpenCell(false);
         $pdf->AddPage('L',"A3");
         $pdf->setListIndentWidth(8);
 

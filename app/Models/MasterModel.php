@@ -294,6 +294,14 @@ class MasterModel extends Model
         return $builder->get()->getRow();
     }
 
+    function cekKodeAkses($where){
+        $builder = $this->db->table('m_unit');
+        $builder->select('id_unit, unit, kode_akses');
+        $builder->where($where);
+
+        return $builder->get()->getRow();
+    }
+
     function insertPeriode($data = null){
         $builder = $this->db->table('m_periode');
         $builder->replace($data);

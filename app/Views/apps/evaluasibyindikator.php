@@ -75,7 +75,7 @@
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Penilaian <?php echo (isset($label)?$label:'') ?></a></li>
+                <li class="breadcrumb-item"><a href="#">Penilaian <?php echo (isset($label) ? $label: '') ?></a></li>
                 <li class="breadcrumb-item active" aria-current="page">
                     Penilaian <?php echo (isset($tag) ? 'Kab/Kota' : 'Perangkat Daerah') ?>
                 </li>
@@ -148,7 +148,7 @@
                                             <tr>
                                                 <th width="37%" style="font-weight: bold;">
                                                     Nama 
-                                                    Perangkat Daerah
+                                                    <?php echo $tag == 'kab' ? 'Kabupaten/Kota' : 'Perangkat Daerah' ?>
                                                 </th>
                                                 <th width="13%" class="text-center" style="font-weight: bold;">
                                                     Nilai Awal

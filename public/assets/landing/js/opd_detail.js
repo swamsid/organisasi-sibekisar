@@ -51,7 +51,16 @@ $(document).ready(function () {
             var predikat='';
 
             $.each(data, function (key, value) {
-                console.log(data);
+                // console.log(data);
+
+                let nilaiAwal       = Number(value.nilai_awal.replace(',', '.'));
+                let nilaiKonversi   = Number(value.nilai_konversi.replace(',', '.'));
+                let nilaiAspek      = Number(value.nilai_aspek.replace(',', '.'));
+
+                let nilaiAwalPrint      = (nilaiAwal % 1 > 0) ? nilaiAwal.toFixed(1) : nilaiAwal.toFixed(0);
+                let nilaiKonversiPrint  = (nilaiKonversi % 1 > 0) ? nilaiKonversi.toFixed(1) : nilaiKonversi.toFixed(0);
+                let nilaiAspekPrint     = (nilaiAspek % 1 > 0) ? nilaiAspek.toFixed(1) : nilaiAspek.toFixed(0);
+
                 n++;
                 t += `<tr>
                         <td style="display:none">${ value.id_aspek }</td>
@@ -60,9 +69,9 @@ $(document).ready(function () {
                         <td align="center" class="text-bold text-black"><b>${ value.total_nilai }</b></td>
                         <td>${ value.indikator} </td>
                         <td align="center">${ parseFloat(value.bobot_aspek) }</td>
-                        <td align="center" ><b>${ value.nilai_awal }</b></td>
-                        <td align="center" ><b>${ Number(value.nilai_konversi.replace(',', '.')).toFixed(2) }</b></td>
-                        <td align="center" ><b>${ Number(value.nilai_aspek).toFixed(2) }</b></td>
+                        <td align="center" ><b>${ nilaiAwalPrint }</b></td>
+                        <td align="center" ><b>${ nilaiKonversiPrint }</b></td>
+                        <td align="center" ><b>${ nilaiAspekPrint}</b></td>
                         <td>${ (!value.keterangan) ? value.opd_pengampu.toUpperCase() : value.keterangan.toUpperCase() }</td>
                     `;
 
@@ -70,6 +79,9 @@ $(document).ready(function () {
                     skor_total = (value.nilai) ? value.nilai : 0;
                     nilai_huruf = (value.nilai_huruf) ? value.nilai_huruf : 0;
                     predikat = (value.predikat) ? value.predikat : 0;
+
+                    skor_total = Number(skor_total);
+                    skor_total = (skor_total % 1 > 0) ? skor_total.toFixed(1) : skor_total.toFixed(0);
                 }
             });
 

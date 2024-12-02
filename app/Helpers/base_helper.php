@@ -164,6 +164,8 @@ function curl_uploaded_file($filedata, $upload_dir, $filename){
 
 function do_uploaded_file($folder, $var = "file", $preffix = "", $replace_name = null, $allowed = null, $max_size=null)
 {
+    // return 'okee';
+
     if ($allowed == null)
         $allowed = 'png,jpg,jpeg,gif,pdf'; //,doc,docx,xls,xlsx,ppt,pptx
     if ($max_size == null)
@@ -265,6 +267,7 @@ function do_uploaded_file($folder, $var = "file", $preffix = "", $replace_name =
         }
         return $result;
     }
+
     return array("status" => false, "reason"=>"Tidak ada file yang di upload");
 }
 

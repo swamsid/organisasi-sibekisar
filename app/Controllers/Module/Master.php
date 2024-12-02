@@ -42,11 +42,16 @@ class Master extends BaseController
 
     function simpan_unit(){
         $data = $_REQUEST;
-        // return json_encode($data);
+        // return json_encode('okee');
         $data['is_aktif'] = (isset($_REQUEST['is_aktif'])?$_REQUEST['is_aktif']:0);
         $data['unit'] = str_replace("'", "`",$data['unit']);
+
         $resultUpload = do_uploaded_file("foto", "file", "");
+
+        // return json_encode($resultUpload);
+
         $data['foto_pejabat']=0;
+
         if($resultUpload['status']) $data['foto_pejabat'] = $resultUpload['file_loc'];
 
         $where= array("id_unit"=>$data['id_unit']);
