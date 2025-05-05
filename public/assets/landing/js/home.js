@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $('#tahun').change(function(){
         $('.input-tahun').val($('#tahun').val());
         $('.input-periode').val($('#tahun option:selected').text());

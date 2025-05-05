@@ -22,7 +22,8 @@
                             <?php
                             $kategori = array(
                                 'opd' => 'PD',
-                                'kab' => 'Kabupaten/Kota'
+                                'kab' => 'Kabupaten/Kota',
+                                'uobk' => 'UOBK'
                             );
                             foreach ($kategori as $key => $value){
                                 $selected = (isset($tag)&&$tag==$key?'selected':'');

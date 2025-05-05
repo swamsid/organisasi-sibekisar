@@ -21,6 +21,9 @@
     <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/main.css") ?>">
     <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/owl-carousel.css") ?>">
     <link rel="shortcut icon" href="<?php echo base_url("assets/images/favicon.ico") ?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/vendors/simple-line-icons/css/simple-line-icons.css") ?>">
+
+    <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/custom.css") ?>">
     
     <script>
         base_url = "<?php echo base_url(); ?>";
@@ -80,10 +83,8 @@
                                         <?php
                                             $link = strtok($_SERVER['REQUEST_URI'], '?');
                                             $link_array = explode('/',$link);
-                                            $page = end($link_array);
+                                            $page = $_GET['tags'];
                                         ?>
-
-                                        <?php print($page) ?>
 
                                         <?php if($page == 'kab') { ?>
                                             <input type="hidden" id="tag" value="kab">
@@ -122,9 +123,9 @@
                                                     </div>
                                                 <?php } ?>
 
-                                                <div class="col-md-5">
+                                                <div class="col-md-4">
                                                     <label><?php echo $label ?></label><br>
-                                                    <select name="id_unit" id="id_unit" class="form-control select2" width="100%">
+                                                    <select name="id_unit" id="id_unit" class="form-control" width="100%">
                                                         <option value="">- Semua <?php echo $label ?> -</option>
                                                         <?php
                                                         if(isset($unit)) {
@@ -135,54 +136,24 @@
                                                         ?>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-3 filter-cettar" style="display:none">
-                                                    <label>Predikat</label>
-                                                    <div>
-                                                        <select name="predikat" id="predikat" class="form-control" width="100%">
-                                                            <?php
-                                                            $kategori = array(
-                                                                'SANGAT CETTAR' => 'SANGAT CETTAR','CETTAR'=>'CETTAR',
-                                                                'CUKUP CETTAR' => 'CUKUP CETTAR',
-                                                                'KURANG CETTAR' => 'KURANG CETTAR',
-                                                                'TIDAK CETTAR' => 'TIDAK CETTAR'
-                                                            );
 
-                                                            echo '<option value="">- Semua Predikat -</option>';
-                                                            foreach ($kategori as $key => $value){
-                                                                $selected = '';
-                                                                echo '<option value="'.$key.'" '. $selected.' >'. $value.'</option>';
-                                                            }
-                                                            ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3 filter-aspek" style="display:none">
-                                                    <label>Aspek</label>
-                                                    <div>
+                                                <div class="col-md-4 filter-aspek" style="display: none">
+                                                    <label style="display: block;">Indikator</label>
+                                                    <select name="id_aspek" id="id_aspek" class="form-control select2" style="display: block; width: 100%">
+                                                        <?php
+                                                        // echo '<option value="">- Semua Aspek -</option>';
+                                                        if(isset($indikator)){
+                                                            foreach($indikator as $row):
+                                                                if(isset($idIndikator) && $idIndikator == $row->id_indikator) 
+                                                                    $selected = ' selected';
+                                                                else 
+                                                                    $selected='';
 
-                                                        <select name="id_aspek" id="id_aspek" class="form-control" width="100%">
-                                                            <?php
-                                                            // echo '<option value="">- Semua Aspek -</option>';
-                                                            if(isset($indikator)){
-                                                                $aspek=array();
-                                                                
-                                                                foreach ($indikator as $key):
-                                                                    $temp = array(
-                                                                        "id_aspek" => $key->id_aspek,
-                                                                        "aspek" => $key->aspek
-                                                                    );
-                                                                    if (!in_array($temp, $aspek)) array_push($aspek, $temp);
-                                                                endforeach;
-
-                                                                foreach($aspek as $row):
-                                                                    if(isset($idaspek) && $idaspek == $row['id_aspek']) $selected = ' selected';
-                                                                    else $selected='';
-                                                                    echo '<option value="'.$row['id_aspek'].'" '. $selected.' >'. $row['aspek'] .'</option>';
-                                                                endforeach;
-                                                            }
-                                                            ?>
-                                                        </select>
-                                                    </div>
+                                                                echo '<option value="'.$row->id_indikator.'" '. $selected.' >'. $row->indikator .'</option>';
+                                                            endforeach;
+                                                        }
+                                                        ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                     </form>
@@ -253,17 +224,8 @@
 <script src="<?php echo base_url("assets/vendors/highchart/highcharts.js") ?>"></script>
 <script src="<?php echo base_url("assets/vendors/highchart/highcharts-3d.js") ?>"></script>
 
-<?php
-if(isset($param) && $param=='spirit'){
-    ?>
-    <script src="<?php echo base_url("assets/landing/js/detail.js") ?>"></script>
-    <?php
-}else{
-    ?>
-    <script src="<?php echo base_url("assets/landing/js/detail_aspek.js") ?>"></script>
-    <?php
-}
-?>
+<script src="<?php echo base_url("assets/landing/js/custom.js") ?>"></script>
+<script src="<?php echo base_url("assets/landing/js/detail_indikator.js") ?>"></script>
 
 </body>
 </html>

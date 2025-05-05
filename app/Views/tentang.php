@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/main.css") ?>">
     <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/owl-carousel.css") ?>">
     <link rel="shortcut icon" href="<?php echo base_url("assets/images/favicon.ico") ?>">
+
+    <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/custom.css") ?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/vendors/simple-line-icons/css/simple-line-icons.css") ?>">
+
     <script>
         base_url = "<?php echo base_url(); ?>";
     </script>
@@ -235,6 +239,7 @@
 <script src="<?php echo base_url("assets/vendors/highchart/highcharts.js") ?>"></script>
 <script src="<?php echo base_url("assets/vendors/highchart/highcharts-3d.js") ?>"></script>
 <script src="<?php echo base_url("assets/landing/js/custom.js") ?>"></script>
+<script src="<?php echo base_url("assets/landing/js/home.js") ?>"></script>
 
 </body>
 </html>
