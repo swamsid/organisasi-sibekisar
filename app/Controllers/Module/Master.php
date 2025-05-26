@@ -44,7 +44,7 @@ class Master extends BaseController
 
     function simpan_unit(){
         $data = $_REQUEST;
-        // return json_encode('okee');
+        // return json_encode($data);
         $data['is_aktif'] = (isset($_REQUEST['is_aktif'])?$_REQUEST['is_aktif']:0);
         $data['unit'] = str_replace("'", "`",$data['unit']);
 
@@ -58,21 +58,23 @@ class Master extends BaseController
 
         $where= array("id_unit"=>$data['id_unit']);
         $data_ = array(
-            "unit"          =>$data['unit'],"nama_unit"=>$data['unit'],
-            "pejabat"       =>$data['pejabat'],
-            "alamat"        =>$data['alamat'],
-            "telp"          =>$data['telp'],
-            "website"       =>$data['website'],
-            "kategori_unit" =>$data['kategori_unit'],
-            "jumlah_bidang" =>$data['jumlah_bidang'],
-            "jumlah_upt"    =>$data['jumlah_upt'],
-            "jumlah_anggaran"=>$data['jumlah_anggaran'],
-            "jumlah_sdm"=>$data['jumlah_sdm'],
-            "email"=>$data['email'],
-            "is_aktif"=>$data['is_aktif'],
-            "medsos_fb"=>$data['medsos_fb'],
-            "medsos_ig"=>$data['medsos_ig'],
-            "medsos_twitter"=>$data['medsos_twitter']
+            "Kode_unit"         =>$data['kode_unit'],
+            "unit"              =>$data['unit'],
+            "nama_unit"         =>$data['unit'],
+            "pejabat"           =>$data['pejabat'],
+            "alamat"            =>$data['alamat'],
+            "telp"              =>$data['telp'],
+            "website"           =>$data['website'],
+            "kategori_unit"     =>$data['kategori_unit'],
+            "jumlah_bidang"     =>$data['jumlah_bidang'],
+            "jumlah_upt"        =>$data['jumlah_upt'],
+            "jumlah_anggaran"   =>$data['jumlah_anggaran'],
+            "jumlah_sdm"        =>$data['jumlah_sdm'],
+            "email"             =>$data['email'],
+            "is_aktif"          =>$data['is_aktif'],
+            "medsos_fb"         =>$data['medsos_fb'],
+            "medsos_ig"         =>$data['medsos_ig'],
+            "medsos_twitter"    =>$data['medsos_twitter']
         );
 
         if($data['foto_pejabat'] != '0') { 
@@ -80,7 +82,7 @@ class Master extends BaseController
         }
         
         if(isset($data['id_unit']) && !empty($data['id_unit'])) $result = $this->mastermodel->updateMUnit($data_,$where);
-        else $result = $this->mastermodel->insertMUnit($data);
+        else $result = $this->mastermodel->insertMUnit($data_);
 
 
         if ($result) echo json_encode($this->success);
