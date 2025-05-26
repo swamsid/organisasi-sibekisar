@@ -9,13 +9,8 @@ use App\Models\MasterModel;
 
 class Api extends BaseController
 {
-    public function __construct(){
-        $this->session = \Config\Services::session();
-        if(!isset($_SESSION['user']) || empty($_SESSION['user'])) {
-            header('Location: '.base_url('auth'));
-            exit();
-        }
 
+    public function __construct(){
         $this->mastermodel = new MasterModel();
         $this->apimodel = new ApiModel();
 
@@ -23,6 +18,14 @@ class Api extends BaseController
         $this->success = array('message' => 'Proses simpan berhasil', 'type' => 'success', 'status' => 'ok');
         $this->delete = array('message' => 'Hapus data berhasil', 'type' => 'success', 'status' => 'ok');
         $this->failed = array('message' => 'Proses simpan gagal', 'type' => 'error', 'status' => false);
+    }
+
+    public function authOnly(){
+        $this->session = \Config\Services::session();
+        if(!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+            header('Location: '.base_url('auth'));
+            exit();
+        }
     }
 
     public function index(){
@@ -34,6 +37,8 @@ class Api extends BaseController
 
     // API realisasi anggaran
         public function anggaran(){
+            $this->authOnly();
+            
             $data['user'] = $_SESSION['user'];
             $this->addScript("assets/js/apps/api/anggaran.js");
 
@@ -41,6 +46,8 @@ class Api extends BaseController
         }
 
         public function getAnggaran(){
+            $this->authOnly();
+            
             $tahun  = $_GET['tahun'];
             $awal   = '';
             $akhir  = '';
@@ -89,6 +96,31 @@ class Api extends BaseController
                 'status'    => 'ok',
                 'data'      => $response
             ]); return;
+        }
+
+        public function getLastIndikator(){
+            $request            = $_REQUEST;
+            $lastId             = $this->mastermodel->getIdPeriode();
+            $param['tag']       = $request['tag'];
+            $param['periode']   = ($lastId && $lastId->id_periode) ? $lastId->id_periode : null;
+            $data['indikator']  = $this->mastermodel->findMIndikator($param);
+            $data['aspek']      = [];
+            
+            foreach($data['indikator'] as $key => $indikator){
+                $keyExist = array_search($indikator->id_aspek, array_column($data['aspek'], 'id_aspek'));
+    
+                if($keyExist === false){
+                    array_push($data['aspek'], [
+                        'id_aspek'  => $indikator->id_aspek,
+                        'aspek'     => $indikator->aspek,
+                        'icon'      => $indikator->icon
+                    ]);
+                }
+            }
+    
+            return $this->response->setJSON(json_encode(array(
+                "data" => $data
+            )));
         }
 
     // end api

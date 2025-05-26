@@ -17,6 +17,10 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/landing/css/font-awesome.css") ?>">
     <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/main.css") ?>">
     <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/owl-carousel.css") ?>">
+    
+    <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/custom.css") ?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/vendors/simple-line-icons/css/simple-line-icons.css") ?>">
+    
     <link rel="shortcut icon" href="<?php echo base_url("assets/images/favicon.ico") ?>">
     <script>
         base_url = "<?php echo base_url(); ?>";
@@ -26,7 +30,7 @@
         #layout{
             position: fixed;
             width: 100%;
-            height: 100%;
+            height: 1000px;
             background: rgba(0,0,0,0.8);
             z-index: 999;
             text-align: center;
@@ -91,9 +95,12 @@
                 <div class="left-text col-lg-6 col-md-12 col-sm-12 col-xs-12"
                      data-scroll-reveal="enter left move 30px over 0.6s after 0.4s" style="left: 55px!important;">
                     <h1 class="heading">Sistem Integrasi Bersama Kinerja Implementasi Budaya CETTAR <em>(SIBEKISAR)</em></h1>
-                    <p>Sistem yang menilai kinerja Perangkat Daerah sebagai upaya untuk menguatkan kinerja dengan berbasis aplikasi yang digunakan dengan tetap mengedepankan slogan CETTAR.
+                    <p style="line-height: normal">Sistem yang menilai kinerja Perangkat Daerah sebagai upaya untuk menguatkan kinerja dengan berbasis aplikasi yang digunakan dengan tetap mengedepankan slogan CETTAR.
                     </p>
-                    <a href="#about" class="main-button-slider">KNOW US BETTER</a>
+                    <a href="<?php echo base_url("read/tentang") ?>" class="main-button-slider">
+                        Selengkapnya &nbsp;
+                        <i class="fa fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -101,8 +108,6 @@
     <!-- ***** Header Text End ***** -->
 </div>
 <!-- ***** Welcome Area End ***** -->
-
-<div class="left-image-decor"></div>
 
 <!-- ***** Features Big Item Start ***** -->
 <section class="section" id="promotion">
@@ -189,7 +194,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-12 col-md-12 col-sm-12"  style="top:0px !important; padding: 0px 5px; margin-bottom: 50px;">
+            <div class="col-lg-12 col-md-12 col-sm-12"  style="top:0px !important; padding: 0px 5px; margin-bottom: 0px;">
                 <div style="padding: 20px; background: white; box-shadow: 0px 0px 10px #ccc; border-radius: 10px;">
                     <div style="text-align: center; font-weight: bold; margin-bottom: 10px; padding-bottom: 20px; border-bottom: 2px dashed #f0f0f0;">
                         <table width="100%">
@@ -218,7 +223,7 @@
             </div>
         </div>
 
-        <div class="row mobile-bottom-fix" style="padding-top:20px!important">
+        <!-- <div class="row mobile-bottom-fix" style="padding-top:20px!important">
             <?php 
                 $keys   = 0;
                 $icons  = [
@@ -342,7 +347,7 @@
                     </div>
                 </div>
             <?php $keys++; } ?>
-        </div>
+        </div> -->
 
     </div>
 </section>

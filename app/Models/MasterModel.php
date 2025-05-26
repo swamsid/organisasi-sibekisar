@@ -211,7 +211,7 @@ class MasterModel extends Model
 
     function findMIndikator($data =null){
         $builder = $this->db->table('m_indikator');
-        $builder->select('m_aspek.aspek, m_aspek.tag, 
+        $builder->select('m_aspek.aspek, m_aspek.tag, m_aspek.icon,
         m_aspek.nilai_maks,m_aspek.icon, m_indikator.*, mid(md5(m_indikator.id_indikator),9,6) as id_indikator_hash');
         $builder->join('m_aspek', 'm_aspek.id_aspek = m_indikator.id_aspek');
         $builder->where('m_indikator.is_aktif <> 3');

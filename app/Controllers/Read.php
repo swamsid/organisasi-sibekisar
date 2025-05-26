@@ -24,7 +24,7 @@ class Read extends BaseController
     function opd($param=null){ 
 
         $data['kategori_unit'] = 'opd';
-        $data['label']         = 'Perangkat Daerah/UOBK';
+        $data['label']         = 'Perangkat Daerah';
         $data['tag']           = 'opd';
         $data['dataPeriode']   = $this->mastermodel->getPeriode();
 
@@ -230,7 +230,7 @@ class Read extends BaseController
     function uobk($param=null){ 
 
         $data['kategori_unit'] = 'uobk';
-        $data['label']         = 'Perangkat Daerah/UOBK';
+        $data['label']         = 'UOBK';
         $data['tag']           = 'uobk';
         $data['dataPeriode']   = $this->mastermodel->getPeriode();
 
@@ -285,14 +285,31 @@ class Read extends BaseController
         $data['tahun']   = $_GET['t'];
         $data['periode'] = $_GET['p'];
         $data['dataPeriode'] = $this->mastermodel->getPeriode();
-
-        // return json_encode($data['page']);
-
-        //if($data['kategori']=='spirit') $this->addScript("assets/landing/js/detail.js");
-        //else $this->addScript("assets/landing/js/detail_aspek.js");
-
-        // return json_encode($data['indikator']);
         return view('detail', $data);
+    }
+
+    function indikator($tag=null){
+
+        // return json_encode($params);
+        
+        $param['periode']       = ($_GET && $_GET['t']) ? $_GET['t'] : (date('Y') - 1) ;
+        $param['tag']           = isset($tag) && $tag ? $tag : 'opd';
+        $param['kategori_unit'] = $param['tag'];
+
+        $data['indikator']      = $this->mastermodel->findMIndikator($param);
+
+        $data['unit'] = $this->mastermodel->findMUnit($param);
+        $data['label']=((isset($tag) && $tag=='kab')?'Kabupaten/Kota':'Perangkat Daerah/UOBK');
+        $data['tag'] = $param['tag'];
+        
+        $data['tahun']   = $_GET['t'];
+        $data['periode'] = $_GET['p'];
+        $data['idIndikator'] = $_GET['ids'];
+        $data['dataPeriode'] = $this->mastermodel->getPeriode();
+
+        // return json_encode($data['unit']);
+
+        return view('detail/indikator', $data);
     }
 
     public function is_decimal( $val )

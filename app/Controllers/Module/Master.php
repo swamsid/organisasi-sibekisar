@@ -8,10 +8,12 @@ class Master extends BaseController
 {
     public function __construct(){
         $this->session = \Config\Services::session();
+        
         if(!isset($_SESSION['user']) || empty($_SESSION['user'])) {
             header('Location: '.base_url('auth'));
             exit();
         }
+
         $this->mastermodel = new MasterModel();
 
         $this->success = array('message' => 'Proses simpan berhasil', 'type' => 'success', 'status' => 'ok');
@@ -106,6 +108,31 @@ class Master extends BaseController
         return $this->response->setJSON(json_encode(array(
             "iTotalRecords" => $count,
             "aaData" => $data
+        )));
+    }
+
+    public function getLastIndikator(){
+        $request            = $_REQUEST;
+        $lastId             = $this->mastermodel->getIdPeriode();
+        $param['tag']       = $request['tag'];
+        $param['periode']   = ($lastId && $lastId->id_periode) ? $lastId->id_periode : null;
+        $data['indikator']  = $this->mastermodel->findMIndikator($param);
+        $data['aspek']      = [];
+        
+        foreach($data['indikator'] as $key => $indikator){
+            $keyExist = array_search($indikator->id_aspek, array_column($data['aspek'], 'id_aspek'));
+
+            if($keyExist === false){
+                array_push($data['aspek'], [
+                    'id_aspek'  => $indikator->id_aspek,
+                    'aspek'     => $indikator->aspek,
+                    'icon'      => $indikator->icon
+                ]);
+            }
+        }
+
+        return $this->response->setJSON(json_encode(array(
+            "data" => $data
         )));
     }
 

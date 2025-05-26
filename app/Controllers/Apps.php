@@ -511,8 +511,10 @@ class Apps extends BaseController
         //     ) 
         // ));
 
+        $cek = str_replace(' ', '_', str_replace(',', '_', $unitGet[0]->unit));
+        
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        header("Content-Disposition: attachment; filename=Raport_sibekisar_".$unitGet[0]->unit."_".$dataTahunTable->tahun_periode.".xls");
+        header("Content-Disposition: attachment; filename=Raport_sibekisar_".$cek."_".$dataTahunTable->tahun_periode.".xls");
         header("Content-Transfer-Encoding: BINARY");
 
         return $html;

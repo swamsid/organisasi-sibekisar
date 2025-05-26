@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/main.css") ?>">
     <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/owl-carousel.css") ?>">
     <link rel="shortcut icon" href="<?php echo base_url("assets/images/favicon.ico") ?>">
+
+    <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/custom.css") ?>">
     <script>
         base_url = "<?php echo base_url(); ?>";
     </script>

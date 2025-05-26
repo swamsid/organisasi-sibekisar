@@ -2,7 +2,6 @@
 
 	"use strict";
 
-
 	$('.owl-carousel').owlCarousel({
 		loop: true,
 		margin: 30,
@@ -76,6 +75,11 @@
 	$(document).ready(function () {
 		$('a[href^="#welcome"]').addClass('active');
 
+		$(window).click(function() {
+			$('#nav-indikator').parent().removeClass('active');
+			$('#sub-menu').fadeOut(200);
+		});
+
 		//smoothscroll
 		$('.menu-item').on('click', function (e) {
 			e.preventDefault();
@@ -112,6 +116,71 @@
 				}
 			});
 		})
+
+		$('#nav-indikator').click(function(e){
+			if(e){
+				e.preventDefault();
+				e.stopImmediatePropagation();
+			}
+	
+			const konteks = $(this);
+			const li      = konteks.parent();
+	
+			if(li.hasClass('active')){
+				li.removeClass('active');
+				$('#sub-menu').fadeOut(200);
+			}else{
+				$('#sub-menu .konteks-indikator').html($('#template-loading').html())
+	
+				li.addClass('active');
+				$('#sub-menu').fadeIn(300);
+				getIndikator(base_url + "/module/Api/getLastIndikator", { tag: 'opd' });
+			}
+		})
+	
+		function getIndikator(url, params){ 
+			let html = '';
+	
+			$.get(url, params).done(function(response){
+				if(response && response.data.indikator && response.data.indikator.length > 0){
+					response.data.aspek.forEach((aspek, index) => {
+						html += `
+							<div class="indikator aspek">
+								<div class="indikator-icon">
+									<i class="${aspek.icon} menu-icon" style="font-size: 12pt; color: #008056;"></i>
+								</div>
+								<div class="indikator-content">
+									<div class="indikator-title">
+										${aspek.aspek}
+									</div>
+								</div>
+							</div>
+						`;
+	
+						const indikatorAspek = response.data.indikator.filter((z) => { return z.id_aspek == aspek.id_aspek });
+	
+						indikatorAspek.forEach((indikator, beta) => {
+							html += `
+								<div class="indikator">
+									<div class="indikator-icon">
+										<i class="fa fa-tasks" style="font-size: 10pt; color: #ccc;"></i>
+									</div>
+									<div class="indikator-content">
+										<div class="indikator-title">
+											${indikator.indikator}
+										</div>
+									</div>
+								</div>
+							`
+						})
+					})
+				}
+			});
+	
+			setTimeout(() => {
+				$('#sub-menu .konteks-indikator').html(html)
+			}, 1000);
+		} 
 	});
 
 	const Accordion = {
@@ -189,13 +258,10 @@
 		}
 	})();
 
-
-
 	// Home seperator
 	if ($('.home-seperator').length) {
 		$('.home-seperator .left-item, .home-seperator .right-item').imgfix();
 	}
-
 
 	// Home number counterup
 	if ($('.count-item').length) {
@@ -204,7 +270,6 @@
 			time: 1000
 		});
 	}
-
 
 	// Page loading animation
 	$(window).on('load', function () {
@@ -224,12 +289,10 @@
 		});
 	});
 
-
 	// Window Resize Mobile Menu Fix
 	$(window).on('resize', function () {
 		mobileNav();
 	});
-
 
 	// Window Resize Mobile Menu Fix
 	function mobileNav() {
