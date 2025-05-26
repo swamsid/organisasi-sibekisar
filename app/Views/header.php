@@ -28,7 +28,7 @@
                         <li class="scroll-to-section"><a href="<?php echo base_url('read/kab') ?>" >Kab/Kota</a></li>
                         <!-- <li class="scroll-to-section"><a href="#" id="nav-indikator">Indikator</a></li> -->
 
-                        <li class="scroll-to-section" style="border-right: 2px solid #eee; padding-right: 20px;">
+                        <li class="scroll-to-section" style="border-left: 2px solid #eee; padding-left: 20px;">
                             <a href="<?php echo base_url('auth') ?>" >Login</a>
                         </li>
                         <li class="scroll-to-section">
