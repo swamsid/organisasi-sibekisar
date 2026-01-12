@@ -776,8 +776,7 @@ class Apps extends BaseController
                 $result = $this->evaluasimodel->insertData($dataKomponen);
             }
             if ($result && $i == count($_POST['id_unit'], 1)) {
-                $this->evaluasimodel->call_sp_aspek();
-                $b = $this->evaluasimodel->call_sp_spirit();
+                $b = $this->evaluasimodel->call_sp_aspek();
                 if ($b && $i == count($_POST['id_unit'], 1)) echo json_encode($this->success);
                 exit;
             }
@@ -789,24 +788,22 @@ class Apps extends BaseController
         if (empty($_POST)) echo json_encode($this->failed);
 
         $cek = $_POST['catatan_indikator'];
-        // return json_encode($cek);
 
         if (!empty($_POST['id_indikator'])) {
             $id_indikator = $_POST['id_indikator'];
             $fzeropadded = sprintf("%04d", $_POST['id_unit']);
             $id_evaluasi = $_POST['tahun'] . $fzeropadded . '_' . $id_indikator;
 
-            $nilai = (float) str_replace(',', '.', $_POST['nilai_konversi']);
-            $bobot = (float) ($_POST['bobot'] / 100);
+            $nilai      = (float) str_replace(',', '.', $_POST['nilai_konversi']);
+            $nilaimax   = (float) str_replace(',', '.', $_POST['nilai_maks']);
+            $bobot      = (float) ($_POST['bobot']);
 
-            $nilai_akhir = ($nilai * $bobot);
-            // return json_encode($nilai);
+            $nilai_akhir = ($nilai/$nilaimax) * $bobot;
 
             $dataKomponen = array(
                 'id_indikator'          => $id_indikator,
                 'id_evaluasi'           => $id_evaluasi,
-                'nilai_awal'            => $_POST['nilai_awal'],
-                'nilai_konversi'        => $nilai,
+                'nilai_input'           => $nilai,
                 'nilai_akhir'           => $nilai_akhir,
                 'bobot'                 => $bobot,
                 'nilai_maks'            => $_POST['nilai_maks'],

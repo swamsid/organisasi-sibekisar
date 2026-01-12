@@ -333,7 +333,7 @@ class EvaluasiModel extends Model
 
         $builder->orderBy('vw_rekap_by_aspek.total_nilai', 'DESC');
         $builder->orderBy('vw_rekap_by_spirit.nilai', 'DESC');
-        $builder->orderBy('vw_rekap_by_aspek.nilai_akhir', 'DESC');
+        $builder->orderBy('vw_rekap_by_aspek.total_nilai', 'DESC');
         
         if (isset($data['limit']) && !empty($data['limit'])) {
             $builder->limit($data['limit']);
@@ -352,7 +352,7 @@ class EvaluasiModel extends Model
             vw_rekap_by_spirit.nilai_huruf,
             vw_rekap_by_spirit.predikat,
             vw_rekap_by_aspek.aspek,
-            vw_rekap_by_aspek.nilai_akhir,
+            vw_rekap_by_aspek.total_nilai,
             vw_rekap_by_aspek.nilai_maks,
             vw_rekap_by_aspek.total_nilai,
             m_indikator.id_aspek,
@@ -397,12 +397,14 @@ class EvaluasiModel extends Model
         $builder->where('m_indikator.tag', $tags);
         $builder->where('m_indikator.is_aktif', '1');
         $builder->join('m_aspek', 'm_aspek.id_aspek = m_indikator.id_aspek');
+        $builder->join('m_periode', 'm_periode.id_periode = m_indikator.periode');
         $builder->join('vw_rekap_by_aspek', 'm_aspek.id_aspek = vw_rekap_by_aspek.id_aspek and vw_rekap_by_aspek.tahun = "'.$data['tahun'].'" and vw_rekap_by_aspek.id_unit = '.$data['id_unit'], 'left');
         $builder->join('vw_rekap_by_spirit', 'vw_rekap_by_spirit.tahun = "'.$data['tahun'].'" and vw_rekap_by_spirit.id_unit = '.$data['id_unit'], 'left');
         $builder->join('evaluasi', 'evaluasi.id_indikator = m_indikator.id_indikator and evaluasi.tahun = "'.$data['tahun'].'" and evaluasi.id_unit = '.$data['id_unit'], 'left');
         $builder->select('
             m_aspek.aspek,
-            coalesce(vw_rekap_by_aspek.nilai_akhir, 0) as nilai_akhir,
+            m_periode.status_periode,
+            coalesce(vw_rekap_by_aspek.total_nilai, 0) as nilai_akhir,
             coalesce(vw_rekap_by_aspek.nilai_maks, 0) as nilai_maks,
             coalesce(vw_rekap_by_aspek.total_nilai, 0) as total_nilai,
             vw_rekap_by_spirit.id_unit,
@@ -421,7 +423,10 @@ class EvaluasiModel extends Model
             coalesce(evaluasi.nilai_awal, 0) as nilai_awal,
             coalesce(evaluasi.nilai_konversi, 0) as nilai_konversi,
             evaluasi.catatan_indikator,
-            evaluasi.rekomendasi_indikator
+            evaluasi.rekomendasi_indikator,
+            evaluasi.timestamp,
+            DATE_FORMAT(evaluasi.timestamp, "%d/%c/%Y") as date,
+            DATE_FORMAT(evaluasi.timestamp, "%H:%i") as time
         ');
         
         $builder->groupBy('m_indikator.id_indikator');

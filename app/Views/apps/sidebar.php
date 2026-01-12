@@ -79,7 +79,7 @@
                 <i class="icon-paper-clip menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item nav-category"><span class="nav-link">REKAP</span></li>
+        <!-- <li class="nav-item nav-category"><span class="nav-link">REKAP</span></li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#page-layouts" aria-expanded="false" aria-controls="page-layouts">
                 <span class="menu-title">Rangking PD</span>
@@ -89,7 +89,7 @@
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('apps/rangking/cettar') ?>">Dalam CETTAR</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('apps/rangking/spirit') ?>">Dalam Spirit</a></li>
-                    <!--<li class="nav-item"> <a class="nav-link" href="<?php //echo base_url('apps/rangking/indikator') ?>">Berdasarkan Indikator</a></li>-->
+                    <li class="nav-item"> <a class="nav-link" href="<?php //echo base_url('apps/rangking/indikator') ?>">Berdasarkan Indikator</a></li>
                 </ul>
             </div>
         </li>
@@ -102,10 +102,10 @@
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('apps/rangking/cettar/kab') ?>">Dalam CETTAR</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('apps/rangking/spirit/kab') ?>">Dalam Spirit</a></li>
-                    <!--<li class="nav-item"> <a class="nav-link" href="<?php //echo base_url('apps/rangking/indikator') ?>">Berdasarkan Indikator</a></li>-->
+                    <li class="nav-item"> <a class="nav-link" href="<?php //echo base_url('apps/rangking/indikator') ?>">Berdasarkan Indikator</a></li>
                 </ul>
             </div>
-        </li>
+        </li> -->
 
 
           <?php
@@ -195,12 +195,12 @@
             </a>
         </li>
     <?php } ?>
-        <li class="nav-item nav-category"><span class="nav-link">Help</span></li>
+        <!-- <li class="nav-item nav-category"><span class="nav-link">Help</span></li>
         <li class="nav-item">
             <a class="nav-link" href="#" target="_blank">
             <span class="menu-title">Documentation</span>
             <i class="icon-folder-alt menu-icon"></i>
             </a>
-        </li>
+        </li> -->
     </ul>
 </nav>

@@ -16,26 +16,28 @@
                     <!-- aaa -->
                     <!-- ***** Logo Start ***** -->
                     <a class="logo" href="<?php  echo base_url('home') ?>">
-                        <img src="<?php echo base_url("assets/images/logo-sibekisar.png") ?>" alt="logo" style="width: 180px" />
+                        <img src="<?php echo base_url("assets/images/logo-provinsi.png") ?>" alt="logo" style="width: 35px" />
+                        <img src="<?php echo base_url("assets/images/gerbang-baru.png") ?>" alt="logo" style="width: 120px" />
+                        <img src="<?php echo base_url("assets/images/logo-sibekisar.png") ?>" alt="logo" style="width: 100px" />
                     </a>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
+                    <ul class="nav" style="margin-left: 0px">
                         <li class="scroll-to-section"><a href="<?php  echo base_url('home') ?>" >Home</a></li>
                         <!-- <li class="scroll-to-section"><a href="" >Tentang</a></li> -->
                         <li class="scroll-to-section"><a href="<?php echo base_url('read/opd') ?>" >Perangkat Daerah</a></li>
                         <li class="scroll-to-section"><a href="<?php echo base_url('read/uobk') ?>" >UOBK</a></li>
-                        <li class="scroll-to-section"><a href="<?php echo base_url('read/kab') ?>" >Kab/Kota</a></li>
-                        <!-- <li class="scroll-to-section"><a href="#" id="nav-indikator">Indikator</a></li> -->
+                        <!-- <li class="scroll-to-section" style="border-right: 2px solid #eee; padding-right: 20px;"><a href="<?php echo base_url('read/kab') ?>" >Kab/Kota</a></li> -->
+                        <!-- <li class="scroll-to-section" style="border-right: 2px solid #eee; padding-right: 20px;"><a href="#" id="nav-indikator">Indikator</a></li> -->
 
-                        <li class="scroll-to-section" style="border-left: 2px solid #eee; padding-left: 20px;">
-                            <a href="<?php echo base_url('auth') ?>" >Login</a>
-                        </li>
                         <li class="scroll-to-section">
+                            <a href="<?php echo base_url('auth') ?>" >Login Pengampu</a>
+                        </li>
+                        <!-- <li class="scroll-to-section">
                             <a href="http://berakhlak.jatimprov.go.id" target="_blank" style="color: var(--danger); font-weight: bold;">
                                 Berakhlak &nbsp;<i class="fa fa-caret-right"></i>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                     
                     <a class='menu-trigger'>
@@ -48,10 +50,10 @@
             <!-- <div class="col-md-6 offset-6" style="position: relative;">
                 <div class="sub-menu" id="sub-menu">
                     <div class="konteks-title">
-                        <div class="title active">
-                            Perangkat Daerah
+                        <div class="title active" data-flag="OPD">
+                            OPD/UOBK
                         </div>
-                        <div class="title">
+                        <div class="title" data-flag="kab">
                             Kabupaten/Kota
                         </div>
                     </div>
@@ -64,10 +66,10 @@
                         
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
 
-        <div id="template-loading" style="display: none;">
+        <!-- <div id="template-loading" style="display: none;">
             <div class="loading">
                 <img src="<?php echo base_url("assets/images/loading.svg") ?>" alt="logo" style="width: 20%"/>
                 <div style="color: #aaa;">

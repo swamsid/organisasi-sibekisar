@@ -63,6 +63,7 @@ class Master extends BaseController
             "nama_unit"         =>$data['unit'],
             "pejabat"           =>$data['pejabat'],
             "alamat"            =>$data['alamat'],
+            "fax"               =>$data['fax'],
             "telp"              =>$data['telp'],
             "website"           =>$data['website'],
             "kategori_unit"     =>$data['kategori_unit'],

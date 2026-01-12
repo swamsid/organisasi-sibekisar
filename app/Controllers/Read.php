@@ -263,29 +263,36 @@ class Read extends BaseController
     }
 
     function detail($params=null, $tag=null){
-
-        // return json_encode($params);
         
         $data['param']          = empty($params) ? 'spirit' : $params;
-        
+
         $param['periode']       = ($_GET && $_GET['t']) ? $_GET['t'] : (date('Y') - 1) ;
         $param['tag']           = isset($tag) && $tag ? $tag : 'opd';
         $param['kategori_unit'] = $param['tag'];
 
+        $data['tahun']   = $_GET['t'];
+        $data['periode'] = $_GET['p'];
+        $data['dataPeriode'] = $this->mastermodel->getPeriode();        
+
         $data['indikator']      = $this->mastermodel->findMIndikator($param);
 
         $data['unit'] = $this->mastermodel->findMUnit($param);
-        $data['label']=((isset($tag) && $tag=='kab')?'Kabupaten/Kota':'Perangkat Daerah/UOBK');
         $data['tag'] = $param['tag'];
+        
+        if($tag == 'kab')
+            $data['label'] = 'Kabupaten/Kota';
+        else if($tag == 'opd')
+            $data['label'] = 'Perangkat Daerah';
+        else if($tag == 'uobk')
+            $data['label'] = 'UOBK';
 
-        if($params != 'spirit'){
-            $data['idaspek'] = $_GET['ids'];
+        if($params == 'indikator'){
+            // $data['id_indikator'] = $_GET['ids'];
+            return view('detail_indikator', $data);
+        }else{
+            return view('detail', $data);
         }
         
-        $data['tahun']   = $_GET['t'];
-        $data['periode'] = $_GET['p'];
-        $data['dataPeriode'] = $this->mastermodel->getPeriode();
-        return view('detail', $data);
     }
 
     function indikator($tag=null){

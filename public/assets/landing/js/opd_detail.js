@@ -19,32 +19,53 @@ $(document).ready(function () {
             tag     : $('#tag').val()
         };
 
+        const month = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
         var tahun=$("#tahun").val();
         var predikat='';
         var req = $.post(url, param).done(function (data) {
+            const periode = (data.length > 0) ? data[0].status_periode : null;
+            let t = '';
 
-            var t = `<table class="table" id="tb-rekap-spirit" width="100%">
-                        <thead style="color: #038558; background: #f5f5f5;">
-                            <tr>
-                                <th width="1%" rowspan="2" style="display:none;"></th>
-                                <th width="12%" rowspan="2" style="vertical-align: middle; border-top-left-radius: 15px;">Spirit</th>
-                                <th width="8%" rowspan="2" style="vertical-align: middle;">Bobot</th>
-                                <th width="8%" rowspan="2" style="vertical-align: middle;">Nilai</th>
-                                <th width="24%" rowspan="2" style="vertical-align: middle;">Indikator Penilaian</th>
-                                <th width="8%" rowspan="2" style="vertical-align: middle;">Bobot</th>
-                                <th width="8%" colspan="3" style="text-align: center;">Nilai Indikator</th>
-                                <th width="11%" rowspan="2" style="vertical-align: middle; border-top-right-radius: 15px;"">Pengampu</th>
-                            </tr>
-
-                            <tr>
-                                <th width="8%">Awal</th>
-                                <th width="8%">Konversi</th>
-                                <th width="8%">Akhir</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
+            if(periode !== null){
+                if(periode == 'lock'){
+                    t += `
+                        <div style="background: var(--success); color: white; padding: 10px 20px; font-size: 10pt; border-radius: 10px; margin-bottom: 20px;">
+                            <b>Evaluasi telah selesai dilakukan</b> ! Nilai yang tertampil di bawah ini adalah nilai final.
+                        </div>
                     `;
+                }else{
+                    t += `
+                        <div style="background: var(--primary); color: white; padding: 10px 20px; font-size: 10pt; border-radius: 10px; margin-bottom: 20px;">
+                            <b class="blink">Evaluasi Sedang Berlangsung</b> ! Nilai yang tertampil di bawah ini masih dapat berubah sesuai dengan masukkan evaluator.
+                        </div>
+                    `;
+                }
+            }
+
+            t += `<table class="table" id="tb-rekap-spirit" width="100%">
+                    <thead style="color: #038558; background: #f5f5f5;">
+                        <tr>
+                            <th width="1%" rowspan="2" style="display:none;"></th>
+                            <th width="12%" rowspan="2" style="vertical-align: middle; border-top-left-radius: 15px;">Spirit</th>
+                            <th width="8%" rowspan="2" style="vertical-align: middle;">Bobot</th>
+                            <th width="8%" rowspan="2" style="vertical-align: middle;">Nilai</th>
+                            <th width="24%" rowspan="2" style="vertical-align: middle;">Indikator Penilaian</th>
+                            <th width="8%" rowspan="2" style="vertical-align: middle;">Bobot</th>
+                            <th width="8%" colspan="3" style="text-align: center;">Nilai Indikator</th>
+                            <th width="11%" rowspan="2" style="vertical-align: middle; border-top-right-radius: 15px;"">Pengampu</th>
+                        </tr>
+
+                        <tr>
+                            <th width="8%">Awal</th>
+                            <th width="8%">Konversi</th>
+                            <th width="8%">Akhir</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                `;
+
             var n = 0;
             var skor_total=0;
             var nilai_huruf='';
@@ -53,6 +74,7 @@ $(document).ready(function () {
             $.each(data, function (key, value) {
                 // console.log(data);
 
+                const date          = (value.date !== null) ? value.date.split('/') : null ;
                 let nilaiAwal       = Number(value.nilai_awal.replace(',', '.'));
                 let nilaiKonversi   = Number(value.nilai_konversi.replace(',', '.'));
                 let nilaiAspek      = Number(value.nilai_aspek.replace(',', '.'));
@@ -60,6 +82,7 @@ $(document).ready(function () {
                 let nilaiAwalPrint      = (nilaiAwal % 1 > 0) ? nilaiAwal.toFixed(1) : nilaiAwal.toFixed(0);
                 let nilaiKonversiPrint  = (nilaiKonversi % 1 > 0) ? nilaiKonversi.toFixed(1) : nilaiKonversi.toFixed(0);
                 let nilaiAspekPrint     = (nilaiAspek % 1 > 0) ? nilaiAspek.toFixed(1) : nilaiAspek.toFixed(0);
+                let cq                  = (value.keterangan) ? value.keterangan.split('c.q') : value.opd_pengampu;
 
                 n++;
                 t += `<tr>
@@ -67,12 +90,18 @@ $(document).ready(function () {
                         <td>${ (value.aspek != null) ? value.aspek.toUpperCase() : '-'}</td>
                         <td align="center">${value.bobot}</td>
                         <td align="center" class="text-bold text-black"><b>${ value.total_nilai }</b></td>
-                        <td>${ value.indikator} </td>
+                        <td style="position: relative; padding-bottom: 40px;">
+                            ${ value.indikator}
+                            <br/>
+                            <span style="font-size: 8pt; position: absolute; bottom: 8px; color: #888;">
+                                Update terakhir ${ (date !== null && date.length > 0) ? date[0]+" "+month[date[1] - 1]+" "+date[2] : '--' }, ${value.time} WIB
+                            </span> 
+                        </td>
                         <td align="center">${ parseFloat(value.bobot_aspek) }</td>
                         <td align="center" ><b>${ nilaiAwalPrint }</b></td>
                         <td align="center" ><b>${ nilaiKonversiPrint }</b></td>
                         <td align="center" ><b>${ nilaiAspekPrint}</b></td>
-                        <td>${ (!value.keterangan) ? value.opd_pengampu.toUpperCase() : value.keterangan.toUpperCase() }</td>
+                        <td>${ (cq.length > 1) ? cq[0].toUpperCase()+' <br>c.q<br> '+cq[1].toUpperCase() : cq[0].toUpperCase() }</td>
                     `;
 
                 if(n==1){

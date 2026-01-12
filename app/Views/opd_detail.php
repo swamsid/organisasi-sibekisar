@@ -14,6 +14,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/landing/css/font-awesome.css") ?>">
     <link rel="stylesheet" href="<?php echo base_url("assets/vendors/datatables/rg/jquery.dataTables.min.css") ?>">
     <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/main.css") ?>">
+    <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/custom.css") ?>">
     <link rel="stylesheet" href="<?php echo base_url("assets/landing/css/owl-carousel.css") ?>">
     <link rel="shortcut icon" href="<?php echo base_url("assets/images/favicon.ico") ?>">
     <script>
@@ -52,6 +53,16 @@
             width: 70%;
             margin: 0 auto;
             margin-top: 10px;
+        }
+
+        .blink {
+            animation: blinker 1.8s ease-in-out infinite;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0%;
+            }
         }
     </style>
 </head>
@@ -103,7 +114,7 @@
                                     <div class="col-lg-9 col-md-9">
                                         <?php
                                         // echo $unit->kategori_unit;
-                                        if ($unit->kategori_unit == 'opd') {
+                                        if ($unit->kategori_unit == 'opd' || $unit->kategori_unit == 'uobk') {
                                         ?>
                                             <b>Tugas</b> 
                                             <div style="margin-top: 10px;"> 

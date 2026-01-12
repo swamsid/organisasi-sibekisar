@@ -52,8 +52,10 @@ class Evaluasi extends BaseController
     function simpan()
     {
         if (empty($_POST)) echo json_encode($this->failed);
+
         $fzeropadded = sprintf("%04d", $_POST['id_unit']);
         $mulai = sprintf("%02d", $_POST['bulan_mulai']);
+
         if (!empty($_POST['id_indikator'])) {
             $i = 0;
             foreach ($_POST['id_indikator'] as $key) {
@@ -73,9 +75,11 @@ class Evaluasi extends BaseController
                     'timestamp' => date("Y-m-d H:i:s"),
                     'id_user' => $_SESSION['user']->id
                 );
+
                 $result = $this->evaluasimodel->insertData($dataKomponen);
                 $i++;
             }
+
             if($result) echo json_encode($this->success);
         }
        

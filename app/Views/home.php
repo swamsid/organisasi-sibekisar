@@ -93,9 +93,9 @@
         <div class="container">
             <div class="row">
                 <div class="left-text col-lg-6 col-md-12 col-sm-12 col-xs-12"
-                     data-scroll-reveal="enter left move 30px over 0.6s after 0.4s" style="left: 55px!important;">
-                    <h1 class="heading">Sistem Integrasi Bersama Kinerja Implementasi Budaya CETTAR <em>(SIBEKISAR)</em></h1>
-                    <p style="line-height: normal">Sistem yang menilai kinerja Perangkat Daerah sebagai upaya untuk menguatkan kinerja dengan berbasis aplikasi yang digunakan dengan tetap mengedepankan slogan CETTAR.
+                     data-scroll-reveal="enter left move 30px over 0.6s after 0.4s" style="left: 55px!important; padding-top: 50px;">
+                    <h1 class="heading" style="font-size: 24pt;">Selamat Datang di <em style="font-size: 48pt; margin-top: 5px; display: block;">SIBEKISAR</em></h1>
+                    <p style="line-height: normal; font-size: 15pt; padding-top: 0px;">Sistem yang menilai implementasi Reformasi Birokrasi pada Perangkat Daerah Provinsi Jawa Timur. <br><br>&nbsp;
                     </p>
                     <a href="<?php echo base_url("read/tentang") ?>" class="main-button-slider">
                         Selengkapnya &nbsp;
@@ -115,7 +115,7 @@
         <div class="center-heading">
             <div class="row">
                 <div class="col-md-9" style="padding-top: 7px;">
-                    <h3 style="font-weight: 800; font-size: 20pt;">10 Perangkat Daerah, UOBK dan Kab/Kota <span style="font-weight: normal;">Ter</span> <span style="color: #008d5a;">CETTAR</span></h3>
+                    <h3 style="font-weight: 800; font-size: 16pt;">10 Perangkat Daerah, UOBK dan Kab/Kota <span style="font-weight: normal;">dengan nilai</span> <span style="color: #008d5a;">CETTAR</span></h3>
                 </div>
 
                 <div class="col-md-3" style="padding-top: 8px;">
@@ -144,7 +144,8 @@
                         <table width="100%">
                             <tr>
                                 <td width="80%" style="font-size: 20pt; text-align: center;">
-                                    10 Perangkat Daerah <span style="font-weight: normal;">Ter</span> Cettar
+                                    10 Perangkat Daerah 
+                                    <!-- <span style="font-weight: normal;">Ter</span> Cettar -->
                                 </td>
                                 <td width="20%">
                                     <form class="text-right" method="GET" action="<?php echo base_url("read/detail/spirit/opd") ?>">
@@ -171,7 +172,8 @@
                         <table width="100%">
                             <tr>
                                 <td width="80%" style="font-size: 20pt; text-align: center;">
-                                    Unit Organisasi Bersifat Khusus (UOBK) <span style="font-weight: normal;">Ter</span> Cettar
+                                    Unit Organisasi Bersifat Khusus (UOBK) 
+                                    <!-- <span style="font-weight: normal;">Ter</span> Cettar -->
                                 </td>
 
                                 <td width="20%">
@@ -194,13 +196,14 @@
                 </div>
             </div>
 
-            <div class="col-lg-12 col-md-12 col-sm-12"  style="top:0px !important; padding: 0px 5px; margin-bottom: 0px;">
+            <!-- <div class="col-lg-12 col-md-12 col-sm-12"  style="top:0px !important; padding: 0px 5px; margin-bottom: 0px;">
                 <div style="padding: 20px; background: white; box-shadow: 0px 0px 10px #ccc; border-radius: 10px;">
                     <div style="text-align: center; font-weight: bold; margin-bottom: 10px; padding-bottom: 20px; border-bottom: 2px dashed #f0f0f0;">
                         <table width="100%">
                             <tr>
                                 <td width="80%" style="font-size: 20pt; text-align: center;">
-                                    10 Kabupaten/Kota Provinsi Jawa Timur <span style="font-weight: normal;">Ter</span> Cettar
+                                    10 Kabupaten/Kota Provinsi Jawa Timur 
+                                    <span style="font-weight: normal;">Ter</span> Cettar
                                 </td>
 
                                 <td width="20%">
@@ -220,7 +223,7 @@
 
                     <div id="chart-kab"></div>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <!-- <div class="row mobile-bottom-fix" style="padding-top:20px!important">

@@ -1,3 +1,5 @@
+let flag = 'opd';
+
 (function ($) {
 
 	"use strict";
@@ -75,9 +77,12 @@
 	$(document).ready(function () {
 		$('a[href^="#welcome"]').addClass('active');
 
-		$(window).click(function() {
-			$('#nav-indikator').parent().removeClass('active');
-			$('#sub-menu').fadeOut(200);
+		$(window).click(function(e) {
+			if (!document.getElementById('sub-menu').contains(e.target)){
+				$('#nav-indikator').parent().removeClass('active');
+				$('#sub-menu').fadeOut(200);
+			}
+
 		});
 
 		//smoothscroll
@@ -130,16 +135,27 @@
 				li.removeClass('active');
 				$('#sub-menu').fadeOut(200);
 			}else{
-				$('#sub-menu .konteks-indikator').html($('#template-loading').html())
-	
+				
 				li.addClass('active');
 				$('#sub-menu').fadeIn(300);
-				getIndikator(base_url + "/module/Api/getLastIndikator", { tag: 'opd' });
+				getIndikator(base_url + "/module/Api/getLastIndikator", { tag: flag });
 			}
+		})
+
+		$('.title').click(function(e){
+			const konteks 	= $(this);
+			flag 			= konteks.data('flag');
+
+			$('.title').removeClass('active');
+			konteks.addClass('active');
+
+			getIndikator(base_url + "/module/Api/getLastIndikator", { tag: flag });
 		})
 	
 		function getIndikator(url, params){ 
 			let html = '';
+
+			$('#sub-menu .konteks-indikator').html($('#template-loading').html())
 	
 			$.get(url, params).done(function(response){
 				if(response && response.data.indikator && response.data.indikator.length > 0){

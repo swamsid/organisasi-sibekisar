@@ -28,11 +28,20 @@
 
 .sub-menu .konteks-title .title{
     padding: 5px 15px 5px 15px;
+    width: 18vw;
+    text-align: center;
+    cursor: pointer;
 }
 
 .sub-menu .konteks-title .title.active{
     background: #008056;
     color: white;
+    border-radius: 5px;
+}
+
+.sub-menu .konteks-title .title:not(.active):hover{
+    background: #ccc;
+    color: #333;
     border-radius: 5px;
 }
 

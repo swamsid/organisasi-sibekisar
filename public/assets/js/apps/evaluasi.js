@@ -44,16 +44,17 @@ $(document).ready(function () {
     $("#table-data").on("keyup", '.nilai_konversi',function(){
 
         // alert($(this).val().replaceAll(',', '.'));
+        const max = parseFloat($('#nilai_maks').val().replaceAll(',', '.'));
 
-        if(parseFloat($(this).val().replaceAll(',', '.')) > 100 ) {
+        if(parseFloat($(this).val().replaceAll(',', '.')) > max ) {
             $.toast({
                 heading: 'Danger',
-                text: 'Nilai maksimal adalah 100',
+                text: 'Nilai maksimal adalah '+max,
                 icon: 'error',
                 loaderBg: '#f96868',
                 position: 'top-right'
             });
-            $(this).val(100);
+            $(this).val('');
         }else if($(this).val() < 0 ) {
             $.toast({
                 heading: 'Danger',
@@ -155,7 +156,7 @@ $(document).ready(function () {
         $('#layout').show();
 
         $.get(url).done(function (response) {
-            const data = JSON.parse(response) 
+            const data = JSON.parse(response)
 
             data.indikator.forEach((z, index) => { 
                 htmlOption2 +=  `<option value="${z.id_indikator}" data-nmaks="${z.nilai_maks}" data-bobot="${z.bobot}">${z.indikator}</option>`
@@ -338,21 +339,13 @@ $(document).ready(function () {
             let params      = dataJson;
             const lastHTML  = $(`.btn-simpan[data-index="${input.data('index')}"]`).html();
 
-            $(`.btn-simpan[data-index="${input.data('index')}"]`).html('<span style="font-size: 8pt; color: #bbb;">Menyimpan...</span>');
+            // $(`.btn-simpan[data-index="${input.data('index')}"]`).html('<span style="font-size: 8pt; color: #bbb;">Menyimpan...</span>');
             
             $.post(url, params).done(function (response) {
                 var rest = JSON.parse(response);
 
                 if(rest.status == 'ok'){
                     const data = rest.data;
-
-                    // $.toast({
-                    //     // heading: 'success',
-                    //     text: 'Penilaian berhasil disimpan',
-                    //     icon: 'success',
-                    //     loaderBg: '#f96868',
-                    //     position: 'top-right'
-                    // });
 
                     dataNilai[index].nilai_awal             = dataJson.nilai_awal;
                     dataNilai[index].nilai_konversi         = dataJson.nilai_konversi;
@@ -399,7 +392,7 @@ $(document).ready(function () {
                     let html    = '';
                     dataNilai   = data;
 
-                    let type                = (cekStatus() == 'lock') ? 'readonly' : '';
+                    let type = (cekStatus() == 'lock') ? 'readonly' : '';
                     
                     data.forEach((z, alpha) => {
                         let buttonSimpanHTML    =  `
@@ -426,8 +419,6 @@ $(document).ready(function () {
                         if(z.rekomendasi_indikator != '' && z.rekomendasi_indikator != '<br>' && z.rekomendasi_indikator != '<br/>' && z.rekomendasi_indikator != null){
                             btnRekomenasiClass = 'filled'; btnRekomendasiText = 'Perbarui Rekomendasi'
                         }
-
-                        console.log(btnRekomenasiClass);
                         
                         html += `
                         <tr>
@@ -436,10 +427,7 @@ $(document).ready(function () {
                                 ${z.unit}
                             </td>
                             <td>
-                                <input type="text" class="form-control nilai_awal" data-index="${alpha}" style="height: 30px; text-align: center; background: white;" placeholder="Input nilai Awal" name="nilai_awal[]" value="${(z.nilai_awal) ? z.nilai_awal : '' }" ${type}>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control nilai_konversi" data-index="${alpha}" style="height: 30px; text-align: center; background: white;" placeholder="Input nilai" name="nilai_konversi[]" value="${(z.nilai_konversi) ? z.nilai_konversi.replaceAll('.', ',') : '' }" ${type}>
+                                <input type="text" class="form-control nilai_konversi" data-index="${alpha}" style="height: 30px; text-align: center; background: white;" placeholder="Input nilai" name="nilai_konversi[]" value="${(z.nilai_input) ? z.nilai_input.replaceAll('.', ',') : '' }" ${type}>
                             </td>
                             <td>
                                 <button type="button" id="btn-catatan-${alpha}" class="btn btn-block btn-xs btn-custom btn-catatan ${btnCatatanClass}" data-id="${alpha}">${btnCatatanText}</button>
@@ -463,8 +451,6 @@ $(document).ready(function () {
                     setTimeout(() => {
                         $('#layout').fadeOut(300);
                     }, 0);
-
-                    // console.log($('#table-data tbody').html());
                 } else {
                     $('#data-text-info').text('Tidak ditemukan data di indikator ini. coba muat ulang halaman')
                 }
@@ -475,7 +461,7 @@ $(document).ready(function () {
     tabevaluasibyindikator = function(){
         $("#divFormEvaluasi").hide();
         var str = $('#id_indikator_cmb').val();
-        //console.log(str);
+        
         var strsplit = str.split('#');
         var id_indikator=strsplit[0];
         var nilai_maks=strsplit[1];

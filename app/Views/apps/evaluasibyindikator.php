@@ -146,15 +146,12 @@
                                     <table id="table-data" style="margin-bottom: 20px;">
                                         <thead>
                                             <tr>
-                                                <th width="37%" style="font-weight: bold;">
+                                                <th width="50%" style="font-weight: bold;">
                                                     Nama 
                                                     <?php echo $tag == 'kab' ? 'Kabupaten/Kota' : 'Perangkat Daerah' ?>
                                                 </th>
                                                 <th width="13%" class="text-center" style="font-weight: bold;">
-                                                    Nilai Awal
-                                                </th>
-                                                <th width="13%" class="text-center" style="font-weight: bold;">
-                                                    Nilai Konversi
+                                                    Nilai
                                                 </th>
                                                 <th width="12%" class="text-center" style="font-weight: bold;">
                                                     Catatan
