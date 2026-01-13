@@ -404,14 +404,11 @@ class EvaluasiModel extends Model
         $builder->select('
             m_aspek.aspek,
             m_periode.status_periode,
-            coalesce(vw_rekap_by_aspek.total_nilai, 0) as nilai_akhir,
-            coalesce(vw_rekap_by_aspek.nilai_maks, 0) as nilai_maks,
             coalesce(vw_rekap_by_aspek.total_nilai, 0) as total_nilai,
             vw_rekap_by_spirit.id_unit,
             vw_rekap_by_spirit.unit,
             vw_rekap_by_spirit.nilai,
             vw_rekap_by_spirit.nilai_huruf,
-            vw_rekap_by_spirit.predikat,
             m_indikator.id_aspek,
             m_indikator.id_indikator,
             m_aspek.nilai_maks as bobot,
@@ -420,8 +417,6 @@ class EvaluasiModel extends Model
             m_indikator.keterangan,
             m_indikator.bobot as bobot_aspek,
             coalesce(evaluasi.nilai_akhir, 0)  as nilai_aspek,
-            coalesce(evaluasi.nilai_awal, 0) as nilai_awal,
-            coalesce(evaluasi.nilai_konversi, 0) as nilai_konversi,
             evaluasi.catatan_indikator,
             evaluasi.rekomendasi_indikator,
             evaluasi.timestamp,
@@ -429,7 +424,6 @@ class EvaluasiModel extends Model
             DATE_FORMAT(evaluasi.timestamp, "%H:%i") as time
         ');
         
-        $builder->groupBy('m_indikator.id_indikator');
         $builder->orderBy('m_aspek.id_aspek', 'asc');
         return $builder->get()->getResult();
     }

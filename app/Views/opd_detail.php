@@ -247,7 +247,7 @@
                                 <table style="border: 0px solid #000; width: 100%;">
                                     <tr>
                                         <td width="47%" style="text-align: left; padding-left: 10px;">
-                                            <h4>Rapor CETTAR</h4>
+                                            <h4>Rapor Zona Integritas</h4>
                                         </td>
                                         <td width="20%" style="vertical-align: middle;"><b>Tahun Periode</b></td>
                                         <td width="20%" style="padding: 15px 0px 0px 10px; vertical-align: middle;">
@@ -270,12 +270,12 @@
                                                 </div>
                                             </form>
                                         </td>
-                                        <td style="vertical-align: middle; padding-right: 10px;">
+                                        <!-- <td style="vertical-align: middle; padding-right: 10px;">
                                             <Button class="btn btn-primary btn-sm" id="btn-unduh-LHE">
                                                 Unduh LHE &nbsp;
                                                 <i class="fa fa-download"></i>
                                             </Button>
-                                        </td>
+                                        </td> -->
                                     </tr>
                                 </table>                                    
                             </div>
@@ -321,11 +321,11 @@
                     </div>
                 </div>
 
-                <div class="card proj-progress-card col-md-12" style="margin-top: 30px; padding: 20px;">
+                <!-- <div class="card proj-progress-card col-md-12" style="margin-top: 30px; padding: 20px;">
                     <div class="card-block">
                         <div class="row" id="progress-aspek"></div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>

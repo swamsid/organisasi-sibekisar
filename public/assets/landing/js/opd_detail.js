@@ -23,6 +23,7 @@ $(document).ready(function () {
 
         var tahun=$("#tahun").val();
         var predikat='';
+
         var req = $.post(url, param).done(function (data) {
             const periode = (data.length > 0) ? data[0].status_periode : null;
             let t = '';
@@ -46,20 +47,14 @@ $(document).ready(function () {
             t += `<table class="table" id="tb-rekap-spirit" width="100%">
                     <thead style="color: #038558; background: #f5f5f5;">
                         <tr>
-                            <th width="1%" rowspan="2" style="display:none;"></th>
-                            <th width="12%" rowspan="2" style="vertical-align: middle; border-top-left-radius: 15px;">Spirit</th>
-                            <th width="8%" rowspan="2" style="vertical-align: middle;">Bobot</th>
-                            <th width="8%" rowspan="2" style="vertical-align: middle;">Nilai</th>
-                            <th width="24%" rowspan="2" style="vertical-align: middle;">Indikator Penilaian</th>
-                            <th width="8%" rowspan="2" style="vertical-align: middle;">Bobot</th>
-                            <th width="8%" colspan="3" style="text-align: center;">Nilai Indikator</th>
-                            <th width="11%" rowspan="2" style="vertical-align: middle; border-top-right-radius: 15px;"">Pengampu</th>
-                        </tr>
-
-                        <tr>
-                            <th width="8%">Awal</th>
-                            <th width="8%">Konversi</th>
-                            <th width="8%">Akhir</th>
+                            <th width="5%" style="display:none;"></th>
+                            <th width="20%" style="vertical-align: middle; border-top-left-radius: 15px;">Spirit</th>
+                            <th width="8%" style="vertical-align: middle;">Bobot</th>
+                            <th width="8%" style="vertical-align: middle;">Nilai</th>
+                            <th width="23%" style="vertical-align: middle;">Indikator Penilaian</th>
+                            <th width="8%" style="vertical-align: middle;">Bobot</th>
+                            <th width="14%" style="vertical-align: middle;">Nilai Indikator</th>
+                            <th width="14%" style="vertical-align: middle; border-top-right-radius: 15px;">Pengampu</th>
                         </tr>
                     </thead>
 
@@ -72,36 +67,41 @@ $(document).ready(function () {
             var predikat='';
 
             $.each(data, function (key, value) {
-                // console.log(data);
+                console.log(data);
 
-                const date          = (value.date !== null) ? value.date.split('/') : null ;
-                let nilaiAwal       = Number(value.nilai_awal.replace(',', '.'));
-                let nilaiKonversi   = Number(value.nilai_konversi.replace(',', '.'));
-                let nilaiAspek      = Number(value.nilai_aspek.replace(',', '.'));
+                const date      = (value.date !== null) ? value.date.split('/') : null ;
+                let nilaiAspek  = Number(value.nilai_aspek.replace(',', '.'));
 
-                let nilaiAwalPrint      = (nilaiAwal % 1 > 0) ? nilaiAwal.toFixed(1) : nilaiAwal.toFixed(0);
-                let nilaiKonversiPrint  = (nilaiKonversi % 1 > 0) ? nilaiKonversi.toFixed(1) : nilaiKonversi.toFixed(0);
-                let nilaiAspekPrint     = (nilaiAspek % 1 > 0) ? nilaiAspek.toFixed(1) : nilaiAspek.toFixed(0);
-                let cq                  = (value.keterangan) ? value.keterangan.split('c.q') : value.opd_pengampu;
+                let cq          = (value.keterangan) ? value.keterangan.split('c.q') : value.opd_pengampu;
+                let color       = 'black';
+                let update  = 'belum ada penilaian';
+                let updateC = '#ccc';
+
+                if(value.nilai_aspek <= 0)                    
+                    color = 'red';
+
+                if(value.nilai_aspek > 0){
+                    update  = `Update terakhir ${ (date !== null && date.length > 0) ? date[0]+" "+month[date[1] - 1]+" "+date[2] : '--' }, ${value.time} WIB`;
+                    updateC = '#888' 
+                }
 
                 n++;
-                t += `<tr>
-                        <td style="display:none">${ value.id_aspek }</td>
-                        <td>${ (value.aspek != null) ? value.aspek.toUpperCase() : '-'}</td>
-                        <td align="center">${value.bobot}</td>
-                        <td align="center" class="text-bold text-black"><b>${ value.total_nilai }</b></td>
-                        <td style="position: relative; padding-bottom: 40px;">
-                            ${ value.indikator}
-                            <br/>
-                            <span style="font-size: 8pt; position: absolute; bottom: 8px; color: #888;">
-                                Update terakhir ${ (date !== null && date.length > 0) ? date[0]+" "+month[date[1] - 1]+" "+date[2] : '--' }, ${value.time} WIB
-                            </span> 
-                        </td>
-                        <td align="center">${ parseFloat(value.bobot_aspek) }</td>
-                        <td align="center" ><b>${ nilaiAwalPrint }</b></td>
-                        <td align="center" ><b>${ nilaiKonversiPrint }</b></td>
-                        <td align="center" ><b>${ nilaiAspekPrint}</b></td>
-                        <td>${ (cq.length > 1) ? cq[0].toUpperCase()+' <br>c.q<br> '+cq[1].toUpperCase() : cq[0].toUpperCase() }</td>
+                t += `  <tr>
+                            <td style="display:none">${ value.id_aspek }</td>
+                            <td>${ (value.aspek != null) ? value.aspek.toUpperCase() : '-'}</td>
+                            <td align="center">${value.bobot}</td>
+                            <td align="center" class="text-bold text-black"><b>${ value.total_nilai }</b></td>
+                            <td style="position: relative; padding-bottom: 40px;">
+                                ${ value.indikator}
+                                <br/>
+                                <span style="font-size: 7.9pt; color: ${ updateC };">
+                                    ${update}
+                                </span> 
+                            </td>
+                            <td align="center">${ parseFloat(value.bobot_aspek) }</td>
+                            <td align="center" style="color: ${color};"><b>${ value.nilai_aspek }</b></td>
+                            <td>${ (cq.length > 1) ? cq[0].toUpperCase()+' <br>c.q<br> '+cq[1].toUpperCase() : cq[0].toUpperCase() }</td>
+                        </tr>
                     `;
 
                 if(n==1){
@@ -110,7 +110,7 @@ $(document).ready(function () {
                     predikat = (value.predikat) ? value.predikat : 0;
 
                     skor_total = Number(skor_total);
-                    skor_total = (skor_total % 1 > 0) ? skor_total.toFixed(1) : skor_total.toFixed(0);
+                    skor_total = (skor_total % 1 > 0) ? skor_total.toFixed(2) : skor_total.toFixed(0);
                 }
             });
 
@@ -119,17 +119,12 @@ $(document).ready(function () {
                     <tfoot>
                         <tr>
                             <th colspan="3">Skor Total</th>
-                            <th colspan="7">${ skor_total }</th> 
+                            <th colspan="5">${ skor_total }</th> 
                         </tr>
 
                         <tr>
                             <th colspan="3">Nilai</th>
-                            <th colspan="7">${ nilai_huruf }</th>
-                        </tr>
-
-                        <tr>
-                            <th colspan="3">Hasil Penilaian</th>
-                            <th colspan="7">${ predikat }</th>
+                            <th colspan="5">${ nilai_huruf }</th>
                         </tr>
                     </tfoot>
                 </table>`;
@@ -173,6 +168,8 @@ $(document).ready(function () {
         
             var n=0;
             $.each(data.eval, function (key, value) {
+
+                // console.log(value);
 
                 var persen = parseFloat(value['total_nilai']/value['nilai_maks']) * 100;
                 var kurang = parseFloat(parseFloat(value['nilai_maks'])-parseFloat(value['total_nilai']));
@@ -258,6 +255,7 @@ $(document).ready(function () {
 
     tabspirit();
     tabrekap();
+
     grafikcettar = function(data,tahun,id_aspek){
         var a=[], b=[], c=[], d=[], e=[], f=[], g=[];
         var ma=[], mb=[], mc=[], md=[], me=[], mf=[], mg=[];

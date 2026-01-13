@@ -152,9 +152,7 @@ class Apps extends BaseController
     public function gridnilai()
     {
         $data = $_REQUEST;
-        // return json_encode($data);
         $eval = $this->evaluasimodel->findDetailNilaiBaru($data);
-        // return json_encode($eval);
         $count = count($eval);
         return $this->response->setJSON($eval);
     }
