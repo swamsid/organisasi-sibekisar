@@ -26,7 +26,7 @@
                         <li class="scroll-to-section"><a href="<?php  echo base_url('home') ?>" >Home</a></li>
                         <!-- <li class="scroll-to-section"><a href="" >Tentang</a></li> -->
                         <li class="scroll-to-section"><a href="<?php echo base_url('read/opd') ?>" >Perangkat Daerah</a></li>
-                        <li class="scroll-to-section"><a href="<?php echo base_url('read/uobk') ?>" >UOBK</a></li>
+                        <!-- <li class="scroll-to-section"><a href="<?php echo base_url('read/uobk') ?>" >UOBK</a></li> -->
                         <!-- <li class="scroll-to-section" style="border-right: 2px solid #eee; padding-right: 20px;"><a href="<?php echo base_url('read/kab') ?>" >Kab/Kota</a></li> -->
                         <!-- <li class="scroll-to-section" style="border-right: 2px solid #eee; padding-right: 20px;"><a href="#" id="nav-indikator">Indikator</a></li> -->
 

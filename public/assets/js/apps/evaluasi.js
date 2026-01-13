@@ -121,6 +121,7 @@ $(document).ready(function () {
         $('#periode').val($("#frmsearch [name='tahun']").val());
 
         $('#periode_status').val($("#frmsearch [name='tahun'] option:selected").data('status'));
+        $('#keterangan-nilai-maks').fadeOut('500');
 
         cekStatus();
 
@@ -386,6 +387,11 @@ $(document).ready(function () {
             var rest = JSON.parse(response);
             
             if(rest.status == 'success'){
+                const max = parseFloat($('#nilai_maks').val().replaceAll(',', '.'));
+
+                $('#keterangan-nilai-maks').text('(Maks '+max+')');
+                $('#keterangan-nilai-maks').fadeIn('500');
+                
                 const data = rest.data;
 
                 if (data) {

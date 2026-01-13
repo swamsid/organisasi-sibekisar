@@ -147,11 +147,14 @@
                                         <thead>
                                             <tr>
                                                 <th width="50%" style="font-weight: bold;">
-                                                    Nama 
+                                                    Nama
                                                     <?php echo $tag == 'kab' ? 'Kabupaten/Kota' : 'Perangkat Daerah' ?>
                                                 </th>
                                                 <th width="13%" class="text-center" style="font-weight: bold;">
                                                     Nilai
+                                                    <div id="keterangan-nilai-maks" style="font-size: 8pt; font-weight: normal; margin-top: 2px; display: none;">
+                                                        (Maks 80)
+                                                    </div>
                                                 </th>
                                                 <th width="12%" class="text-center" style="font-weight: bold;">
                                                     Catatan
