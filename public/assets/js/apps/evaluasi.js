@@ -26,7 +26,7 @@ $(document).ready(function () {
             ['para', ['ul', 'ol']],
         ],
 
-        placeholder         : 'Tulis Catatan Disini...',
+        placeholder         : 'Tulis Rekomendasi Disini...',
         shortcuts           : false,
         tabDisable          : true,
         disableResizeEditor : true,
@@ -126,6 +126,7 @@ $(document).ready(function () {
         cekStatus();
 
         $('#id_indikator').val('');
+        $('#btn-export-excel').fadeOut();
         $('.btn-hide-first').fadeOut(300);
 
         $('#nilai_maks').val('');
@@ -368,6 +369,15 @@ $(document).ready(function () {
         
     })
 
+    $('#btn-export-excel').on('click', function(e){
+        const tahun         = $('#tahun-periode').val();
+        const indikator     = $('#id_indikator_cmb').val();
+        const namaTahun     = $('#tahun-periode option:selected').text();
+        const nmIndikator   = $('#id_indikator_cmb option:selected').text();
+
+        window.open(`${base_url}/apps/evaluasiExport?periode=${tahun}&ind=${indikator}&nmthn=${namaTahun}&nmind=${nmIndikator}`, '_blank');
+    });
+
     function getDataByIndikator(){
         let url     = base_url + "/apps/finddetailbyindikator";
         let params  = {
@@ -462,6 +472,8 @@ $(document).ready(function () {
                 }
             }
         });
+
+        $('#btn-export-excel').fadeIn();
     }
 
     tabevaluasibyindikator = function(){

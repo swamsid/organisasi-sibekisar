@@ -643,6 +643,20 @@ class Apps extends BaseController
         $this->show('apps/evaluasibyindikator', $data);
     }
 
+    public function evaluasiExport($tag = null, $id_indikator = null)
+    {
+        $data['tahun']          = $_GET['periode'];
+        $data['id_indikator']   = $_GET['ind'];
+        $data['nmthn']          = $_GET['nmthn'];
+        $data['nmind']          = $_GET['nmind'];
+        $data['tag']            = 'opd';
+
+        $data['data']           = $this->evaluasimodel->findPenilaian($data);
+
+        // return json_encode($data);
+        return view('apps/exportEvaluasi', $data);
+    }
+
     public function rapor($tag = null, $id_indikator = null)
     {
 

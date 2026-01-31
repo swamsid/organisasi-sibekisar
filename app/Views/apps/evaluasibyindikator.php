@@ -113,6 +113,10 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-4 text-right" style="padding-top: 10px;">
+                                <button type="button" class="btn btn-primary btn-sm" id="btn-export-excel" style="display: none;">Export Excel</button>
+                            </div>
+
                             <!-- <div class="col-md-4 text-right">
                                 <?php
                                 if($_SESSION['user']->id_role==1 or ($_SESSION['user']->id_role==2 && $_SESSION['user']->id_unit==6))

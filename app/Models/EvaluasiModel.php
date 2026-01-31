@@ -247,7 +247,7 @@ class EvaluasiModel extends Model
         );
         
         if($data['tag'] == 'opd'){
-            $builder->where('kategori_unit <>', 'kab');
+            $builder->where('kategori_unit', 'opd');
         }else{
             $builder->where('kategori_unit', $data['tag']);
         }
