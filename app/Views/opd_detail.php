@@ -247,7 +247,7 @@
                                 <table style="border: 0px solid #000; width: 100%;">
                                     <tr>
                                         <td width="47%" style="text-align: left; padding-left: 10px;">
-                                            <h4>Rapor Zona Integritas</h4>
+                                            <h5>Hasil Evaluasi Reformasi Birokrasi Perangkat Daerah</h5>
                                         </td>
                                         <td width="20%" style="vertical-align: middle;"><b>Tahun Periode</b></td>
                                         <td width="20%" style="padding: 15px 0px 0px 10px; vertical-align: middle;">
