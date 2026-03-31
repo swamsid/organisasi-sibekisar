@@ -626,6 +626,72 @@ class Apps extends BaseController
         return json_encode($response);
     }
 
+    function finddetailbykoefisien()
+    {        
+        $data = $this->evaluasimodel->findkoefisien($_REQUEST);
+
+        $response = [
+            'status'    => 'success',
+            'data'      => $data
+        ];
+
+        return json_encode($response);
+    }
+
+    // koefisien
+        public function koefisien($tag = null, $id_indikator = null)
+        {
+            // return $tag;
+            if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+                header('Location: ' . base_url('auth'));
+                exit();
+            }
+
+            $data['tag'] = $tag;
+
+            $this->addScript("assets/js/apps/koefisien.js");
+            $this->show('apps/koefisien', $data);
+        }
+
+        function simpankoefisienpeserta(){
+            if (empty($_POST)) echo json_encode($this->failed);
+
+            $cek = $_POST['catatan_indikator'];
+
+            if (!empty($_POST['id_unit'])) {
+                $fzeropadded    = sprintf("%04d", $_POST['id_unit']);
+                $id_koefisien   = $_POST['tahun'] . $fzeropadded;
+
+                $nilai          = (float) str_replace(',', '.', $_POST['nilai_konversi']);
+
+                $dataKomponen = array(
+                    'id_koefisien'          => $id_koefisien,
+                    'nilai_input'           => $nilai,
+                    'tahun'                 => $_POST['periode'],
+                    'id_unit'               => $_POST['id_unit'],
+                    'catatan_indikator'     => $_POST['catatan_indikator'],
+                    'periode'               => $_POST['tahun'],
+                    'user_verifikasi'       => '0',
+                    'catatan_verifikasi'    => '',
+                    'waktu_verifikasi'      => '',
+                    'is_verify'             => '0',
+                    'timestamp'             => date("Y-m-d H:i:s"),
+                    'id_user'               => $_SESSION['user']->id_user
+                );
+
+                // return json_encode($dataKomponen);
+
+                $result = $this->evaluasimodel->insertDataKoefisien($dataKomponen);
+
+                if ($result) {
+                    $this->evaluasimodel->call_sp_aspek();
+                    $b = $this->evaluasimodel->call_sp_spirit();
+                    if ($b) echo json_encode($this->success);
+                    exit;
+                }
+            }
+        }
+
     /** Evaluasi */
 
     public function evaluasi($tag = null, $id_indikator = null)

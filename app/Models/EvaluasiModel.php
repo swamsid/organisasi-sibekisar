@@ -25,6 +25,12 @@ class EvaluasiModel extends Model
         return $builder->replace($data);
     }
 
+    function insertDataKoefisien($data = null)
+    {
+        $builder = $this->db->table('koefisien');
+        return $builder->replace($data);
+    }
+
     function updateData($data = null, $where = null)
     {
         $builder = $this->db->table('evaluasi');
@@ -261,6 +267,29 @@ class EvaluasiModel extends Model
         return $builder->get()->getResult();
     }
 
+    function findKoefisien($data){
+        $builder = $this->db->table('m_unit');
+        $builder->join(
+            'koefisien', 
+            'm_unit.id_unit = koefisien.id_unit AND koefisien.tahun = '.$data['tahun'], 
+            'left'
+        );
+        
+        if($data['tag'] == 'opd'){
+            $builder->where('kategori_unit', 'opd');
+        }else{
+            $builder->where('kategori_unit', $data['tag']);
+        }
+        
+
+        $builder->select('m_unit.unit, ,m_unit.id_unit as unit_id, koefisien.*');
+        
+        $builder->orderBy('m_unit.kategori_unit');
+        $builder->orderBy('m_unit.unit');
+        
+        return $builder->get()->getResult();
+    }
+
     // Dirga
 
     function findAspek($data = null)
@@ -401,10 +430,13 @@ class EvaluasiModel extends Model
         $builder->join('vw_rekap_by_aspek', 'm_aspek.id_aspek = vw_rekap_by_aspek.id_aspek and vw_rekap_by_aspek.tahun = "'.$data['tahun'].'" and vw_rekap_by_aspek.id_unit = '.$data['id_unit'], 'left');
         $builder->join('vw_rekap_by_spirit', 'vw_rekap_by_spirit.tahun = "'.$data['tahun'].'" and vw_rekap_by_spirit.id_unit = '.$data['id_unit'], 'left');
         $builder->join('evaluasi', 'evaluasi.id_indikator = m_indikator.id_indikator and evaluasi.tahun = "'.$data['tahun'].'" and evaluasi.id_unit = '.$data['id_unit'], 'left');
+        $builder->join('koefisien', 'koefisien.tahun = "'.$data['tahun'].'" and koefisien.id_unit = "'.$data['id_unit'].'"', 'left');
         $builder->select('
             m_aspek.aspek,
+            m_aspek.jenis,
+            coalesce(koefisien.nilai_input, 0) as nilai_input,
             m_periode.status_periode,
-            coalesce(vw_rekap_by_aspek.total_nilai, 0) as total_nilai,
+            coalesce(vw_rekap_by_aspek.nilai_aspek, 0) as total_nilai,
             vw_rekap_by_spirit.id_unit,
             vw_rekap_by_spirit.unit,
             vw_rekap_by_spirit.nilai,

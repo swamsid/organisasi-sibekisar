@@ -22,7 +22,6 @@ $(document).ready(function () {
         const month = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
         var tahun=$("#tahun").val();
-        var predikat='';
 
         var req = $.post(url, param).done(function (data) {
             const periode = (data.length > 0) ? data[0].status_periode : null;
@@ -61,13 +60,22 @@ $(document).ready(function () {
                     <tbody>
                 `;
 
-            var n = 0;
-            var skor_total=0;
-            var nilai_huruf='';
-            var predikat='';
+            let n = 0;
+            let skor_general = 0, skor_tematik = 0, skor_total = 0;
+            let koefisien = 0;
+            let nilai_huruf='';
+            const predikat = [
+                {id: 'AA', text: 'Sangat Memuaskan'},
+                {id: 'A', text: 'Memuaskan'},
+                {id: 'A-', text: 'Memuaskan dengan Catatan'},
+                {id: 'BB', text: 'Sangat Baik'},
+                {id: 'B', text: 'Baik'},
+                {id: 'CC', text: 'Cukup'},
+            ] ;
+            let aspek   = '';
 
             $.each(data, function (key, value) {
-                console.log(data);
+                // console.log(data);
 
                 const date      = (value.date !== null) ? value.date.split('/') : null ;
                 let nilaiAspek  = Number(value.nilai_aspek.replace(',', '.'));
@@ -104,27 +112,72 @@ $(document).ready(function () {
                         </tr>
                     `;
 
+                if(value.aspek != aspek){
+                    aspek = value.aspek;
+                    if(value.jenis == 'general')
+                        skor_general += parseFloat(value.total_nilai);
+                    else
+                        skor_tematik += parseFloat(value.total_nilai);
+                }
+
                 if(n==1){
+                    koefisien = (parseFloat(value.nilai_input) % 1 > 0) ? parseFloat(value.nilai_input).toFixed(2) : parseFloat(value.nilai_input).toFixed(0)
                     skor_total = (value.nilai) ? value.nilai : 0;
                     nilai_huruf = (value.nilai_huruf) ? value.nilai_huruf : 0;
-                    predikat = (value.predikat) ? value.predikat : 0;
 
                     skor_total = Number(skor_total);
                     skor_total = (skor_total % 1 > 0) ? skor_total.toFixed(2) : skor_total.toFixed(0);
                 }
             });
+            
+            let idPredikat = predikat.findIndex(p => p.id == nilai_huruf);
 
             t += `  </tbody>
                 
                     <tfoot>
                         <tr>
-                            <th colspan="3">Skor Total</th>
-                            <th colspan="5">${ skor_total }</th> 
+                            <th colspan="2">Nilai RB General</th>
+                            <th class="text-right">${ skor_general }</th> 
+                            <th colspan="4"></th>
                         </tr>
 
                         <tr>
-                            <th colspan="3">Nilai</th>
-                            <th colspan="5">${ nilai_huruf }</th>
+                            <th colspan="2" style="font-weight: normal; padding-left: 40px; border-top: 0px;">- Koefisien</th>
+                            <th class="text-right" style="font-weight: normal; border-top: 0px;">${ koefisien }%</th> 
+                            <th colspan="4" style="border-top: 0px;"></th>
+                        </tr>
+
+                        <tr>
+                            <th colspan="2">Total Nilai RB General</th>
+                            <th class="text-right">
+                                ${ (skor_general - (skor_general * (koefisien / 100))).toFixed(2) }
+                            </th> 
+                            <th colspan="4"></th>
+                        </tr>
+
+                        <tr>
+                            <th colspan="2">Total Nilai RB Tematik</th>
+                            <th class="text-right">${ skor_tematik }</th>
+                            <th colspan="4"></th> 
+                        </tr>
+
+                        <tr>
+                            <th colspan="2">Total Nilai Reformasi Birokrasi</th>
+                            <th class="text-right">${ skor_total }</th>
+                            <th colspan="4"></th> 
+                        </tr>
+
+                        <tr>
+                            <th colspan="2">Predikat Nilai</th>
+                            <th class="text-right">
+                                ${ nilai_huruf }
+                            </th>
+                            <th class="text-left" style="padding-left: 0px;">
+                                <span style="font-weight: normal; font-size: 10pt;">
+                                    (${ (idPredikat >= 0) ? predikat[idPredikat].text : 'unknown' })
+                                </span>
+                            </th>
+                            <th colspan="3"></th>
                         </tr>
                     </tfoot>
                 </table>`;
