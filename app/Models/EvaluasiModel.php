@@ -449,6 +449,7 @@ class EvaluasiModel extends Model
             m_indikator.keterangan,
             m_indikator.bobot as bobot_aspek,
             coalesce(evaluasi.nilai_akhir, 0)  as nilai_aspek,
+            coalesce(evaluasi.nilai_input, 0)  as nilai_input_evaluasi,
             evaluasi.catatan_indikator,
             evaluasi.rekomendasi_indikator,
             evaluasi.timestamp,

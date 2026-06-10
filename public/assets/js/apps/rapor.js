@@ -18,6 +18,7 @@ $(document).ready(function () {
         tabspirit();
         // tabrekap();
     });
+
     tabspirit = function () {
         if ($.fn.DataTable.isDataTable("table.display")) $("table.display").DataTable().destroy();
         var url = base_url + "/apps/gridnilai";
@@ -28,7 +29,6 @@ $(document).ready(function () {
         };
 
         var tahun = $("#tahun").val();
-        var predikat = '';
         var req = $.post(url, param).done(function (data) {
 
             var t = '<table class="table" id="tb-rekap-spirit" width="100%" style="margin-top: 20px;">' +
@@ -39,13 +39,12 @@ $(document).ready(function () {
             var n = 0;
             var skor_total = 0;
             var nilai_huruf = '';
-            var predikat = '';
             $.each(data, function (key, value) {
                 n++;
                 const print = (!value.keterangan) ? value.opd_pengampu.toUpperCase() : value.keterangan.toUpperCase();
                 t += '<tr>' +
                     '<td>' + (value.aspek != null ? value.aspek.toUpperCase() : '-') + '</td>' +
-                    '<td align="center">' + value.nilai_maks + '</td>' +
+                    '<td align="center">' + value.bobot + '</td>' +
                     '<td align="center" class="text-bold text-black"><b>' + (value.total_nilai?value.total_nilai:0) + '</b></td>' +
                     '<td>' + value.indikator + '</td><td align="center">' + parseInt(value.bobot_aspek) + '</td>' +
                     '<td align="center" ><b>' + parseFloat(value.nilai_aspek).toFixed(2) + '</b></td>' +
@@ -56,17 +55,27 @@ $(document).ready(function () {
                 if (n == 1) {
                     skor_total = parseFloat(value.nilai).toFixed(2);
                     nilai_huruf = value.nilai_huruf;
-                    predikat = value.predikat;
                 }
             });
+
+            const predikat = [
+                {id: 'AA', text: 'Sangat Memuaskan'},
+                {id: 'A', text: 'Memuaskan'},
+                {id: 'A-', text: 'Memuaskan dengan Catatan'},
+                {id: 'BB', text: 'Sangat Baik'},
+                {id: 'B', text: 'Baik'},
+                {id: 'CC', text: 'Cukup'},
+            ] ;
+
+            let idPredikat = predikat.findIndex(p => p.id == nilai_huruf);
 
             t += '</tbody><tfoot><tr><th colspan="9"></th></tr>' +
                 '<tr><th colspan="2">Skor Total</th><th colspan="7">' + skor_total + '</th> </tr>' +
                 '<tr><th colspan="2">Nilai</th><th colspan="7">' + nilai_huruf + '</th></tr>' +
-                '<tr><th colspan="2">Hasil Penilaian</th><th colspan="7">' + predikat + '</th></tr>' +
+                '<tr><th colspan="2">Hasil Penilaian</th><th colspan="7">' + predikat[idPredikat].text + '</th></tr>' +
                 '</tfoot></table>';
             $('#div-spirit').html(t);
-            // $("#tb-raport").DataTable();
+            
             var oTable = $('#tb-rekap-spirit').DataTable({
                 dom: 'B<"header">rt',
                 responsive: true,

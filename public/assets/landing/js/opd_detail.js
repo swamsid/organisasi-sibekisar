@@ -1,7 +1,5 @@
 $(document).ready(function () {
 
-    // alert('okee');
-
     var aPos="";
     var aData="";
     $("#tahun").on('change',function(){

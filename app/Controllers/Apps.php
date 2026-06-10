@@ -345,7 +345,6 @@ class Apps extends BaseController
 
     function excel($id = null, $tahun = null, $tag = null)
     {
-        // return 'okee';
 
         $data['id_unit']    = $id;
         $data['tahun']      = $tahun;
@@ -360,8 +359,6 @@ class Apps extends BaseController
         $aspek = array();
         $unit = array();
 
-        // return json_encode($indikator);
-
         foreach ($indikator as $key):
             $temp = array(
                 "id_aspek" => $key->id_aspek,
@@ -375,7 +372,6 @@ class Apps extends BaseController
                 "unit" => $key->unit,
                 "skor_total" => $key->nilai,
                 "nilai_huruf" => $key->nilai_huruf,
-                "predikat" => $key->predikat
             );
             if (!in_array($tempunit, $unit)) array_push($unit, $tempunit);
         endforeach;
@@ -426,7 +422,7 @@ class Apps extends BaseController
                             <th width="9%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Indikator Penilaian</th>
                             <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Bobot</th>
 
-                            <th width="16%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" colspan="3">Nilai Indikator</th>
+                            <th width="16%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" colspan="2">Nilai Indikator</th>
                             
                             <th width="9%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Pengampu</th>
                             <th width="20%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Catatan</th>
@@ -434,9 +430,8 @@ class Apps extends BaseController
                         </tr>
 
                         <tr>
-                            <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Awal</th>
-                            <th width="6%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Konversi</th>                                        
-                            <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Akhir</th>
+                            <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Nilai Input</th>
+                            <th width="6%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Nilai Akhir</th>
                         </tr>
                     </thead>
 
@@ -465,10 +460,9 @@ class Apps extends BaseController
                             <td width="9%" style="height: 20px; border: 1px solid #000;">'.$key->indikator.'</td>
                             <td width="5%" align="center" style="height: 40px; border: 1px solid #000;">'.$this->is_decimal($key->bobot_aspek).'</td>
                             <td width="5%" align="center" style="height: 40px; border: 1px solid #000;"><b>
-                                '.$this->is_decimal((float)str_replace(',', '.', $key->nilai_awal)).'
+                                '.$this->is_decimal((float)str_replace(',', '.', $key->nilai_input_evaluasi)).'
                             </b></td>
-                            <td width="6%" align="center" style="height: 40px; border: 1px solid #000;"><b>'.$this->is_decimal($key->nilai_konversi).'</b></td>
-                            <td width="5%" align="center" style="height: 40px; border: 1px solid #000;"><b>'.$this->is_decimal($key->nilai_aspek).'</b></td>
+                            <td width="6%" align="center" style="height: 40px; border: 1px solid #000;"><b>'.$this->is_decimal($key->nilai_aspek).'</b></td>
                             <td width="9%" style="height: 40px; border: 1px solid #000;">'.$print.'</td>
                             <td width="20%" class="listed" style="height: 40px; border: 1px solid #000;">'.strip_tags($key->catatan_indikator).'</td>
                             <td width="20%" style="height: 40px; border: 1px solid #000;">'.strip_tags($key->rekomendasi_indikator).'</td>
@@ -478,6 +472,13 @@ class Apps extends BaseController
             }
 
             // return json_encode($runit);
+
+            $predikat['AA'] = 'Sangat Memuaskan';
+            $predikat['A']  = 'Memuaskan';
+            $predikat['A-'] = 'Memuaskan dengan Catatan';
+            $predikat['BB'] = 'Sangat Baik';
+            $predikat['B']  = 'Baik';
+            $predikat['CC'] = 'Cukup';
         
             $html .= '
                         </tbody>
@@ -492,7 +493,7 @@ class Apps extends BaseController
                             </tr>
                             <tr style="font-size: 14pt; font-weight: bold;">
                                 <th colspan="2" style="border: 1px solid #000;">Predikat</th>
-                                <th colspan="9" style="border: 1px solid #000;">' . $runit['predikat'] . '</th>
+                                <th colspan="9" style="border: 1px solid #000;">' . $predikat[$runit['nilai_huruf']] . '</th>
                             </tr>
                         </tfoot>
                     </table>';
