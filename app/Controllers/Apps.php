@@ -203,7 +203,6 @@ class Apps extends BaseController
                 "unit" => $key->unit,
                 "skor_total" => $key->nilai,
                 "nilai_huruf" => $key->nilai_huruf,
-                "predikat" => $key->predikat
             );
             if (!in_array($tempunit, $unit)) array_push($unit, $tempunit);
         endforeach;
@@ -216,31 +215,42 @@ class Apps extends BaseController
                     <tbody>
                         <tr>
                             <td style="height: 20pt;"></td>
-                            <td rowspan="3" align="right">
-                                <table><tr><td style="height: 40pt;"></td></tr></table>
-                                <span style="font-weight: bold; font-size: 14pt;">sibekisar.jatimprov.go.id &nbsp;&nbsp;&nbsp;</span>
+                            <td rowspan="2">
+                                <table>
+                                    <tr>
+                                        <td align="right" colspan="3" height="20px"></td>
+                                    </tr>  
+                                    <tr>
+                                        <td width="60%"></td>
+                                        <td width="40%" height="18px">Lampiran Surat Gubernur Jawa Timur</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td width="60%" height="18px"></td>
+                                        <td width="9%" height="18px">Nomor</td>
+                                        <td width="2%" height="18px">:</td>
+                                        <td width="39%" height="18px">000.8.6.2/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/031.2/2026</td>
+                                    </tr>
+                                    <tr>
+                                        <td width="60%"></td>
+                                        <td width="9%">Tanggal</td>
+                                        <td width="2%">:</td>
+                                        <td width="39%">&nbsp;&nbsp;&nbsp;&nbsp; Juni 2026</td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <span style="font-weight: bold; font-size: 24pt;">Raport Budaya Kerja CETTAR</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span style="line-height: 46pt; font-size: 14pt;">'.$unitGet[0]->unit.'</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span style="font-size: 12pt; font-weight: normal; color: #555;">Tahun ' . $dataTahunTable->tahun_periode.'</span>
+                            <td width="80%">
+                                <span style="font-weight: bold; font-size: 24pt; line-height: 15px;">'.$unitGet[0]->unit.'</span>
+                                <div style="color: #555; line-height: 18px;">&nbsp; Tahun '.$dataTahunTable->tahun_periode.'</div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
 
                 <table>
-                    <tr><td style="height: 20pt;">&nbsp;</td></tr>
+                    <tr><td style="height: 30pt;">&nbsp;</td></tr>
                 </table>
                 
                 <table cellpadding="5" width="100%" class="table"  style="border: 1px solid #000; margin-top: 5px; font-size: 12pt;">
@@ -254,16 +264,15 @@ class Apps extends BaseController
                             <th width="9%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Indikator Penilaian</th>
                             <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Bobot</th>
 
-                            <th width="16%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" colspan="3">Nilai Indikator</th>
+                            <th width="10%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" colspan="2">Nilai Indikator</th>
                             
                             <th width="9%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Pengampu</th>
-                            <th width="20%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Catatan</th>
-                            <th width="20%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Rekomendasi</th>
+                            <th width="23%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Catatan</th>
+                            <th width="23%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;" rowspan="2">Rekomendasi</th>
                         </tr>
 
                         <tr>
-                            <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Awal</th>
-                            <th width="6%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Konversi</th>                                        
+                            <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Awal</th>                                     
                             <th width="5%" style="background-color: #eee; font-weight: bold; text-align: center; border: 1px solid #000;">Akhir</th>
                         </tr>
                     </thead>
@@ -293,19 +302,25 @@ class Apps extends BaseController
                             <td width="9%" style="height: 20px; border: 1px solid #000;">'.$key->indikator.'</td>
                             <td width="5%" align="center" style="height: 40px; border: 1px solid #000;">'.$this->is_decimal($key->bobot_aspek).'</td>
                             <td width="5%" align="center" style="height: 40px; border: 1px solid #000;"><b>
-                                '.$this->is_decimal((float)str_replace(',', '.', $key->nilai_awal)).'
+                                '.$this->is_decimal((float)str_replace(',', '.', $key->nilai_input_evaluasi)).'
                             </b></td>
-                            <td width="6%" align="center" style="height: 40px; border: 1px solid #000;"><b>'.$this->is_decimal($key->nilai_konversi).'</b></td>
                             <td width="5%" align="center" style="height: 40px; border: 1px solid #000;"><b>'.$this->is_decimal($key->nilai_aspek).'</b></td>
                             <td width="9%" style="height: 40px; border: 1px solid #000;">'.$print.'</td>
-                            <td width="20%" class="listed" style="height: 40px; border: 1px solid #000;">'.strip_tags($key->catatan_indikator).'</td>
-                            <td width="20%" style="height: 40px; border: 1px solid #000;">'.strip_tags($key->rekomendasi_indikator).'</td>
+                            <td width="23%" class="listed" style="height: 40px; border: 1px solid #000;">'.strip_tags($key->catatan_indikator).'</td>
+                            <td width="23%" style="height: 40px; border: 1px solid #000;">'.strip_tags($key->rekomendasi_indikator).'</td>
                         </tr>';
                     }
                 }
             }
 
             // return json_encode($runit);
+
+            $predikat['AA'] = 'Sangat Memuaskan';
+            $predikat['A']  = 'Memuaskan';
+            $predikat['A-'] = 'Memuaskan dengan Catatan';
+            $predikat['BB'] = 'Sangat Baik';
+            $predikat['B']  = 'Baik';
+            $predikat['CC'] = 'Cukup';
         
             $html .= '
                         </tbody>
@@ -320,7 +335,7 @@ class Apps extends BaseController
                             </tr>
                             <tr style="font-size: 14pt; font-weight: bold;">
                                 <th colspan="2" style="border: 1px solid #000;">Predikat</th>
-                                <th colspan="9" style="border: 1px solid #000;">' . $runit['predikat'] . '</th>
+                                <th colspan="9" style="border: 1px solid #000;">' . $predikat[$runit['nilai_huruf']] . '</th>
                             </tr>
                         </tfoot>
                     </table>';
@@ -391,7 +406,7 @@ class Apps extends BaseController
                         </tr>
                         <tr>
                             <td>
-                                <span style="font-weight: bold; font-size: 24pt;">Raport Budaya Kerja CETTAR</span>
+                                <span style="font-weight: bold; font-size: 24pt;"></span>
                             </td>
                         </tr>
                         <tr>
