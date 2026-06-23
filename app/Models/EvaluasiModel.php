@@ -303,6 +303,87 @@ class EvaluasiModel extends Model
         return $query;
     }
 
+    function getRekapNilai($data = null){
+        $builder = $this->db->table('m_unit as unit');
+        $builder->join('vw_rekap_by_aspek as nilai', 'unit.id_unit = nilai.id_unit AND nilai.tahun = '.$data['tahun'], 'left');
+        $builder->join('vw_rekap_by_aspek as n_sebelum', 'unit.id_unit = n_sebelum.id_unit AND n_sebelum.tahun = '.$data['sebelum'], 'left');
+        $builder->join('m_aspek as aspek', 'nilai.id_aspek = aspek.id_aspek', 'left');
+        $builder->where('kategori_unit != "kab"');
+        $builder->select('
+            unit.id_unit, 
+            unit.unit, 
+
+            SUM(CASE
+                WHEN aspek.jenis = "general"
+                THEN nilai.nilai_aspek
+                ELSE 0
+            END) as nilai_general,
+
+            max(CASE
+                WHEN aspek.jenis = "general"
+                THEN nilai.nilai_koefisien
+                ELSE 0
+            END) as koefisien_general,
+
+            SUM(CASE
+                WHEN aspek.jenis = "general"
+                THEN nilai.total_nilai
+                ELSE 0
+            END) as tot_nilai_general,
+
+            SUM(CASE
+                WHEN aspek.jenis = "tematik"
+                THEN nilai.total_nilai
+                ELSE 0
+            END) as nilai_tematik,
+
+            max(CASE
+                WHEN aspek.jenis = "tematik"
+                THEN nilai.nilai_koefisien
+                ELSE 0
+            END) as koefisien_tematik,            
+
+            SUM(CASE
+                WHEN aspek.jenis = "tematik"
+                THEN nilai.total_nilai
+                ELSE 0
+            END) as tot_nilai_tematik,
+            
+            coalesce(SUM(nilai.total_nilai), 0) as indeks_rb,
+            coalesce(SUM(n_sebelum.total_nilai), 0) as indeks_sebelum,
+            FORMAT((coalesce(SUM(nilai.total_nilai), 0) - coalesce(SUM(n_sebelum.total_nilai), 0)), 2) as selisih 
+            '
+        );
+
+        $builder->orderBy('unit.unit');
+        $builder->groupBy('unit.id_unit');
+
+        $query = $builder->get()->getResult();
+        
+        return $query;
+    }
+
+    function getPeriodeSebelum($data = null){
+        $builder = $this->db->table('m_periode');
+        $builder->where('id_periode < '.$data['tahun']);
+        $builder->select('m_periode.*');
+        $builder->orderBy('id_periode', 'desc');
+
+        $query = $builder->get()->getFirstRow();
+        
+        return $query;
+    }
+
+    function getPeriode($data = null){
+        $builder = $this->db->table('m_periode');
+        $builder->where('id_periode = '.$data['tahun']);
+        $builder->select('m_periode.*');
+
+        $query = $builder->get()->getFirstRow();
+        
+        return $query;
+    }
+
     function findCettar($data = null)
     {
         $builder = $this->db->table('vw_rekap_by_spirit');

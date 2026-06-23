@@ -514,17 +514,6 @@ class Apps extends BaseController
                     </table>';
         }
 
-        // $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        // $pdf->setOpenCell(false);
-        // $pdf->AddPage('L',"A3");
-        // $pdf->setListIndentWidth(8);
-
-        // $pdf->setHtmlVSpace(array(
-        //     'li' => array(
-        //         'h' => 1, // margin in mm
-        //     ) 
-        // ));
-
         $cek = str_replace(' ', '_', str_replace(',', '_', $unitGet[0]->unit));
         
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -764,6 +753,137 @@ class Apps extends BaseController
         $data['periode']    = $this->mastermodel->getPeriode();
         
         $this->show('apps/rapor', $data);
+    }
+
+    public function nilai($tag = null)
+    {
+
+        $data['user'] = $_SESSION['user'];
+        $param['tag'] = (isset($tag) && $tag ? $tag : 'opd');
+        $param['kategori_unit'] = $param['tag'];
+
+        $data['unit'] = $this->mastermodel->findMUnit($param);
+
+        if ($_SESSION['user']->id_role == 1) $data['id_unit'] = '';
+        else $data['id_unit'] = $_SESSION['user']->id_unit;
+
+        $this->addScript("assets/js/apps/nilai.js");
+
+        $data['label']      = ((isset($tag) && $tag == 'kab') ? 'Kabupaten/Kota' : 'Perangkat Daerah');
+        $data['tag']        = $param['tag'];
+        $data['periode']    = $this->mastermodel->getPeriode();
+        
+        $this->show('apps/nilai', $data);
+    }
+
+    public function getRekapNilai(){
+        $data = $_REQUEST;
+
+        $dataWhere = [
+            'tahun'     => $data['tahun'],
+            'sebelum'   => 00
+        ];
+
+        $periodeSebelumnya = $this->evaluasimodel->getPeriodeSebelum($dataWhere);
+
+        if($periodeSebelumnya)
+            $dataWhere['sebelum'] = $periodeSebelumnya->id_periode;
+
+        $eval = $this->evaluasimodel->getRekapNilai($dataWhere);
+
+        return $this->response->setJSON($eval);
+    }
+
+    public function exportNilaiExcel(){
+
+        $data = $_REQUEST;
+
+        $periode = $this->evaluasimodel->getPeriode($data);
+
+        $dataWhere = [
+            'tahun'     => $data['tahun'],
+            'sebelum'   => 00
+        ];
+
+        $periodeSebelumnya = $this->evaluasimodel->getPeriodeSebelum($dataWhere);
+
+        if($periodeSebelumnya)
+            $dataWhere['sebelum'] = $periodeSebelumnya->id_periode;
+
+        $eval = $this->evaluasimodel->getRekapNilai($dataWhere);
+
+        $html = '
+            <table style="table-layout:fixed;">
+                <tbody>
+                    <tr>
+                        <td colspan="8" style="height: 20pt; font-weight: bold; font-size: 14pt;">Rekap Nilai RB Tahun '.$periode->tahun_periode.'</td>
+                    </tr>
+                    <tr><td>&nbsp;</td></tr>
+                </tbody>
+            </table>
+        ';
+
+        $html .= '
+            <table style="table-layout:fixed;">
+                <thead>  
+                    <tr>
+                        <th rowspan="2" align="center">No.</th>
+                        <th rowspan="2" style="width:700px;">Perangkat Daerah</th>
+                        <th align="center" colspan="3">Nilai Reformasi Birokrasi</th>
+                        <th align="center" colspan="3">Indeks RB</th>
+                    </tr>
+
+                    <tr>
+                        <th align="center">General</th>
+                        <th align="center">Koefisien</th>
+                        <th align="center">Tematik</th>
+
+                        <th align="center">Tahun '.$periode->tahun_periode.'</th>
+                        <th align="center">Sebelumnya</th>
+                        <th>Kenaikan/Penurunan</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+        ';
+
+        foreach($eval as $key => $nilai){
+            $status = 'tetap';
+
+            if($nilai->selisih < 0)
+                $status = 'turun';
+            else if($nilai->selisih > 0)
+                $status = 'naik';
+            $html .= '
+                <tr>
+                    <td align="center">'.($key + 1).'</td>  
+                    <td>'.$nilai->unit.'</td>  
+                    <td align="center">'.$nilai->nilai_general.'</td>  
+                    <td align="center">'.$nilai->koefisien_general.'</td>  
+                    <td align="center">'.$nilai->nilai_tematik.'</td>  
+                    <td align="center">'.$nilai->indeks_rb.'</td>
+                    <td align="center">'.$nilai->indeks_sebelum.'</td>
+                    <td align="center">
+                        ('.$status.') 
+                        '.abs($nilai->selisih).'
+                    </td>
+                </tr>
+            ';
+        }
+
+        $html .= '
+                </tbody>
+
+                
+            </table>
+        ';
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment; filename=Rekap_Nilai_RB_".$periode->tahun_periode.".xls");
+        header("Content-Transfer-Encoding: BINARY");
+
+        return $html;
+        exit(0);
     }
 
     public function verifikasi($tag = null, $id_indikator = null)

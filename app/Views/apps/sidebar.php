@@ -73,6 +73,14 @@
                 <i class="icon-book-open menu-icon"></i>
             </a>
         </li>
+        <?php if($_SESSION['user']->id_role==1) { ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?php echo base_url('apps/nilai') ?>">
+                    <span class="menu-title">Rekap Nilai</span>
+                    <i class="icon-book-open menu-icon"></i>
+                </a>
+            </li>
+        <?php } ?>
         <!-- <li class="nav-item">
             <a class="nav-link" href="<?php echo base_url('apps/rapor/kab') ?>">
                 <span class="menu-title">Rapor Kab/Kota</span>
